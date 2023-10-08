@@ -29,7 +29,7 @@ export default function UserAccount() {
           >
             <path
               d="M6.25 8.125L10 11.875L13.75 8.125"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke-linecap="round"
               strokeLinejoin="round"
             ></path>

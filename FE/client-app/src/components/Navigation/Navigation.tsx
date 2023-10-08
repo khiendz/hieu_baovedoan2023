@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { HomeOutlined, BankOutlined } from '@ant-design/icons';
+import { HomeOutlined, EditOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import Link from 'next/link';
@@ -13,31 +13,39 @@ const items: MenuProps['items'] = [
     icon: <HomeOutlined />,
   },
   {
-    label: <Link href='/khach-san' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>KHÁCH SẠN</span></Link>,
-    key: 'hotel',
-    icon: <BankOutlined />
+    label: <Link href='/tin-tuc' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Tin tức</span></Link>,
+    key: 'news',
+    icon: <EditOutlined />
   },
   {
-    label: <Link href='/tour' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>TOUR DU LỊCH</span></Link>,
+    label: <Link href='/introduce' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Giới thiệu</span></Link>,
     key: 'tour',
     children: [
       {
-        label: <Link href='/tour/trong-nuoc' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>TRONG NƯỚC</span></Link>,
+        label: <Link href='/introduce/offline' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách offline</span></Link>,
         key: 'local'
       },
       {
-        label: <Link href='/tour/ngoai-nuoc' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>NGOÀI NƯỚC</span></Link>,
+        label: <Link href='/introduce/online' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách online</span></Link>,
         key: 'global'
       },
     ],
   },
   {
     label: (
-      <Link href="https://ant.design" target="_blank" rel="noopener noreferrer" className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'>
-        VÉ MÁY BAY
+      <Link href="/san-pham" rel="noopener noreferrer" className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'>
+        Sản phẩm
       </Link>
     ),
     key: 'airplane',
+  },
+  {
+    label: (
+      <Link href="/doc-gia" rel="noopener noreferrer" className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'>
+        Quản lý độc giả
+      </Link>
+    ),
+    key: 'doc-gia',
   },
 ];
 
