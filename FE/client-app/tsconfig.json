@@ -13,13 +13,16 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "strictPropertyInitialization": false,
+    "baseUrl": "./src", // Đặt baseUrl vào thư mục 'src'
     "plugins": [
       {
         "name": "next"
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@model/*": ["model/*"] // Thiết lập alias cho thư mục 'model'
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

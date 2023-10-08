@@ -1,0 +1,43 @@
+﻿@font-face {
+  font-family: 'Georgia';
+  src: url('assets/fonts/Georgia/Georgia.eot');
+  src: url('assets/fonts/Georgia/Georgia.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/Georgia/Georgia.woff2') format('woff2'),
+  url('assets/fonts/Georgia/Georgia.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Georgia';
+  src: url('assets/fonts/Georgia/Georgia-Italic.eot');
+  src: url('assets/fonts/Georgia/Georgia-Italic.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/Georgia/Georgia-Italic.woff2') format('woff2'),
+  url('assets/fonts/Georgia/Georgia-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Georgia';
+  src: url('assets/fonts/Georgia/Georgia-Bold.eot');
+  src: url('assets/fonts/Georgia/Georgia-Bold.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/Georgia/Georgia-Bold.woff2') format('woff2'),
+  url('assets/fonts/Georgia/Georgia-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Georgia';
+  src: url('assets/fonts/Georgia/Georgia-BoldItalic.eot');
+  src: url('assets/fonts/Georgia/Georgia-BoldItalic.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/Georgia/Georgia-BoldItalic.woff2') format('woff2'),
+  url('assets/fonts/Georgia/Georgia-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
