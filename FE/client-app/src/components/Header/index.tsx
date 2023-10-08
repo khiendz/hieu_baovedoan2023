@@ -11,8 +11,8 @@ const roboto = Roboto({
 
 export default function Header() {
   return (
-    <header className="dk-flex dk-flex-row dk-bg-[#003C71] dk-h-16 dk-text-[#FFF] dk-gap-14 dk-justify-between dk-items-center dk-font-Inter">
-      <span className="dk-pl-8 dk-whitespace-nowrap">Thắng tour</span>
+    <header className="dk-flex dk-flex-row dk-bg-[#613a1a] dk-h-16 dk-text-[#FFF] dk-gap-14 dk-justify-between dk-items-center dk-font-Inter">
+      <span className="dk-pl-8 dk-whitespace-nowrap">Hiếu tour</span>
       <div className="search dk-flex dk-flex-row dk-gap-6 dk-pr-[600px]">
         <input
           type="text"

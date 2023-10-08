@@ -17,7 +17,7 @@ export default function UserAccount() {
         >
           <UserOutlined />
           <span className="hover:dk-opacity-[0.8] dk-text-[#FFF] dk-font-Inter">
-            Xin chào Thắng
+            Xin chào Hiếu
           </span>
           <svg
             aria-hidden="true"
@@ -31,14 +31,14 @@ export default function UserAccount() {
               d="M6.25 8.125L10 11.875L13.75 8.125"
               stroke-width="1.5"
               stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeLinejoin="round"
             ></path>
           </svg>
         </button>
         <div
           className={`${
             isLogin ? "display-none" : ""
-          } dk-absolute dk-bg-[#FFF] dk-p-4 dk-h-fit dk-text-[#222] dk-font-Inter dk-font-medium dk-text-sm dk-top-[64px] dk-rounded-sm dk-shadow-2xl user-infos dk-right-[82px]`}
+          } dk-absolute dk-bg-[#FFF] dk-p-4 dk-h-fit dk-text-[#222] dk-font-Inter dk-font-medium dk-text-sm dk-top-[64px] dk-rounded-sm dk-shadow-2xl user-infos dk-right-[82px] dk-z-[99]`}
         >
           <ul className="dk-flex dk-flex-col dk-items-center dk-justify-center dk-z-[99]">
             <li className="dk-w-full dk-flex dk-justify-start">
