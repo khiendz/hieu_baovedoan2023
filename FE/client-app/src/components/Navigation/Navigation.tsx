@@ -18,15 +18,15 @@ const items: MenuProps['items'] = [
     icon: <EditOutlined />
   },
   {
-    label: <Link href='/introduce' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Giới thiệu</span></Link>,
+    label: <Link href='/gioi-thieu' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Giới thiệu</span></Link>,
     key: 'tour',
     children: [
       {
-        label: <Link href='/introduce/offline' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách offline</span></Link>,
+        label: <Link href='/gioi-thieu/offline' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách offline</span></Link>,
         key: 'local'
       },
       {
-        label: <Link href='/introduce/online' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách online</span></Link>,
+        label: <Link href='/gioi-thieu/online' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách online</span></Link>,
         key: 'global'
       },
     ],

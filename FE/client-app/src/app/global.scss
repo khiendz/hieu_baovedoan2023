@@ -14,6 +14,7 @@ body {
         min-width: 1280px;
         background: #FFF;
         height: auto;
+        z-index: 1;
         &::before {
             content: " ";
             display: block;
@@ -23,6 +24,7 @@ body {
             background-size: cover;
             width: 100%;
             height: 100%;
+            z-index: -1;
         }
     }
 }
@@ -54,6 +56,7 @@ body {
         @apply dk-shadow-xl;
     }
     &-miss,&-miss-v2 {
+        z-index: 1;
         &::after {
             content: " ";
             display: block;
@@ -64,7 +67,7 @@ body {
             height: 100%;
             top: 0;
             left: 0;
-            z-index: 0;
+            z-index: -1;
             border-radius: 8px;
         }
         &-miss-v2 {
@@ -76,5 +79,18 @@ body {
 }
 
 .default-color {
-    color: #613a1a;
+    color: #8b0000;
 }
+
+.introduce {
+    min-width: 1158px;
+    padding: 16px;
+}
+
+.list-marker {
+    li {
+      &::marker {
+        color: #8b0000;
+      }
+    }
+  }
