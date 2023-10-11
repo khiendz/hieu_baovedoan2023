@@ -76,6 +76,11 @@ body {
             }
         }
     }
+    &-news {
+        &::after {
+            opacity: 1;
+        }
+    }
 }
 
 .default-color {
@@ -94,3 +99,9 @@ body {
       }
     }
   }
+
+a {
+    &:hover {
+        color: #8b0000;
+    }
+}

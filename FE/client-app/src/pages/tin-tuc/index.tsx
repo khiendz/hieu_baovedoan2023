@@ -9,45 +9,45 @@ import {
 export default function tour() {
   return (
     <LayoutDefault>
-      <div className="content-container content-miss dk-flex dk-flex-col dk-font-Roboto dk-gap-4 dk-z-10 dk-items-center dk-mb-7">
+      <div className="content-container content-miss content-news dk-flex dk-flex-col dk-font-Roboto dk-gap-4 dk-z-10 dk-items-center dk-mb-7">
         <div className="dk-w-[1128px] dk-flex dk-flex-col dk-relative dk-max-w-full">
           <div className="highlight dk-grid dk-grid-cols-6 dk-pb-5 dk-border-b-[1px] dk-border-b-[#222]">
             <div className="dk-col-span-1 dk-flex dk-flex-col dk-pr-5 dk-border-r-[1px] dk-border-r-[#222]">
               <article className="dk-border-b-[1px] dk-border-b-[#222] dk-pb-5">
-                <a className="dk-w-fit dk-h-fit">
+                <a className="dk-w-fit dk-h-fit" href="/">
                   <img
                     src="https://nlv.gov.vn/images/stories/thumbs/com_content/2811/jvnews_200x150.jpg"
                     className="dk-w-[234px] dk-aspect-[3/2]"
                   />
                 </a>
                 <h3 className="dk-Inter dk-mt-3 dk-leading-6 dk-font-semibold">
-                  <a>Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
+                  <a href="/">Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
                 </h3>
               </article>
               <article className="dk-border-b-[1px_solid_#eee] dk-mt-5">
-                <a className="dk-w-fit dk-h-fit">
+                <a className="dk-w-fit dk-h-fit" href="/">
                   <img
                     src="https://nlv.gov.vn/images/stories/thumbs/com_content/2811/jvnews_200x150.jpg"
                     className="dk-w-[234px] dk-aspect-[3/2]"
                   />
                 </a>
                 <h3 className="dk-Inter dk-mt-3 dk-leading-6 dk-font-semibold">
-                  <a>Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
+                  <a href="/">Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
                 </h3>
               </article>
             </div>
             <div className="dk-col-span-3 dk-flex dk-flex-col dk-pl-5">
               <article className="dk-pb-5">
-                <a className="dk-w-fit dk-h-fit">
+                <a className="dk-w-fit dk-h-fit" href="/">
                   <img
                     src="https://nlv.gov.vn/images/stories/thumbs/com_content/2811/jvnews_200x150.jpg"
                     className="dk-w-[516px] dk-aspect-[3/2]"
                   />
                 </a>
                 <h3 className="dk-Inter dk-mt-3 dk-leading-6 dk-font-semibold dk-text-[24px] dk-leading-8">
-                  <a>Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
+                  <a href="/">Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
                 </h3>
-                <a className="sapo dk-font-Inter dk-text-[#000] dk-text-sm">
+                <a className="sapo dk-font-Inter dk-text-[#000] dk-text-sm" href="/">
                   Tuyến đường cao tốc Đại lộ Thăng Long đoạn nối từ quốc lộ 21
                   đến cao tốc Hòa Lạc - Hòa Bình có tổng mức đầu tư 5.249 tỷ
                   đồng. Dự án được lên kế hoạch hoàn thành và đưa vào sử dụng
@@ -60,7 +60,7 @@ export default function tour() {
                 <h3 className="dk-Inter dk-mt-3 dk-leading-6 dk-font-semibold">
                   <a>Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
                 </h3>
-                <a className="dk-w-fit dk-h-fit">
+                <a className="dk-w-fit dk-h-fit" href="/">
                   <img
                     src="https://nlv.gov.vn/images/stories/thumbs/com_content/2811/jvnews_200x150.jpg"
                     className="dk-w-[234px] dk-aspect-[3/2]"
@@ -69,9 +69,9 @@ export default function tour() {
               </article>
               <article className="dk-flex dk-border-b-[1px] dk-border-b-[#222] dk-pb-5 dk-mt-5">
                 <h3 className="dk-Inter dk-mt-3 dk-leading-6 dk-font-semibold">
-                  <a>Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
+                  <a href="/">Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
                 </h3>
-                <a className="dk-w-fit dk-h-fit">
+                <a className="dk-w-fit dk-h-fit" href="/">
                   <img
                     src="https://nlv.gov.vn/images/stories/thumbs/com_content/2811/jvnews_200x150.jpg"
                     className="dk-w-[234px] dk-aspect-[3/2]"
@@ -80,9 +80,9 @@ export default function tour() {
               </article>
               <article className="dk-flex dk-border-b-[1px] dk-border-b-[#222] dk-pb-5 dk-mt-5">
                 <h3 className="dk-Inter dk-mt-3 dk-leading-6 dk-font-semibold">
-                  <a>Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
+                  <a href="/">Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
                 </h3>
-                <a className="dk-w-fit dk-h-fit">
+                <a className="dk-w-fit dk-h-fit" href="/">
                   <img
                     src="https://nlv.gov.vn/images/stories/thumbs/com_content/2811/jvnews_200x150.jpg"
                     className="dk-w-[234px] dk-aspect-[3/2]"
@@ -91,9 +91,9 @@ export default function tour() {
               </article>
               <article className="dk-flex dk-border-b-[1px_solid_#eee] dk-mt-5">
                 <h3 className="dk-Inter dk-mt-3 dk-leading-6 dk-font-semibold">
-                  <a>Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
+                  <a href="/">Tập huấn chuẩn hóa dữ liệu tại ủy ban trung ương</a>
                 </h3>
-                <a className="dk-w-fit dk-h-fit">
+                <a className="dk-w-fit dk-h-fit" href="/">
                   <img
                     src="https://nlv.gov.vn/images/stories/thumbs/com_content/2811/jvnews_200x150.jpg"
                     className="dk-w-[234px] dk-aspect-[3/2]"
