@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Model cho bảng books
+model Book {
+  book_id     Int       @id @default(autoincrement())
+  title       String
+  author      String
+  genre       String
+  ISBN        String
+  quantity    Int
+  location    String
+  public_year DateTime
+  barcodes    Barcode[] // Quan hệ với bảng barcodes
+  borrowedBooks BorrowedBook[] // Quan hệ với bảng borrowedBooks
+}
+
+// Model cho bảng members
+model Member {
+  member_id Int      @id @default(autoincrement())
+  name      String
+  address   String
+  phone     Int
+  email     String
+  joinDate  DateTime
+  borrowedBooks BorrowedBook[] // Quan hệ với bảng borrowedBooks
+}
+
+// Model cho bảng borrowedBooks
+model BorrowedBook {
+  transaction_id Int       @id @default(autoincrement())
+  member_id      Int
+  book_id        Int
+  borrow_date    DateTime
+  due_date       DateTime
+  return_date    DateTime?
+  late_fee       Int?
+  Member         Member   @relation(fields: [member_id], references: [member_id])
+  Book           Book     @relation(fields: [book_id], references: [book_id])
+  lateFees       LateFee[] // Quan hệ với bảng lateFees
+}
+
+// Model cho bảng lateFees
+model LateFee {
+  late_fee_id   Int       @id @default(autoincrement())
+  transaction_id Int
+  fee_amount    Int
+  BorrowedBook  BorrowedBook @relation(fields: [transaction_id], references: [transaction_id])
+}
+
+// Model cho bảng employees
+model Employee {
+  employee_id   Int       @id @default(autoincrement())
+  name          String
+  work_schedule String
+}
+
+// Model cho bảng userAccounts
+model UserAccount {
+  user_id   Int    @id @default(autoincrement())
+  username  String
+  password  String
+  role      String
+}
+
+// Model cho bảng barcodes
+model Barcode {
+  barcode_id    Int    @id @default(autoincrement())
+  book_id       Int
+  barcode_value String
+  Book          Book   @relation(fields: [book_id], references: [book_id])
+}
+
+// Model cho bảng backUpData
+model BackUpData {
+  backup_id      Int    @id @default(autoincrement())
+  backup_timestamp String
+  backup_file    String
+}
+
