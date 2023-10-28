@@ -14,6 +14,7 @@ type Props = {
   bookOrder: any;
   setBook: any;
   setOrder: any;
+  showPopup: any;
 };
 
 export default function AcceptOrder(props: Props) {
@@ -154,7 +155,11 @@ export default function AcceptOrder(props: Props) {
                   >
                     Hủy
                   </button>
-                  <button className={styles.submit} type="submit">
+                  <button className={styles.submit} type="submit" onClick={
+                    () => {
+                      props.showPopup({status: 200,message: "Thuê sách thành công",title: "Bạn sẽ được liên hệ sớm nhất để xác nhận thông tin"})
+                    }
+                  }>
                     Thuê sách
                   </button>
                 </div>

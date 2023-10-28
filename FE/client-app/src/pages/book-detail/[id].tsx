@@ -6,6 +6,7 @@ import { getBookById } from "services/book-services";
 import { useRouter } from "next/router";
 import format from "date-fns/format";
 import AcceptOrder from "modules/AcceptOrder";
+import PopupMessage from "components/PopupMessage";
 
 const { Meta } = Card;
 
@@ -14,6 +15,7 @@ const Product: React.FC = () => {
   const [book, setBook] = useState<Book>();
   const { id } = router.query;
   const [orderAccept, setOrrderAccept] = useState(false);
+  const [dataPopup, setDataPopup] = useState<any>(null);
 
   useEffect(() => {
     initData();
@@ -35,6 +37,29 @@ const Product: React.FC = () => {
     } catch (e) {
       // Xử lý lỗi nếu cần
     }
+  };
+
+  const showPopup = ({
+    status,
+    message,
+    title,
+  }: {
+    status?: any;
+    message?: any;
+    title?: any;
+  }) => {
+    setDataPopup({
+      status: status === 200 || status === "ok" ? "success" : "error",
+      title: title
+        ? title
+        : status
+        ? "<b>Đăng nhập thành công</b>"
+        : "<b>Tài khoản hoặc mật khẩu không đúng</b>",
+      message: message || "Vui lòng kiểm tra đường truyền mạng",
+      onClose: () => {
+        setDataPopup(null);
+      },
+    });
   };
 
   return (
@@ -65,12 +90,12 @@ const Product: React.FC = () => {
                     </li>
                     <li>Số lượng: {book?.Quantity}</li>
                   </ul>
-                  <button 
+                  <button
                     className="dk-bg-orange-500 dk-p-4 dk-font-Inter dk-text-white dk-font-semibold dk-text-sm dk-rounded-xl"
                     onClick={() => {
-                        setOrrderAccept(!orderAccept);
-                      }}
-                    >
+                      setOrrderAccept(!orderAccept);
+                    }}
+                  >
                     Thuê sách trực tuyến
                   </button>
                 </div>
@@ -84,8 +109,10 @@ const Product: React.FC = () => {
           bookOrder={book}
           setBook={setBook}
           setOrder={setOrrderAccept}
+          showPopup={showPopup}
         />
       ) : null}
+      <PopupMessage {...dataPopup} />
     </>
   );
 };

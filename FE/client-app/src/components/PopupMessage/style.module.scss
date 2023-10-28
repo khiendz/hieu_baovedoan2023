@@ -1,0 +1,93 @@
+@import "../../styles/shared.scss";
+
+.popup {
+  &-message {
+    position: fixed;
+    top: 68px;
+    right: 40px;
+    width: 392px;
+    padding: 24px 44px 16px 60px;
+    background: #FFF none;
+    box-shadow: 0 4px 50px rgba(0, 0, 0, .05);
+    z-index: 100;
+    font-family: $font-SFUIDisplay;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14px;
+    visibility: hidden;
+    transform: translateX(500px);
+    transition: transform .2s, visibility .2s;
+
+    &.mobile {
+      width: 312px;
+      top: 80px;
+      right: 32px;
+      transform: translateX(400px);
+    }
+
+    &.active {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    &__close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFF none;
+      border: 0;
+    }
+
+    &__status {
+      position: absolute;
+      top: 24px;
+      left: 20px;
+    }
+
+    &__title {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 19px;
+      margin: 0;
+    }
+
+    &__content {
+      margin: 12px 0 0;
+    }
+
+    &__time {
+      display: block;
+      width: 0;
+      height: 0;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border-bottom: 1px solid transparent;
+      -webkit-animation: animationTime 3s;
+      animation: animationTime 3s;
+
+      &.success {
+        border-bottom-color: #2D8988;
+      }
+
+      &.error {
+        border-bottom-color: #CD3038;
+      }
+    }
+  }
+}
+
+@keyframes animationTime {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0;
+  }
+}
