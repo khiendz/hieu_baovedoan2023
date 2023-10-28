@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Book {
+  BookId     Int       @id @default(autoincrement()) @map("BookId")
+  Title      String
+  Author     String?
+  BookTypeId Int       @map("BookTypeId")
+  ISBN       String?
+  Quantity   Int?
+  Location   String?
+  PublicYear DateTime?
+  Img        String?
+
+  BookType     BookType       @relation(fields: [BookTypeId], references: [BookTypeID])
+  Barcodes     Barcode[]
+  BorrowedBook BorrowedBook[]
+}
+
+model BookType {
+  BookTypeID  Int     @id @map("BookTypeID")
+  Name        String
+  Description String?
+  Img         String?
+
+  Books Book[]
+}
+
+model Member {
+  MemberId     Int            @id @default(autoincrement()) @map("MemberId")
+  Name         String?
+  Address      String?
+  Phone        Int?
+  Email        String?
+  JoinDate     DateTime?
+  BorrowedBook BorrowedBook[]
+}
+
+model BorrowedBook {
+  TransactionId Int       @id @default(autoincrement()) @map("TransactionId")
+  MemberId      Int       @map("MemberId")
+  BookId        Int       @map("BookId")
+  BorrowDate    DateTime?
+  DueDate       DateTime?
+  ReturnDate    DateTime?
+  KateFee       Int?
+
+  Member   Member    @relation(fields: [MemberId], references: [MemberId])
+  Book     Book      @relation(fields: [BookId], references: [BookId])
+  LateFees LateFee[]
+}
+
+model LateFee {
+  LateFeeId     Int @id @default(autoincrement()) @map("LateFeeId")
+  TransactionId Int @map("TransactionId")
+  FeeAmount     Int
+
+  BorrowedBook BorrowedBook @relation(fields: [TransactionId], references: [TransactionId])
+  Payment      Payment[]
+}
+
+model Payment {
+  PaymentID     Int       @id @default(autoincrement()) @map("PaymentID")
+  LateFeeId     Int?      @map("LateFeeId")
+  PaymentDate   DateTime?
+  Amount        Float?
+  StatePayments Int?
+
+  LateFee LateFee? @relation(fields: [LateFeeId], references: [LateFeeId])
+}
+
+model Employee {
+  EmployeeId   Int     @id @default(autoincrement()) @map("EmployeeId")
+  Name         String?
+  Phone        Int?
+  WorkSchedule String?
+  UserId       Int     @map("UserId")
+
+  UserAccount UserAccount @relation(fields: [UserId], references: [UserId])
+}
+
+model UserAccount {
+  UserId   Int        @id @default(autoincrement()) @map("UserId")
+  Username String?
+  Password String?
+  Role     String?
+  Employee Employee[]
+}
+
+model Barcode {
+  BarcodeId    Int     @id @default(autoincrement()) @map("BarcodeId")
+  BookId       Int     @map("BookId")
+  BarcodeValue String?
+
+  Book Book @relation(fields: [BookId], references: [BookId])
+}
+
+model BackupData {
+  BackupId        Int     @id @default(autoincrement()) @map("BackupId")
+  BackupTimestamp String?
+  BackupFile      String?
+}

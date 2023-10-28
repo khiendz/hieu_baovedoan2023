@@ -39,14 +39,6 @@ const items: MenuProps['items'] = [
     ),
     key: 'airplane',
   },
-  {
-    label: (
-      <Link href="/doc-gia" rel="noopener noreferrer" className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'>
-        Quản lý độc giả
-      </Link>
-    ),
-    key: 'doc-gia',
-  },
 ];
 
 const Navigation: React.FC = () => {
