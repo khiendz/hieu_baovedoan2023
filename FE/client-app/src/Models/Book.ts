@@ -1,6 +1,6 @@
-import { Barcode } from "./Barcode";
 import { BookType } from "./BookType";
 import { BorrowedBook } from "./BorrowedBook";
+import { Publisher } from "./Publisher";
 
 // model/Book.ts
 export class Book {
@@ -15,7 +15,8 @@ export class Book {
       public PublicYear: Date | null,
       public Img: string | null,
       public BookType: BookType,
-      public Barcodes: Barcode[],
+      public Publisher: Publisher,
+      public Barcode: string | null,
       public BorrowedBook: BorrowedBook[]
     ) {}
   }

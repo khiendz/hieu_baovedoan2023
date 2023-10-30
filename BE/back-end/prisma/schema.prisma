@@ -11,19 +11,30 @@ datasource db {
 }
 
 model Book {
-  BookId     Int       @id @default(autoincrement()) @map("BookId")
-  Title      String
-  Author     String?
-  BookTypeId Int       @map("BookTypeId")
-  ISBN       String?
-  Quantity   Int?
-  Location   String?
-  PublicYear DateTime?
-  Img        String?
+  BookId      Int       @id @default(autoincrement()) @map("BookId")
+  Title       String
+  Author      String?
+  BookTypeId  Int       @map("BookTypeId")
+  ISBN        String?
+  Quantity    Int?
+  Location    String?
+  PublicYear  DateTime?
+  Img         String?
+  Barcode     String    @default("")
+  PublisherId Int       @default(0)
 
   BookType     BookType       @relation(fields: [BookTypeId], references: [BookTypeID])
-  Barcodes     Barcode[]
+  Publisher    Publisher      @relation(fields: [PublisherId], references: [PublisherId])
   BorrowedBook BorrowedBook[]
+}
+
+model Publisher {
+  PublisherId Int     @id @default(autoincrement()) @map("PublisherId")
+  Name        String
+  Address     String?
+  PHONE       String?
+  Website     String?
+  Book        Book[]
 }
 
 model BookType {
@@ -94,14 +105,6 @@ model UserAccount {
   Password String?
   Role     String?
   Employee Employee[]
-}
-
-model Barcode {
-  BarcodeId    Int     @id @default(autoincrement()) @map("BarcodeId")
-  BookId       Int     @map("BookId")
-  BarcodeValue String?
-
-  Book Book @relation(fields: [BookId], references: [BookId])
 }
 
 model BackupData {
