@@ -9,6 +9,7 @@ export class Member {
       public Phone: number | null,
       public Email: string | null,
       public JoinDate: Date | null,
+      public MemberRoleId: number | null,
       public BorrowedBook: BorrowedBook[]
     ) {}
   }

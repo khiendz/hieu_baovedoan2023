@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 const { Meta } = Card;
 
 const Product: React.FC = () => {
-    debugger
   const router = useRouter();
   const [books,setBooks] = useState<Book[]>([]);
   const { id } = router.query;

@@ -11,21 +11,30 @@ datasource db {
 }
 
 model Book {
-  BookId      Int       @id @default(autoincrement()) @map("BookId")
-  Title       String
-  Author      String?
-  BookTypeId  Int       @map("BookTypeId")
-  ISBN        String?
-  Quantity    Int?
-  Location    String?
-  PublicYear  DateTime?
-  Img         String?
-  Barcode     String    @default("")
-  PublisherId Int       @default(0)
+  BookId        Int       @id @default(autoincrement()) @map("BookId")
+  Title         String
+  BookTypeId    Int       @map("BookTypeId")
+  ISBN          String?
+  Quantity      Int?
+  Location      String?
+  PublicYear    DateTime?
+  Img           String?
+  Barcode       String    @default("")
+  PublisherId   Int       @default(0)
+  AuthorId      Int       @default(0)
+  LateFeeTypeId Int       @default(0)
 
   BookType     BookType       @relation(fields: [BookTypeId], references: [BookTypeID])
   Publisher    Publisher      @relation(fields: [PublisherId], references: [PublisherId])
+  Author       Author         @relation(fields: [AuthorId], references: [AuthorId])
   BorrowedBook BorrowedBook[]
+}
+
+model Author {
+  AuthorId    Int     @id @default(autoincrement()) @map("AuthorId")
+  Name        String
+  Description String?
+  Book        Book[]
 }
 
 model Publisher {
@@ -53,7 +62,14 @@ model Member {
   Phone        Int?
   Email        String?
   JoinDate     DateTime?
+  MemberRoleId Int            @default(0)
   BorrowedBook BorrowedBook[]
+}
+
+model MemberRole {
+  MemberRoleId Int     @id @default(autoincrement()) @map("MemberRoleId")
+  Value        String
+  Description  String?
 }
 
 model BorrowedBook {
@@ -77,6 +93,14 @@ model LateFee {
 
   BorrowedBook BorrowedBook @relation(fields: [TransactionId], references: [TransactionId])
   Payment      Payment[]
+}
+
+model LateFeeType {
+  LateFeeTypeId Int     @id @default(autoincrement()) @map("LateFeeTypeId")
+  Name          String
+  Description   String
+  FeeAmount     Decimal
+  DateCount     Int
 }
 
 model Payment {

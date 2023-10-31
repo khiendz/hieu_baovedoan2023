@@ -11,8 +11,9 @@ type Props = {
 };
 
 const SelectBox: React.FC<Props> = (props: Props) => {
+  const { data, setTag } = props;
   const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
+    setTag(value);
   };
   return (
     <Select

@@ -82,6 +82,10 @@ const handleInput = (value:string) => {
   setSearchInput(value);
 }
 
+const handleSelect = (value: string[]) => {
+  setTag(value);
+}
+
   return (
     <LayoutDefault>
             <div className="content-container content-miss dk-flex dk-flex-col dk-font-Roboto dk-gap-4">
@@ -119,11 +123,11 @@ const handleInput = (value:string) => {
             } */}
           </div>
           <div className="select dk-flex dk-flex-row dk-gap-4 dk-relative dk-z-10">
-            <SelectBox data={bookTypeList} setTag={setTag}/>
+            <SelectBox data={bookTypeList} setTag={(e:string[]) => handleSelect(e)}/>
           </div>
           <div className="dk-w-full dk-flex dk-items-center dk-justify-center dk-relative dk-z-10">
             <a 
-              href={`/san-pham/${searchInputRef.current}`}
+              href={`/san-pham/${searchInputRef.current}?tag=${tag.join("+")}`}
               className="dk-p-3 dk-flex dk-gap-4 dk-bg-[#F79321] dk-text-sm dk-font-bold dk-font-Roboto dk-rounded dk-text-[#222]"
               >
               <SecurityScanOutlined />
