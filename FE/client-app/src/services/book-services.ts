@@ -17,13 +17,13 @@ export async function getBookById(id: string) {
     }
 }
 
-export async function getBookByName(id: string) {
+export async function getBookByName(id: string,tags: string) {
 
     if (!id)
         return null;
 
     try {
-        const res: any = await axios.get(`${domainBE}/api/book-by-name/${id}`);
+        const res: any = await axios.get(`${domainBE}/api/book-by-name/${id}?tags=${tags}`);
         if (res.status == 200)
             return res.data;
 

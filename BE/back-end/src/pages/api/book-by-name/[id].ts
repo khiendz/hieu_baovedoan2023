@@ -7,13 +7,21 @@ const prisma = new PrismaClient();
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     const queryTitle = req.query.id as string;
+    const tags = req.query.tags as string;
 
     if (!queryTitle) {
       return res.status(400).json({ error: 'Invalid title query' });
     }
-
+ 
+    const tagArray = tags.toString().split(",");
     try {
-      const listBook = await prisma.book.findMany();
+      const listBook = await prisma.book.findMany({
+        where: {
+          BookTypeId: {
+            in: Array.isArray(tagArray) ? tagArray.map(e => parseInt(e)) : [parseInt(tagArray)]
+          }
+        }
+      });
       const query = removeAccents(queryTitle).toLocaleLowerCase();
       const books = listBook?.filter((book) => 
       {

@@ -127,7 +127,7 @@ const handleSelect = (value: string[]) => {
           </div>
           <div className="dk-w-full dk-flex dk-items-center dk-justify-center dk-relative dk-z-10">
             <a 
-              href={`/san-pham/${searchInputRef.current}?tag=${tag.join("+")}`}
+              href={`/san-pham/${searchInputRef.current}?tags=${tag.join(",")}`}
               className="dk-p-3 dk-flex dk-gap-4 dk-bg-[#F79321] dk-text-sm dk-font-bold dk-font-Roboto dk-rounded dk-text-[#222]"
               >
               <SecurityScanOutlined />

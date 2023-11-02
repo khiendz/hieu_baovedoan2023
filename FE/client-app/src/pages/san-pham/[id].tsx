@@ -10,7 +10,7 @@ const { Meta } = Card;
 const Product: React.FC = () => {
   const router = useRouter();
   const [books,setBooks] = useState<Book[]>([]);
-  const { id } = router.query;
+  const { id, tags = "" } = router.query;
 
   useEffect(() => {
     initData();
@@ -24,7 +24,7 @@ const Product: React.FC = () => {
     if (id === null || id === undefined) return;
     try {
       const idParam = id;
-      const rest = await getBookByName(idParam.toString() || "");
+      const rest = await getBookByName(idParam.toString() || "", tags?.toString());
       if (rest) {
         let data: Book[] = rest;
         setBooks(data);
