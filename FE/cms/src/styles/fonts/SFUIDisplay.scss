@@ -1,0 +1,21 @@
+﻿@font-face {
+  font-family: 'SF UI Display';
+  src: url('assets/fonts/SFUIDisplay/SFUIDisplay-Medium.eot');
+  src: url('assets/fonts/SFUIDisplay/SFUIDisplay-Medium.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/SFUIDisplay/SFUIDisplay-Medium.woff2') format('woff2'),
+  url('assets/fonts/SFUIDisplay/SFUIDisplay-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF UI Display';
+  src: url('assets/fonts/SFUIDisplay/SFUIDisplay-Bold.eot');
+  src: url('assets/fonts/SFUIDisplay/SFUIDisplay-Bold.eot?#iefix') format('embedded-opentype'),
+  url('assets/fonts/SFUIDisplay/SFUIDisplay-Bold.woff2') format('woff2'),
+  url('assets/fonts/SFUIDisplay/SFUIDisplay-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

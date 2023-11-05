@@ -1,0 +1,384 @@
+@import '../../../../styles/shared/variable';
+
+.contactContainer {
+  display: flex;
+  margin: 0 auto;
+  width: fit-content;
+  min-height: 100vh;
+
+  .formContainer {
+    width: 531px;
+    height: fit-content;
+    padding-right: 29px;
+    border-right: 1px solid #E8E8E8;
+    display: flex;
+    flex-direction: column;
+    gap: 31px;
+
+    .title {
+      color: #000;
+      font-family: $font-Inter;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+
+        &.success {
+          input, select {
+            &:focus-visible {
+              border: 1px solid #4B9065;
+            }
+          }
+
+          .charCount {
+            color: var(--greenpalletgreen-2, #158E42);
+          }
+
+          .touched {
+            color: #222;
+          }
+        }
+
+        label {
+          color: var(--dantricolorblack, #292D32);
+          font-family: $font-Inter;
+          font-size: 15px;
+          font-style: normal;
+          font-weight: 500;
+          line-height: normal;
+        }
+
+        input, select {
+          padding: 0px 70px 0 16px;
+          color: var(--dantricolorblack, #292D32);
+          font-family: $font-Inter;
+          font-size: 15px;
+          font-style: normal;
+          font-weight: 400;
+          line-height: normal;
+          width: 100%;
+          @apply dk-shadow-sm;
+
+          &.active {
+            padding: 0px 60px 0 16px;
+          }
+
+          &:focus-visible {
+            border: 1px solid #292D32;
+          }
+        }
+
+        input,
+        select {
+          border: 1px solid #D9D9D9;
+          outline: none;
+          height: 48px;
+          border-radius: 4px;
+          appearance: none;
+        }
+
+        textarea {
+          height: 179px;
+          resize: none;
+          padding: 16px;
+        }
+
+        .dropZoneContainer {
+          .dropZoneHead {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+
+            .previewContainer {
+              width: 126px;
+              height: 95px;
+              border: 1px solid #E9ECEF;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              margin-top: 5px;
+              margin-bottom: 15px;
+              position: relative;
+
+              img {
+                max-height: 75px;
+                max-width: 82px;
+              }
+            }
+          }
+
+          .dropZoneBody {
+            display: flex;
+            width: 492px;
+            padding: 16px 24px 16px 32px;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            border-radius: 10px;
+            border: 1px dashed rgba(0, 0, 0, 0.25);
+
+            .descriptionBox {
+              display: flex;
+              width: 252px;
+              gap: 12px;
+              flex-direction: column;
+
+              .title {
+                color: #000;
+                font-family: $font-Inter;
+                font-size: 13px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+              }
+
+              .description {
+                color: rgba(0, 0, 0, 0.40);
+                font-family: $font-Inter;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: normal;
+              }
+            }
+
+            .labelForInput {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: 5px;
+              border: 1px solid var(--primarygreenbranding, #0F6C32);
+              background: #FBFDFE;
+              color: var(--primarygreenbranding, #0F6C32);
+              font-family: $font-Inter;
+              font-size: 10px;
+              font-style: normal;
+              font-weight: 400;
+              line-height: normal;
+              text-transform: uppercase;
+              width: 85px;
+              height: 36px;
+            }
+          }
+        }
+      }
+    }
+
+    .submit {
+      display: flex;
+      width: 141px;
+      height: 43px;
+      padding: 18px 32px;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      border-radius: 4px;
+      background: var(--cool-gray-300, #D1D5DB);
+      color: var(--dantricolorblack, #292D32);
+      font-family: $font-Inter;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      border: none;
+      margin-top: -7px;
+      white-space: nowrap;
+
+      &.succeed {
+        background: #00A651;
+        color: #FFF;
+      }
+    }
+  }
+
+  .infoContactContainer {
+    width: 305px;
+    padding-left: 31px;
+
+    h2 {
+      color: #000;
+      font-family: $font-Inter;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: normal;
+      margin: 0 0 31px 0;
+    }
+
+    .head,
+    .body,
+    .footer {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li,
+      a {
+        color: #000;
+        font-family: $font-Inter;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 24px;
+
+        strong {
+          font-weight: 700;
+        }
+      }
+    }
+
+    .head {
+      padding-bottom: 26px;
+    }
+
+    .body {
+      padding-top: 20px;
+      padding-bottom: 27px;
+      border-top: 1px solid #DEDEDE;
+      border-bottom: 1px solid #DEDEDE;
+    }
+
+    .footer {
+      padding-top: 27px;
+    }
+  }
+
+  &.contactContainerMb {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 2px;
+
+    .formContainer,
+    .infoContactContainer {
+      width: 100%;
+      border: none;
+      padding: 0;
+    }
+
+    .formContainer {
+      border-bottom: 1px solid #E8E8E8;
+      padding-bottom: 46px;
+      margin-bottom: 32px;
+
+      .form {
+        .dropZoneContainer {
+          .dropZoneBody {
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 38px 0;
+
+            .descriptionBox {
+              width: calc(100% - 146px);
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              gap: 12px;
+
+              .description {
+                font-size: 14px;
+              }
+            }
+
+            .labelForInput {
+              font-size: 14px;
+              width: 106px;
+              height: 41px;
+            }
+          }
+        }
+      }
+
+      .note {
+        margin-top: -15px;
+      }
+
+      .submit {
+        margin-top: -4px;
+      }
+
+      .fieldFileMb {
+        margin-top: -15px;
+        gap: 9px;
+      }
+
+    }
+  }
+}
+
+.requireField {
+  &::after {
+    content: "*";
+    color: #CD3038;
+    margin: 0 3px;
+  }
+}
+
+.noRequired {
+  color: #6B7280;
+  font-family: $font-Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+}
+
+.error {
+  font-family: $font-Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 15px;
+  display: flex;
+  color: #CD3038;
+
+  .charCount {
+    color: #cd3038;
+  }
+}
+
+.charCount {
+  position: absolute;
+  margin-top: 44px;
+  right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--neutralsdarkgray, #222);
+  text-align: right;
+  font-family: $font-Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.closeButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 1px;
+  right: 1px;
+}
+
+.note {
+  color: var(--neutralsdarkgray, #222);
+  font-family: $font-Inter;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+}

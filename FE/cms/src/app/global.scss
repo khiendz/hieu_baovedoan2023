@@ -1,0 +1,140 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '../styles/shared/variable';
+
+body {
+    background: #FFF none;
+    max-height: fit-content;
+}
+
+.main {
+    &-container {
+        position: relative;
+        min-width: 1280px;
+        background: #FFF;
+        height: auto;
+        z-index: 1;
+        &::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            background: url("../assets/images/background-image.webp");
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+    }
+}
+
+.display-none {
+    display: none;
+}
+
+.user-infos::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    right: 35px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 9px solid #FFF;
+}
+
+.content {
+    &-container {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 8px;
+        min-height: 500px;
+        min-width: 100%;
+        position: relative;
+        @apply dk-shadow-xl;
+    }
+    &-miss,&-miss-v2 {
+        z-index: 1;
+        &::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            opacity: 0.5;
+            background-color: #FFF;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            border-radius: 8px;
+        }
+        &-miss-v2 {
+            &::after {
+                background-color: rgba(0,0,0,0.3)
+            }
+        }
+    }
+    &-news {
+        &::after {
+            opacity: 1;
+        }
+    }
+}
+
+.default-color {
+    color: #8b0000;
+}
+
+.introduce {
+    min-width: 1158px;
+    padding: 16px;
+}
+
+.list-marker {
+    li {
+      &::marker {
+        color: #8b0000;
+      }
+    }
+  }
+
+a {
+    &:hover {
+        color: #8b0000;
+    }
+}
+
+.scroll {
+    &-custom {
+        &::-webkit-scrollbar {
+            width: 4px;
+          }
+        
+          &::-webkit-scrollbar-thumb {
+            background-color: #a0aec0;
+          }
+        
+          &::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+          }
+        
+          /* Firefox */
+          & {
+            scrollbar-width: thin;
+            scrollbar-color: #a0aec0 #f1f1f1;
+          }
+        
+          /* Microsoft Edge */
+          @supports (-ms-overflow-style: none) {
+            &::-ms-scrollbar-thumb {
+              background-color: #a0aec0;
+            }
+        
+            &::-ms-scrollbar-track {
+              background-color: #f1f1f1;
+            }
+          }
+    }
+}

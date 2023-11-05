@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Define your data model
+model Books {
+  BookId     Int       @id @default(autoincrement()) // id sách
+  Title      String    @unique @map("Title") // tiêu đề sách
+  Author     String?   @map("Author") // tác giả
+  BookTypeId Int?      @map("BookTypeId") // id loại sách
+  ISBN       String?   @unique @map("ISBN") // mã ISBN
+  Quantity   Int?      @map("Quantity") // số lượng sách
+  Location   String?   @map("Location") // vị trí sách
+  PublicYear DateTime? @map("PublicYear") // năm suất bản
+  Img        String?   @map("Img") // ảnh sách
+}
+
+model BookType {
+  BookTypeID  Int     @id @default(autoincrement()) // id loại sách
+  Name        String  @unique @map("Name") // tên loại sách
+  Description String? @map("Description") // miêu tả loại sách
+  Img         String? @map("Img") // ảnh loại sách
+}
+
+model Members {
+  MemberId Int       @id @default(autoincrement()) // id thành viên
+  Name     String?   @map("Name") // tên thành viên
+  Address  String?   @map("Address") // địa chỉ
+  Phone    Int?      @map("Phone") // số điện thoại
+  Email    String?   @unique @map("Email") // địa chỉ email
+  JoinDate DateTime? @map("JoinDate") // thời gian tham gia
+}
+
+model BorrowedBooks {
+  TransactionId Int       @id @default(autoincrement()) // id giao dịch
+  MemberId      Int       @map("MemberId") // id thành viên mượn
+  BookId        Int       @map("BookId") // id sách
+  BorrowDate    DateTime? @map("BorrowDate") // thời gian bắt đầu mượn
+  DueDate       DateTime? @map("DueDate") // thời gian hạn trả sách
+  ReturnDate    DateTime? @map("ReturnDate") // ngày trả sách
+  KateFee       Int?      @map("KateFee") // phí trễ hạn trên 1 ngày
+}
+
+model LateFees {
+  LateFeeId     Int @id @default(autoincrement()) // id phí trễ hạn
+  TransactionId Int @map("TransactionId") // id giao dịch
+  FeeAmount     Int @map("FeeAmount") // số tiền phí trễ hạn
+}
+
+model Payments {
+  PaymentID     Int      @id @default(autoincrement()) // id thanh toán
+  LateFeeId     Int      @map("LateFeeId") // id phí trễ hạn
+  PaymentDate   DateTime @map("PaymentDate") // thời gian thanh toán
+  Amount        Float    @map("Amount") // tổng số tiền thanh toán
+  StatePayments Int?     @map("StatePayments") // trạng thái thanh toán
+}
+
+model Employees {
+  EmployeeId   Int     @id @default(autoincrement()) // id nhân viên
+  Name         String? @map("Name") // tên nhân viên
+  Phone        Int?    @map("Phone") // số điện thoại
+  WorkSchedule String? @map("WorkSchedule") // lịch làm việc
+  UserId       Int?    @map("UserId") // id tài khoản
+}
+
+model UserAccounts {
+  UserId   Int     @id @default(autoincrement()) // id tài khoản
+  Username String  @unique @map("Username") // tên tài khoản
+  Password String  @map("Password") // mật khẩu
+  Role     String? @map("Role") // vai trò
+}
+
+model Barcodes {
+  BarcodeId    Int     @id @default(autoincrement()) // id mã vạch
+  BookId       Int     @map("BookId") // id sách
+  BarcodeValue String? @map("BarcodeValue") // giá trị mã vạch
+}
+
+model BackUpData {
+  BackupId        Int     @id @default(autoincrement()) // id bảng backup
+  BackupTimestamp String? @map("BackupTimestamp") // thời gian sao lưu
+  BackupFile      String? @map("BackupFile") // tập sao lưu
+}
