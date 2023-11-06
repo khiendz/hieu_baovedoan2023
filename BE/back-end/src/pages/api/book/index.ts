@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else if (req.method === 'POST') {
         const book = req.body;
 
-        const result = await AddBook(book);
+        const result = await UpdateBook(book);
 
         if (!result) {
             return res.status(500).json({ error: 'Failed to create a new tour type' });
@@ -77,6 +77,30 @@ const AddBook = async (bookData: Book) => {
         console.error(error);
         return {
             tour: null,
+            message: "Internal Server Error",
+            status: "500"
+        };
+    }
+}
+
+const UpdateBook = async (book: Book) => {
+    try {
+        const updatedBook = await prisma.book.update({
+            where: {
+                BookId: 1
+            }, // Assuming you have an 'id' field in your Book model
+            data: book,
+        });
+
+        return {
+            data: updatedBook,
+            message: "Success",
+            status: "200"
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            data: null,
             message: "Internal Server Error",
             status: "500"
         };

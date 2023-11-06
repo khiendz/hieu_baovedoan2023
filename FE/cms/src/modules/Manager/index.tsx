@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import {
   Form,
   Input,
@@ -10,7 +10,7 @@ import {
   Typography,
   Select,
   DatePicker,
-  Space
+  Space,
 } from "antd";
 import { getAllBookType, getAllBookWithType } from "services";
 import { Book } from "Models/Book";
@@ -54,13 +54,13 @@ const EditableCell: React.FC<EditableCellProps> = ({
         />
       );
       break;
-    case "date": 
-        inputNode = (
-          <Space direction="vertical" size={12}>
-            <DatePicker format={"DD-MM-YYYY"}/>
-          </Space>
-        )
-        break;
+    case "date":
+      inputNode = (
+        <Space direction="vertical" size={12}>
+          <DatePicker format={"DD-MM-YYYY"} />
+        </Space>
+      );
+      break;
     default:
       inputNode = <Input />;
       break;
@@ -90,7 +90,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
 const Manager: React.FC = () => {
   const [bookTypes, setBookType] = useState([]);
-  const [books, setBook] = useState([]);
+  const [books, setBook] = useState<Book[]>([]);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record: Book) => record?.BookId?.toString() === editingKey;
@@ -156,12 +156,27 @@ const Manager: React.FC = () => {
       align: "left",
     },
     {
+      title: "Mã sách",
+      className: "column-money",
+      dataIndex: "Barcode",
+      editable: true,
+      align: "left",
+    },
+    {
+      title: "Mã Nhà xuất bản",
+      className: "column-money",
+      dataIndex: "PublisherId",
+      editable: true,
+      align: "left",
+    },
+    {
       title: "operation",
       dataIndex: "operation",
+      align: "center",
       render: (_: any, record: Book) => {
         const editable = isEditing(record);
         return editable ? (
-          <span>
+          <span className="dk-block dk-w-[88px] dk-font-semibold">
             <Typography.Link
               onClick={() => save(record?.BookId || "")}
               style={{ marginRight: 8 }}
@@ -195,7 +210,7 @@ const Manager: React.FC = () => {
         inputType = "select";
         break;
       case "PublicYear":
-        inputType = "date"
+        inputType = "date";
         break;
       default:
         inputType = "text";
@@ -214,7 +229,28 @@ const Manager: React.FC = () => {
     };
   });
 
-  const save = async (key: React.Key) => {};
+  const save = async (key: React.Key) => {
+    try {
+      const row = (await form.validateFields()) as Book;
+      const newData = [...books];
+      const index = newData.findIndex((item) => key === item.BookId);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        setBook(newData);
+        setEditingKey("");
+      } else {
+        newData.push(row);
+        setBook(newData);
+        setEditingKey("");
+      }
+    } catch (errInfo) {
+      console.log("Validate Failed:", errInfo);
+    }
+  };
 
   const cancel = () => {
     setEditingKey("");
