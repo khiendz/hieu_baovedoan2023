@@ -1,28 +1,28 @@
 import { Author } from "./Author";
 import { BookType } from "./BookType";
+import { Book_BookType } from "./Book_BookType";
 import { BorrowedBook } from "./BorrowedBook";
 import { LateFeeType } from "./LateFeeType";
 import { Publisher } from "./Publisher";
 
 // model/Book.ts
 export class Book {
-    constructor(
-      public BookId: number | null,
-      public Title: string,
-      public BookTypeId: number,
-      public ISBN: string | null,
-      public Quantity: number | null,
-      public Location: string | null,
-      public PublicYear: Date | null,
-      public PublisherId: number | null,
-      public AuthorId: number | null,
-      public LateFeeTypeId: number | null,
-      public Img: string | null,
-      public BookType: BookType,
-      public Publisher: Publisher,
-      public Author: Author | null,
-      public Barcode: string | null,
-      public BorrowedBook: BorrowedBook[],
-      public LateFeeType: LateFeeType
-    ) {}
-  }
+  BookId: number;
+  Title: string;
+  ISBN: string | null;
+  Quantity: number | null;
+  Location: string | null;
+  PublicYear: Date | null;
+  Img: string | null;
+  Barcode: string;
+  PublisherId: number | null;
+  AuthorId: number | null;
+  LateFeeTypeId: number;
+
+  Publisher: Publisher | null;
+  Author: Author | null;
+  BorrowedBook: BorrowedBook[];
+  Book_BookType: Book_BookType[];
+  BookType: BookType[];
+}
+  

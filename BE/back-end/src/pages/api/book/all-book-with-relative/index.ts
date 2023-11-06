@@ -21,11 +21,17 @@ const GetBooksWithType = async () => {
     try {
         const book = await prisma.book.findMany({
             include: {
-              BookType: true,
-              Publisher: true
+                Publisher: true,
+                Author: true,
+                BorrowedBook: true,
+                Book_BookType: {
+                    include: {
+                        BookType: true
+                    }
+                }
             }
-          });
-          
+        });
+
 
         if (book) {
             return {
@@ -43,7 +49,7 @@ const GetBooksWithType = async () => {
     } catch (error) {
         console.error(error);
         return {
-            tour: null,
+            data: null,
             message: "Internal Server Error",
             status: "500"
         };

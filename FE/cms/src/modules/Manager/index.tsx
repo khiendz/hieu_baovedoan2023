@@ -17,6 +17,7 @@ import { Book } from "Models/Book";
 import "./style.scss";
 import { BookType } from "Models/BookType";
 import { format } from "date-fns";
+import { Book_BookType } from "Models/Book_BookType";
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
@@ -41,14 +42,14 @@ const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   const arrayBookType = bookTypes?.map((ob: BookType) => {
-    return { value: ob.BookTypeID, label: ob.Name };
+    return { value: ob.BookTypeId, label: ob.Name };
   });
   let inputNode = null;
   switch (inputType) {
     case "select":
       inputNode = (
         <Select
-          defaultValue={arrayBookType[0].value}
+          defaultValue={arrayBookType[0]?.value}
           options={[...arrayBookType]}
         />
       );
@@ -106,9 +107,13 @@ const Manager: React.FC = () => {
     {
       title: "Loại sách",
       className: "column-money",
-      dataIndex: "BookType",
+      dataIndex: "Book_BookType",
       inputType: "Select",
-      render: (bookType: BookType) => <span className="dk-block dk-w-[150px]">{bookType.Name}</span>,
+      render: (bookType: Book_BookType[]) => (
+        <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
+          {bookType?.map((ob) => ob.BookType.Name).join(", ")}
+        </span>
+      ),
       editable: true,
       align: "left",
     },
@@ -202,10 +207,10 @@ const Manager: React.FC = () => {
     if (!col.editable) {
       return col;
     }
-
+    
     let inputType = "text";
     switch (col.dataIndex) {
-      case "BookType":
+      case "Book_BookType":
         inputType = "select";
         break;
       case "PublicYear":

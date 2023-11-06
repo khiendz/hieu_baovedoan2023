@@ -1,12 +1,12 @@
 import { Book } from "./Book";
+import { Book_BookType } from "./Book_BookType";
 
 // model/BookType.ts
 export class BookType {
-    constructor(
-      public BookTypeID: number,
-      public Name: string,
-      public Description: string | null,
-      public Img: string | null,
-      public Books: Book[]
-    ) {}
-  }
+  BookTypeId: number;
+  Name: string;
+  Description: string | null;
+  Img: string | null;
+  Book_BookType: Book_BookType[];
+  Book: Book[];
+}

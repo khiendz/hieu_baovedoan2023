@@ -19,14 +19,15 @@ model Book {
   PublicYear    DateTime?
   Img           String?
   Barcode       String    @default("")
-  PublisherId   Int?       @default(0)
-  AuthorId      Int?       @default(0)
+  PublisherId   Int?      @default(0)
+  AuthorId      Int?      @default(0)
   LateFeeTypeId Int       @default(0)
 
-  BookType     BookType[]
-  Publisher    Publisher?     @relation(fields: [PublisherId], references: [PublisherId])
-  Author       Author?        @relation(fields: [AuthorId], references: [AuthorId])
-  BorrowedBook BorrowedBook[]
+  Publisher     Publisher?      @relation(fields: [PublisherId], references: [PublisherId])
+  Author        Author?         @relation(fields: [AuthorId], references: [AuthorId])
+  BorrowedBook  BorrowedBook[]
+  Book_BookType Book_BookType[]
+  BookType      BookType[]
 }
 
 model Author {
@@ -46,12 +47,21 @@ model Publisher {
 }
 
 model BookType {
-  BookTypeID  Int     @id @map("BookTypeID")
-  Name        String
-  Description String?
-  Img         String?
+  BookTypeId    Int             @id @default(autoincrement()) @map("BookTypeId")
+  Name          String
+  Description   String?
+  Img           String?
+  Book_BookType Book_BookType[]
+  Book          Book[]
+}
 
-  Books Book[]
+model Book_BookType {
+  Book_BookTypeId Int @id @default(autoincrement()) @map("Book_BookTypeId")
+  BookId          Int
+  BookTypeId      Int
+
+  Book     Book     @relation(fields: [BookId], references: [BookId])
+  BookType BookType @relation(fields: [BookTypeId], references: [BookTypeId])
 }
 
 model Member {

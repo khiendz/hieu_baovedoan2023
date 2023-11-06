@@ -34,7 +34,7 @@ export async function getBookByName(id: string,tags: string) {
 
 export async function getAllBook () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/book?tag=1`);
+        const res: any = await axios.get(`${domainBE}/api/book`);
         if (res.status == 200) 
             return res.data;
         

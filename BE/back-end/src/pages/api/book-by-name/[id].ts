@@ -13,12 +13,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).json({ error: 'Invalid title query' });
     }
  
-    const tagArray = tags.toString().split(",");
+    const tagArray = tags?.toString()?.split(",");
     try {
       const listBook = await prisma.book.findMany({
-        where: {
-          BookTypeId: {
-            in: Array.isArray(tagArray) ? tagArray.map(e => parseInt(e)) : [parseInt(tagArray)]
+        include: {
+          Book_BookType: {
+            where: {
+              BookTypeId: {
+                in: Array.isArray(tagArray) ? tagArray?.map(e => parseInt(e)) : [0]
+              }
+            }
           }
         }
       });
