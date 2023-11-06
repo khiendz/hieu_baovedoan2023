@@ -19,13 +19,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const GetBooksWithType = async () => {
     try {
-        const book = await prisma.book.findMany(
-            {
-                include: {
-                    BookType: true
-                }
+        const book = await prisma.book.findMany({
+            include: {
+              BookType: true,
+              Publisher: true
             }
-        );
+          });
+          
 
         if (book) {
             return {

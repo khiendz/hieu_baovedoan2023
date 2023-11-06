@@ -12,7 +12,7 @@ import {
   DatePicker,
   Space,
 } from "antd";
-import { getAllBookType, getAllBookWithType } from "services";
+import { getAllBookType, getAllBookWithRelative } from "services";
 import { Book } from "Models/Book";
 import "./style.scss";
 import { BookType } from "Models/BookType";
@@ -44,12 +44,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
     return { value: ob.BookTypeID, label: ob.Name };
   });
   let inputNode = null;
-
   switch (inputType) {
     case "select":
       inputNode = (
         <Select
-          defaultValue={record?.BookType?.Name}
+          defaultValue={arrayBookType[0].value}
           options={[...arrayBookType]}
         />
       );
@@ -109,7 +108,7 @@ const Manager: React.FC = () => {
       className: "column-money",
       dataIndex: "BookType",
       inputType: "Select",
-      render: (bookType: BookType) => <span>{bookType.Name}</span>,
+      render: (bookType: BookType) => <span className="dk-block dk-w-[150px]">{bookType.Name}</span>,
       editable: true,
       align: "left",
     },
@@ -270,7 +269,7 @@ const Manager: React.FC = () => {
 
   const initData = async () => {
     try {
-      const result = await getAllBookWithType();
+      const result = await getAllBookWithRelative();
       if (result && result?.data) {
         setBook(result?.data);
       }

@@ -43,9 +43,9 @@ export async function getAllBook () {
     }
 }
 
-export async function getAllBookWithType () {
+export async function getAllBookWithRelative () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/book/all-book-with-type`);
+        const res: any = await axios.get(`${domainBE}/api/book/all-book-with-relative`);
         if (res.status == 200) 
             return res.data;
         

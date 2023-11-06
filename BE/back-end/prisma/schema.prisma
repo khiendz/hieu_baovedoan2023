@@ -24,9 +24,9 @@ model Book {
   AuthorId      Int       @default(0)
   LateFeeTypeId Int       @default(0)
 
-  BookType     BookType       @relation(fields: [BookTypeId], references: [BookTypeID])
-  Publisher    Publisher      @relation(fields: [PublisherId], references: [PublisherId])
-  Author       Author         @relation(fields: [AuthorId], references: [AuthorId])
+  BookType     BookType?      @relation(fields: [BookTypeId], references: [BookTypeID])
+  Publisher    Publisher?     @relation(fields: [PublisherId], references: [PublisherId])
+  Author       Author?        @relation(fields: [AuthorId], references: [AuthorId])
   BorrowedBook BorrowedBook[]
 }
 
@@ -81,8 +81,8 @@ model BorrowedBook {
   ReturnDate    DateTime?
   KateFee       Int?
 
-  Member   Member    @relation(fields: [MemberId], references: [MemberId])
-  Book     Book      @relation(fields: [BookId], references: [BookId])
+  Member   Member?   @relation(fields: [MemberId], references: [MemberId])
+  Book     Book?     @relation(fields: [BookId], references: [BookId])
   LateFees LateFee[]
 }
 
@@ -120,7 +120,7 @@ model Employee {
   WorkSchedule String?
   UserId       Int     @map("UserId")
 
-  UserAccount UserAccount @relation(fields: [UserId], references: [UserId])
+  UserAccount UserAccount? @relation(fields: [UserId], references: [UserId])
 }
 
 model UserAccount {
