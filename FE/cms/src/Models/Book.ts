@@ -9,7 +9,6 @@ export class Book {
     constructor(
       public BookId: number | null,
       public Title: string,
-      public BookTypeId: number,
       public ISBN: string | null,
       public Quantity: number | null,
       public Location: string | null,
@@ -18,7 +17,7 @@ export class Book {
       public AuthorId: number | null,
       public LateFeeTypeId: number | null,
       public Img: string | null,
-      public BookType: BookType,
+      public BookType: BookType[],
       public Publisher: Publisher,
       public Author: Author | null,
       public Barcode: string | null,

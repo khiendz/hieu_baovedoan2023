@@ -13,18 +13,17 @@ datasource db {
 model Book {
   BookId        Int       @id @default(autoincrement()) @map("BookId")
   Title         String
-  BookTypeId    Int       @map("BookTypeId")
   ISBN          String?
   Quantity      Int?
   Location      String?
   PublicYear    DateTime?
   Img           String?
   Barcode       String    @default("")
-  PublisherId   Int       @default(0)
-  AuthorId      Int       @default(0)
+  PublisherId   Int?       @default(0)
+  AuthorId      Int?       @default(0)
   LateFeeTypeId Int       @default(0)
 
-  BookType     BookType?      @relation(fields: [BookTypeId], references: [BookTypeID])
+  BookType     BookType[]
   Publisher    Publisher?     @relation(fields: [PublisherId], references: [PublisherId])
   Author       Author?        @relation(fields: [AuthorId], references: [AuthorId])
   BorrowedBook BorrowedBook[]
