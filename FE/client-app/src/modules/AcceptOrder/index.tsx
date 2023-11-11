@@ -80,9 +80,10 @@ export default function AcceptOrder(props: Props) {
           <Formik
             initialValues={{
               fullName: "",
-              phone: 0,
+              phone: null,
               email: "",
               different: "",
+              dueDate: new Date()
             }}
             enableReinitialize={true}
             validate={(values) => {
@@ -102,7 +103,7 @@ export default function AcceptOrder(props: Props) {
                 (members?.length || 0) + 1,
                 values.fullName,
                 values.different,
-                values.phone as number,
+                values.phone,
                 values.email,
                 new Date(),
                 0,
@@ -113,7 +114,7 @@ export default function AcceptOrder(props: Props) {
                 isNewMember ? isNewMember.MemberId : member?.MemberId,
                 bookOrder.BookId,
                 new Date(),
-                new Date(),
+                new Date(values.dueDate),
                 new Date(),
                 20000,
                 member,
@@ -128,7 +129,7 @@ export default function AcceptOrder(props: Props) {
                     data?.MemberId,
                     bookOrder.BookId,
                     new Date(),
-                    new Date(),
+                    new Date(values.dueDate),
                     new Date(),
                     20000,
                     member,
@@ -237,6 +238,26 @@ export default function AcceptOrder(props: Props) {
                   <ErrorMessage
                     className={styles.error}
                     name="different"
+                    component="div"
+                  />
+                </div>
+                <div className={classNames(styles.fieldContainer)}>
+                  <p className="dk-mt-5">Hạn trả:</p>
+                  <Field
+                    className={classNames(styles.field, {
+                      [styles.success]: !errors.dueDate && touched.dueDate,
+                    }, styles.different)}
+                    type="date"
+                    id="different"
+                    name="dueDate"
+                    placeholder="Địa chỉ"
+                    onChange={(e: any) => {
+                      setFieldValue("dueDate", e.target.value);
+                    }}
+                  />
+                  <ErrorMessage
+                    className={styles.error}
+                    name="dueDate"
                     component="div"
                   />
                 </div>

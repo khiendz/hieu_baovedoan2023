@@ -16,6 +16,11 @@ const items: MenuProps['items'] = [
     label: <Link href='/tac-gia' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Tác giả</span></Link>,
     key: 'news',
     icon: <EditOutlined />
+  },
+  {
+    label: <Link href='/muon-sach' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Mượn sách</span></Link>,
+    key: 'order',
+    icon: <EditOutlined />
   }
 ];
 
