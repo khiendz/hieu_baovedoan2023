@@ -18,13 +18,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         return res.json({ ...result });
-    } else if (req.method === 'POST') {
+    } else if (req.method === 'PUT') {
         const book = req.body;
 
         const result = await UpdateBook(book);
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to create a new tour type' });
+            return res.status(500).json({ error: 'Failed to update the book' });
+        }
+
+        return res.json({ ...result });
+    }  else if (req.method === 'POST') {
+        const book = req.body;
+
+        const result = await AddBook(book);
+
+        if (!result) {
+            return res.status(500).json({ error: 'Failed to create a new book' });
         }
 
         return res.json({ ...result });
@@ -46,7 +56,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 const GetBook = async () => {
     try {
         const book = await prisma.book.findMany();
-
         if (book) {
             return {
                 data: book,
@@ -70,15 +79,27 @@ const GetBook = async () => {
     }
 }
 
-const AddBook = async (bookData: Book) => {
+const AddBook = async (book: Book) => {
     try {
-        const book = await prisma.book.create({
-            data: bookData,
+        const bookResult = await prisma.book.create({
+            data: {
+                BookId: book.BookId,
+                Title: book.Title,
+                ISBN: book.ISBN,
+                Quantity: book.Quantity,
+                Location: book.Location,
+                PublicYear: book.PublicYear,
+                Img: book.Img,
+                Barcode: book.Barcode,
+                PublisherId: book.PublisherId,
+                AuthorId: book.AuthorId,
+                LateFeeTypeId: book.LateFeeTypeId
+            },
         });
 
-        if (bookData) {
+        if (bookResult) {
             return {
-                tour: bookData,
+                tour: bookResult,
                 message: "Success",
                 status: "200"
             };

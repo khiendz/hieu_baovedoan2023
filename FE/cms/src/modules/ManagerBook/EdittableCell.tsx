@@ -109,6 +109,9 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             format={"DD-MM-YYYY"}
             defaultValue={dayjs(record?.PublicYear)}
             className="dk-w-[200px]"
+            onChange={(value) => {
+              form.setFieldValue(dataIndex, dayjs(value));
+            }}
           />
         </Space>
       );

@@ -7,6 +7,7 @@ import {
   getAllPublisher,
   UpdateBook,
   DeleteBook,
+  AddBook,
 } from "services";
 import { Book } from "Models/Book";
 import "./style.scss";
@@ -16,6 +17,8 @@ import { Publisher } from "Models/Publisher";
 import { Author } from "Models/Author";
 import { EditableCell } from "./EdittableCell";
 import { BookType } from "Models/BookType";
+import AddRecord from "./Component/AddRecord";
+import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/interface';
 
 const ManagerBook: React.FC = () => {
   const [bookTypes, setBookType] = useState([]);
@@ -24,6 +27,9 @@ const ManagerBook: React.FC = () => {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
+  const [open, setOpen] = useState(false);
+  const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | null>>({});
+  const [sortedInfo, setSortedInfo] = useState<SorterResult<Book>>({});
   const isEditing = (record: Book) => record?.BookId?.toString() === editingKey;
 
   const columns = [
@@ -44,7 +50,7 @@ const ManagerBook: React.FC = () => {
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
           {bookTypes
             .filter((ob: BookType) =>
-              bookType.find(
+              bookType?.find(
                 (el: Book_BookType) => el.BookTypeId == ob.BookTypeId
               )
             )
@@ -81,7 +87,7 @@ const ManagerBook: React.FC = () => {
       className: "column-money",
       dataIndex: "PublicYear",
       render: (date: any) => {
-        const timer = new Date(date);
+        const timer = new Date(date || new Date());
         return <p>{format(timer, "dd-MM-yyyy")}</p>;
       },
       editable: true,
@@ -220,6 +226,17 @@ const ManagerBook: React.FC = () => {
     }
   };
 
+  const handleAddBook =async (book:Book) => {
+    try {
+      const result = await AddBook(book);
+      if (result) return result?.data;
+      else return null;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  }
+
   const clearTheBook = async (bookId: number) => {
     if (!bookId) return null;
 
@@ -267,6 +284,12 @@ const ManagerBook: React.FC = () => {
     setBook(newData);
   };
 
+  const handleAdd = async(book: Book) => {
+    const result = await handleAddBook(book);
+    debugger
+    setBook([{...book,BookId: books.length + 1},...books]);
+  };
+
   const edit = (record: Book, key: string) => {
     form.setFieldsValue({
       ...record,
@@ -285,7 +308,7 @@ const ManagerBook: React.FC = () => {
     try {
       const result = await getAllBookWithRelative();
       if (result && result?.data) {
-        setBook(result?.data);
+        setBook(result?.data?.reverse());
       }
     } catch (e) {}
   };
@@ -319,6 +342,7 @@ const ManagerBook: React.FC = () => {
 
   return books && bookTypes ? (
     <Form form={form} component={false}>
+      <AddRecord Authors={authors} Publishers={publishers} BookTypes={bookTypes} Save={handleAdd} Form={form} Books={books}/>
       <Table
         columns={mergedColumns}
         dataSource={books}

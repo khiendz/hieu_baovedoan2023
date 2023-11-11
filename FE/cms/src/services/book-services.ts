@@ -57,6 +57,24 @@ export async function getAllBookWithRelative () {
 
 export async function UpdateBook(book: Book) {
     try {
+        const res: any = await axios.put(`${domainBE}/api/book`, JSON.stringify(book), {
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+        });
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book:', e);
+    }
+
+    return null;
+}
+
+export async function AddBook(book: Book) {
+    try {
         const res: any = await axios.post(`${domainBE}/api/book`, JSON.stringify(book), {
             headers: {
                 'Content-Type': 'application/json', 
