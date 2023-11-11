@@ -1,23 +1,70 @@
 "use client";
 import { LoadingOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import { useState } from "react";
-import { UserOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useAppContext } from "hook/use-app-context";
 import { BorrowedBook } from "Models/BorrowedBook";
 import classNames from "classnames";
+import { Member } from "Models/Member";
+import { AddBorrowedBook } from "services/borrowedBook-services";
+import { AddMember, getAllMember } from "services";
 import { Book } from "Models/Book";
+import dayjs from "dayjs";
 
 type Props = {
-  bookOrder: any;
+  bookOrder: Book;
   setBook: any;
   setOrder: any;
   showPopup: any;
 };
 
 export default function AcceptOrder(props: Props) {
+  const [members,setMembers] = useState<Member[]>();
+  const {bookOrder, setBook, setOrder} = props;
+
+  useEffect(() => {
+    initMember();
+  }, []);
+
+  const HandleAddBorrowedBook = async (borrowedBook: BorrowedBook) => {
+    if (!borrowedBook)
+      return null;
+
+    try {
+      const result = await AddBorrowedBook(borrowedBook);
+      if (result) 
+        return result.data;
+      return null;
+    }catch (e){
+      console.log(e);
+      return null;
+    }
+  }
+
+  const HandleAddMember = async (member: Member) => {
+    if (!member)
+      return null;
+
+    try {
+      if (members?.find(ob => ob.MemberId == member.MemberId))
+        return;
+      const result = await AddMember(member);
+      if (result) 
+        return result.data;
+      return null;
+    }catch (e){
+      console.log(e);
+      return null;
+    }
+  }
+
+  const initMember = async () => {
+    const result = await getAllMember();
+    if (result && result?.data)
+      setMembers(result.data);
+  }
+
   return (
     <div className={styles.container}>
       <div
@@ -33,7 +80,7 @@ export default function AcceptOrder(props: Props) {
           <Formik
             initialValues={{
               fullName: "",
-              phone: "",
+              phone: 0,
               email: "",
               different: "",
             }}
@@ -49,11 +96,60 @@ export default function AcceptOrder(props: Props) {
               }
               return errors;
             }}
-            onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-              }, 400);
+            onSubmit={async (values, { setSubmitting }) => {
+              const isNewMember = members?.find(ob => ob.Phone == values.phone);
+              const member = new Member(
+                (members?.length || 0) + 1,
+                values.fullName,
+                values.different,
+                values.phone as number,
+                values.email,
+                new Date(),
+                0,
+                []
+              );
+              let borrowedBook = new BorrowedBook(
+                0,
+                isNewMember ? isNewMember.MemberId : member?.MemberId,
+                bookOrder.BookId,
+                new Date(),
+                new Date(),
+                new Date(),
+                20000,
+                member,
+                bookOrder,
+                []
+              );
+
+              if (isNewMember === undefined) {
+                HandleAddMember(member).then(async (data: Member) => {
+                  borrowedBook = new BorrowedBook(
+                    0,
+                    data?.MemberId,
+                    bookOrder.BookId,
+                    new Date(),
+                    new Date(),
+                    new Date(),
+                    20000,
+                    member,
+                    bookOrder,
+                    []
+                  );
+                  const result = await HandleAddBorrowedBook(borrowedBook);
+
+                  if (result) {
+                    setSubmitting(false);
+                    setOrder(false);
+                  }
+                })
+              } else {
+                const result = await HandleAddBorrowedBook(borrowedBook);
+
+                if (result) {
+                  setSubmitting(false);
+                  setOrder(false);
+                }
+              }
             }}
           >
             {({

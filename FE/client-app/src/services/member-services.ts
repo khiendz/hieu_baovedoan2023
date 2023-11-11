@@ -1,16 +1,15 @@
-import { Book } from 'Models/Book';
-import { BorrowedBook } from 'Models/BorrowedBook';
+import { Member } from 'Models/Member';
 import axios from 'axios';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
 
-export async function getBorrowedBookById(id: string) {
+export async function getMemberById(id: string) {
 
     if (!id)
         return null;
 
     try {
-        const res: any = await axios.get(`${domainBE}/api/borrowed-book/${id}`);
+        const res: any = await axios.get(`${domainBE}/api/member/${id}`);
         if (res.status == 200)
             return res.data;
 
@@ -19,9 +18,9 @@ export async function getBorrowedBookById(id: string) {
     }
 }
 
-export async function getAllBorrowedBook () {
+export async function getAllMember () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/borrowedBook?tag=1`);
+        const res: any = await axios.get(`${domainBE}/api/member`);
         if (res.status == 200) 
             return res.data;
         
@@ -30,9 +29,9 @@ export async function getAllBorrowedBook () {
     }
 }
 
-export async function getAllBorrowedWithRelative () {
+export async function getAllMemberWithRelative () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/borrowedBook/all-book-with-relative`);
+        const res: any = await axios.get(`${domainBE}/api/member/all-member-with-relative`);
         if (res.status == 200) 
             return res.data;
         
@@ -41,9 +40,9 @@ export async function getAllBorrowedWithRelative () {
     }
 }
 
-export async function UpdateBorrowedBook(borrowedBool: BorrowedBook) {
+export async function UpdateMember(member: Member) {
     try {
-        const res: any = await axios.put(`${domainBE}/api/borrowed-book`, JSON.stringify(borrowedBool), {
+        const res: any = await axios.put(`${domainBE}/api/member`, JSON.stringify(member), {
             headers: {
                 'Content-Type': 'application/json', 
             },
@@ -59,9 +58,9 @@ export async function UpdateBorrowedBook(borrowedBool: BorrowedBook) {
     return null;
 }
 
-export async function AddBorrowedBook(borrowedBook: BorrowedBook) {
+export async function AddMember(borrowedBook: Member) {
     try {
-        const res: any = await axios.post(`${domainBE}/api/borrowed-book`, JSON.stringify(borrowedBook), {
+        const res: any = await axios.post(`${domainBE}/api/member`, JSON.stringify(borrowedBook), {
             headers: {
                 'Content-Type': 'application/json', 
             },
@@ -77,9 +76,9 @@ export async function AddBorrowedBook(borrowedBook: BorrowedBook) {
     return null;
 }
 
-export async function DeleteBorrowedBook(borrowedBookId: number) {
+export async function DeleteMember(memberId: number) {
     try {
-        const res: any = await axios.delete(`${domainBE}/api/borrowed-book?borrowedBookId=${borrowedBookId}`);
+        const res: any = await axios.delete(`${domainBE}/api/member?memberId=${memberId}`);
 
         if (res.status === 200) {
             return res.data;

@@ -83,7 +83,14 @@ const GetAllBorrowedBook = async () => {
 const AddBorrowedBook = async (borrow: BorrowedBook) => {
     try {
         const borrowResult = await prisma.borrowedBook.create({
-            data: borrow,
+            data: {
+                MemberId: borrow.MemberId,
+                BookId: borrow.BookId,
+                BorrowDate: borrow.BorrowDate,
+                DueDate: borrow.DueDate,
+                ReturnDate: borrow.ReturnDate,
+                KateFee: borrow.KateFee
+            },
         });
 
         if (borrowResult) {

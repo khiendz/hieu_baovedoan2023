@@ -68,7 +68,7 @@ model Member {
   MemberId     Int            @id @default(autoincrement()) @map("MemberId")
   Name         String?
   Address      String?
-  Phone        Int?
+  Phone        String?
   Email        String?
   JoinDate     DateTime?
   MemberRoleId Int            @default(0)

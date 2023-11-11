@@ -15,7 +15,7 @@ const { Meta } = Card;
 
 const Product: React.FC = () => {
   const router = useRouter();
-  const [book, setBook] = useState<Book>();
+  const [book, setBook] = useState<Book>(new Book());
   const [bookTypes, setBookType] = useState([]);
   const { id } = router.query;
   const [orderAccept, setOrrderAccept] = useState(false);
@@ -110,7 +110,7 @@ const Product: React.FC = () => {
                     <li>
                       Năm xuất bản:{" "}
                       {format(
-                        new Date(book?.PublicYear?.toString() || ""),
+                        book?.PublicYear ? new Date(book?.PublicYear?.toString() || "") : new Date(),
                         "dd-MM-yyyy"
                       )}
                     </li>
