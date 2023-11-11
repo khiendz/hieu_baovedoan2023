@@ -1,96 +1,31 @@
 import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import {
   Form,
-  Input,
-  InputNumber,
   Popconfirm,
   Table,
   Typography,
-  Select,
-  DatePicker,
-  Space,
 } from "antd";
-import { getAllBookType, getAllBookWithRelative } from "services";
+import {
+  getAllBookType,
+  getAllBookWithRelative,
+  getAllAuthor,
+  getAllPublisher,
+  UpdateBook
+} from "services";
 import { Book } from "Models/Book";
 import "./style.scss";
-import { BookType } from "Models/BookType";
 import { format } from "date-fns";
 import { Book_BookType } from "Models/Book_BookType";
+import { Publisher } from "Models/Publisher";
+import { Author } from "Models/Author";
+import { EditableCell } from "./EdittableCell";
+import { BookType } from "Models/BookType";
 
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: "date" | "text" | "select";
-  bookTypes: BookType[];
-  record: Book;
-  index: number;
-  children: React.ReactNode;
-}
-
-const EditableCell: React.FC<EditableCellProps> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  bookTypes,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const arrayBookType = bookTypes?.map((ob: BookType) => {
-    return { value: ob.BookTypeId, label: ob.Name };
-  });
-  let inputNode = null;
-  switch (inputType) {
-    case "select":
-      inputNode = (
-        <Select
-          defaultValue={arrayBookType[0]?.value}
-          options={[...arrayBookType]}
-        />
-      );
-      break;
-    case "date":
-      inputNode = (
-        <Space direction="vertical" size={12}>
-          <DatePicker format={"DD-MM-YYYY"} />
-        </Space>
-      );
-      break;
-    default:
-      inputNode = <Input />;
-      break;
-  }
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
-const Manager: React.FC = () => {
+const ManagerBook: React.FC = () => {
   const [bookTypes, setBookType] = useState([]);
   const [books, setBook] = useState<Book[]>([]);
+  const [authors, setAuthors] = useState<Author[]>([]);
+  const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
   const isEditing = (record: Book) => record?.BookId?.toString() === editingKey;
@@ -111,7 +46,11 @@ const Manager: React.FC = () => {
       inputType: "Select",
       render: (bookType: Book_BookType[]) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-          {bookType?.map((ob) => ob.BookType.Name).join(", ")}
+          {
+            bookTypes.filter((ob: BookType) => 
+            bookType.find((el: Book_BookType) => 
+            el.BookTypeId == ob.BookTypeId)).map((ob: BookType) => ob?.Name)?.join(", ")
+          }
         </span>
       ),
       editable: true,
@@ -167,9 +106,28 @@ const Manager: React.FC = () => {
       align: "left",
     },
     {
-      title: "Mã Nhà xuất bản",
+      title: "Nhà xuất bản",
       className: "column-money",
-      dataIndex: "PublisherId",
+      dataIndex: "Publisher",
+      inputType: "Select",
+      render: (publisher: Publisher) => (
+        <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
+          {publisher?.Name}
+        </span>
+      ),
+      editable: true,
+      align: "left",
+    },
+    {
+      title: "Tác giả",
+      className: "column-money",
+      dataIndex: "Author",
+      inputType: "Select",
+      render: (author: Author) => (
+        <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
+          {author?.Name}
+        </span>
+      ),
       editable: true,
       align: "left",
     },
@@ -207,10 +165,16 @@ const Manager: React.FC = () => {
     if (!col.editable) {
       return col;
     }
-    
+
     let inputType = "text";
     switch (col.dataIndex) {
       case "Book_BookType":
+        inputType = "select";
+        break;
+      case "Author":
+        inputType = "select";
+        break;
+      case "Publisher":
         inputType = "select";
         break;
       case "PublicYear":
@@ -229,9 +193,26 @@ const Manager: React.FC = () => {
         title: col.title,
         editing: isEditing(record),
         bookTypes: bookTypes,
+        authors: authors,
+        publishers: publishers,
+        form: form
       }),
     };
   });
+
+  const changeBook = async (book: Book) => {
+    try {
+      const result = await UpdateBook(book);
+      if (result) 
+        return result?.data;
+      else 
+        return null;
+    } catch (e) 
+    {
+      console.log(e);
+      return null;
+    }
+  }
 
   const save = async (key: React.Key) => {
     try {
@@ -240,6 +221,8 @@ const Manager: React.FC = () => {
       const index = newData.findIndex((item) => key === item.BookId);
       if (index > -1) {
         const item = newData[index];
+        const newBook = {...item,...row};
+        const result = changeBook(newBook);
         newData.splice(index, 1, {
           ...item,
           ...row,
@@ -270,6 +253,8 @@ const Manager: React.FC = () => {
   useEffect(() => {
     initData();
     initBookType();
+    initAuthor();
+    initPublisher();
   }, []);
 
   const initData = async () => {
@@ -286,6 +271,24 @@ const Manager: React.FC = () => {
       const result = await getAllBookType();
       if (result) {
         setBookType(result.data);
+      }
+    } catch (e) {}
+  };
+
+  const initAuthor = async () => {
+    try {
+      const result = await getAllAuthor();
+      if (result) {
+        setAuthors(result.data);
+      }
+    } catch (e) {}
+  };
+
+  const initPublisher = async () => {
+    try {
+      const result = await getAllPublisher();
+      if (result) {
+        setPublishers(result.data);
       }
     } catch (e) {}
   };
@@ -317,4 +320,4 @@ const Manager: React.FC = () => {
   ) : null;
 };
 
-export default Manager;
+export default ManagerBook;

@@ -13,7 +13,7 @@ const items: MenuProps['items'] = [
     icon: <HomeOutlined />,
   },
   {
-    label: <Link href='/tin-tuc' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Tin tức</span></Link>,
+    label: <Link href='/tac-gia' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Tác giả</span></Link>,
     key: 'news',
     icon: <EditOutlined />
   },

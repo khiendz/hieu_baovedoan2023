@@ -1,17 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, Book, Prisma, Book_BookType } from '@prisma/client';
+import { PrismaClient, Author, Publisher } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-
-    if (req.method == "OPTIONS") {
-        res.setHeader("Allow", "POST");
-        return res.status(202).json({});
-    }
-
     if (req.method === 'GET') {
-        const result = await GetBook();
+        const result = await GetAllPublisher();
 
         if (!result) {
             return res.status(400).json({ error: 'Invalid tour ID' });
@@ -19,9 +13,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.json({ ...result });
     } else if (req.method === 'POST') {
-        const book = req.body;
+        const author = req.body;
 
-        const result = await UpdateBook(book);
+        const result = await UpdatePublisher(author);
 
         if (!result) {
             return res.status(500).json({ error: 'Failed to create a new tour type' });
@@ -33,13 +27,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-const GetBook = async () => {
+const GetAllPublisher = async () => {
     try {
-        const book = await prisma.book.findMany();
+        const publishers = await prisma.publisher.findMany();
 
-        if (book) {
+        if (publishers) {
             return {
-                data: book,
+                data: publishers,
                 message: "Success",
                 status: "200"
             };
@@ -60,15 +54,15 @@ const GetBook = async () => {
     }
 }
 
-const AddBook = async (bookData: Book) => {
+const AddPublisher= async (publisher: Publisher) => {
     try {
-        const book = await prisma.book.create({
-            data: bookData,
+        const publisherResult = await prisma.publisher.create({
+            data: publisher,
         });
 
-        if (bookData) {
+        if (publisherResult) {
             return {
-                tour: bookData,
+                author: publisherResult,
                 message: "Success",
                 status: "200"
             };
@@ -89,43 +83,17 @@ const AddBook = async (bookData: Book) => {
     }
 }
 
-const UpdateBook = async (book: any) => {
+const UpdatePublisher = async (publisher: Publisher) => {
     try {
-        const updatedBook = await prisma.book.update({
+        const updatedPublisher = await prisma.publisher.update({
             where: {
-                BookId: book?.BookId
-            },
-            data: {
-                AuthorId: book.Author.AuthorId,
-                Barcode: book.Barcode,
-                Img: book.Img,
-                ISBN: book.ISBN,
-                LateFeeTypeId: book.LateFeeTypeId,
-                Location: book.Location,
-                PublicYear: book.PublicYear,
-                Quantity: book.Quantity,
-                PublisherId: book.Publisher.PublisherId,
-                Title: book.Title
-            },
-        });
-
-        await prisma.book_BookType.deleteMany({
-            where: {
-                BookId: book?.BookId
-            }
-        });
-
-        book.Book_BookType.forEach(async (element: Book_BookType) => {
-            await prisma.book_BookType.create({
-                data: {
-                    BookId: element.BookId,
-                    BookTypeId: element.BookTypeId
-                }
-            })
+                PublisherId: publisher.PublisherId
+            }, 
+            data: publisher,
         });
 
         return {
-            data: updatedBook,
+            data: updatedPublisher,
             message: "Success",
             status: "200"
         };

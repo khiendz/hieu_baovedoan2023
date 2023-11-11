@@ -6,7 +6,7 @@ export const typeRegion = {
     global: 1
 }
 
-export async function getBookTypeById(id: string) {
+export async function getBookTypeByBookId(id: string) {
     if (!id)
         return null;
     

@@ -1,17 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, Book, Prisma, Book_BookType } from '@prisma/client';
+import { PrismaClient, Book, Author, BorrowedBook } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-
-    if (req.method == "OPTIONS") {
-        res.setHeader("Allow", "POST");
-        return res.status(202).json({});
-    }
-
     if (req.method === 'GET') {
-        const result = await GetBook();
+        const result = await GetAllBorrowedBook();
 
         if (!result) {
             return res.status(400).json({ error: 'Invalid tour ID' });
@@ -19,12 +13,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.json({ ...result });
     } else if (req.method === 'POST') {
-        const book = req.body;
+        const borrowedBook = req.body;
 
-        const result = await UpdateBook(book);
+        const result = await UpdateBorrowedBook(borrowedBook);
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to create a new tour type' });
+            return res.status(500).json({ error: 'Failed to create a new borrowed book' });
         }
 
         return res.json({ ...result });
@@ -33,13 +27,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-const GetBook = async () => {
+const GetAllBorrowedBook = async () => {
     try {
-        const book = await prisma.book.findMany();
+        const borrowedBook = await prisma.borrowedBook.findMany();
 
-        if (book) {
+        if (borrowedBook) {
             return {
-                data: book,
+                data: borrowedBook,
                 message: "Success",
                 status: "200"
             };
@@ -60,15 +54,15 @@ const GetBook = async () => {
     }
 }
 
-const AddBook = async (bookData: Book) => {
+const AddAuthor = async (author: Author) => {
     try {
-        const book = await prisma.book.create({
-            data: bookData,
+        const authorResult = await prisma.author.create({
+            data: author,
         });
 
-        if (bookData) {
+        if (authorResult) {
             return {
-                tour: bookData,
+                author: authorResult,
                 message: "Success",
                 status: "200"
             };
@@ -89,43 +83,17 @@ const AddBook = async (bookData: Book) => {
     }
 }
 
-const UpdateBook = async (book: any) => {
+const UpdateBorrowedBook = async (borrowedBook: BorrowedBook) => {
     try {
-        const updatedBook = await prisma.book.update({
+        const updatedBorrowedBook = await prisma.borrowedBook.update({
             where: {
-                BookId: book?.BookId
-            },
-            data: {
-                AuthorId: book.Author.AuthorId,
-                Barcode: book.Barcode,
-                Img: book.Img,
-                ISBN: book.ISBN,
-                LateFeeTypeId: book.LateFeeTypeId,
-                Location: book.Location,
-                PublicYear: book.PublicYear,
-                Quantity: book.Quantity,
-                PublisherId: book.Publisher.PublisherId,
-                Title: book.Title
-            },
-        });
-
-        await prisma.book_BookType.deleteMany({
-            where: {
-                BookId: book?.BookId
-            }
-        });
-
-        book.Book_BookType.forEach(async (element: Book_BookType) => {
-            await prisma.book_BookType.create({
-                data: {
-                    BookId: element.BookId,
-                    BookTypeId: element.BookTypeId
-                }
-            })
+                TransactionId: borrowedBook.TransactionId
+            }, // Assuming you have an 'id' field in your Book model
+            data: borrowedBook,
         });
 
         return {
-            data: updatedBook,
+            data: updatedBorrowedBook,
             message: "Success",
             status: "200"
         };

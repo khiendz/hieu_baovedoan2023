@@ -1,3 +1,4 @@
+import { Book } from 'Models/Book';
 import axios from 'axios';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
@@ -54,5 +55,22 @@ export async function getAllBookWithRelative () {
     }
 }
 
+export async function UpdateBook(book: Book) {
+    try {
+        const res: any = await axios.post(`${domainBE}/api/book`, JSON.stringify(book), {
+            headers: {
+                'Content-Type': 'application/json', // Kiểu dữ liệu bạn đang gửi (JSON, XML, vv.)
+            },
+        });
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book:', e);
+    }
+
+    return null;
+}
 
 

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, Book, Prisma, Book_BookType } from '@prisma/client';
+import { PrismaClient, Book, BookType, Book_BookType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method == "OPTIONS") {
         res.setHeader("Allow", "POST");
         return res.status(202).json({});
-    }
+      }
 
     if (req.method === 'GET') {
         const result = await GetBook();
@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else if (req.method === 'POST') {
         const book = req.body;
 
-        const result = await UpdateBook(book);
+        const result = await UpdateBookBookTypeByBookID(book);
 
         if (!result) {
             return res.status(500).json({ error: 'Failed to create a new tour type' });
@@ -89,43 +89,17 @@ const AddBook = async (bookData: Book) => {
     }
 }
 
-const UpdateBook = async (book: any) => {
+const UpdateBookBookTypeByBookID = async (bookBookType: Book_BookType) => {
     try {
-        const updatedBook = await prisma.book.update({
+        const updatedBookBookType = await prisma.book_BookType.update({
             where: {
-                BookId: book?.BookId
+                Book_BookTypeId: bookBookType.Book_BookTypeId
             },
-            data: {
-                AuthorId: book.Author.AuthorId,
-                Barcode: book.Barcode,
-                Img: book.Img,
-                ISBN: book.ISBN,
-                LateFeeTypeId: book.LateFeeTypeId,
-                Location: book.Location,
-                PublicYear: book.PublicYear,
-                Quantity: book.Quantity,
-                PublisherId: book.Publisher.PublisherId,
-                Title: book.Title
-            },
-        });
-
-        await prisma.book_BookType.deleteMany({
-            where: {
-                BookId: book?.BookId
-            }
-        });
-
-        book.Book_BookType.forEach(async (element: Book_BookType) => {
-            await prisma.book_BookType.create({
-                data: {
-                    BookId: element.BookId,
-                    BookTypeId: element.BookTypeId
-                }
-            })
+            data: bookBookType,
         });
 
         return {
-            data: updatedBook,
+            data: updatedBookBookType,
             message: "Success",
             status: "200"
         };
