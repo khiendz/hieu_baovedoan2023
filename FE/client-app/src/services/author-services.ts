@@ -1,15 +1,15 @@
-import { Book } from 'Models/Book';
+import { Author } from 'Models/Author';
 import axios from 'axios';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
 
-export async function getBookById(id: string) {
+export async function getAuthorById(id: string) {
 
     if (!id)
         return null;
 
     try {
-        const res: any = await axios.get(`${domainBE}/api/book/${id}`);
+        const res: any = await axios.get(`${domainBE}/api/author/${id}`);
         if (res.status == 200)
             return res.data;
 
@@ -18,13 +18,13 @@ export async function getBookById(id: string) {
     }
 }
 
-export async function getBookByName(id: string,tags: string) {
+export async function getAuthorByName(id: string,tags: string) {
 
     if (!id)
         return null;
 
     try {
-        const res: any = await axios.get(`${domainBE}/api/book-by-name/${id}?tags=${tags}`);
+        const res: any = await axios.get(`${domainBE}/api/author-by-name/${id}?tags=${tags}`);
         if (res.status == 200)
             return res.data;
 
@@ -33,9 +33,9 @@ export async function getBookByName(id: string,tags: string) {
     }
 }
 
-export async function getAllBook () {
+export async function getAllAuthor () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/book?tag=1`);
+        const res: any = await axios.get(`${domainBE}/api/author?tag=1`);
         if (res.status == 200) 
             return res.data;
         
@@ -44,9 +44,9 @@ export async function getAllBook () {
     }
 }
 
-export async function getAllBookWithRelative () {
+export async function getAllAuthorWithRelative () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/book/all-book-with-relative`);
+        const res: any = await axios.get(`${domainBE}/api/author/all-author-with-relative`);
         if (res.status == 200) 
             return res.data;
         
@@ -55,9 +55,9 @@ export async function getAllBookWithRelative () {
     }
 }
 
-export async function UpdateBook(book: Book) {
+export async function UpdateAuthor(author: Author) {
     try {
-        const res: any = await axios.put(`${domainBE}/api/book`, JSON.stringify(book), {
+        const res: any = await axios.post(`${domainBE}/api/author`, JSON.stringify(author), {
             headers: {
                 'Content-Type': 'application/json', 
             },
@@ -73,9 +73,10 @@ export async function UpdateBook(book: Book) {
     return null;
 }
 
-export async function AddBook(book: Book) {
+
+export async function AddAuthor(author: Author) {
     try {
-        const res: any = await axios.post(`${domainBE}/api/book`, JSON.stringify(book), {
+        const res: any = await axios.post(`${domainBE}/api/author`, JSON.stringify(author), {
             headers: {
                 'Content-Type': 'application/json', 
             },
@@ -91,16 +92,17 @@ export async function AddBook(book: Book) {
     return null;
 }
 
-export async function DeleteBook(bookId: number) {
+export async function DeleteAuthor(authorId: number) {
     try {
-        const res: any = await axios.delete(`${domainBE}/api/book?bookId=${bookId}`);
+        const res: any = await axios.delete(`${domainBE}/api/author?authorId=${authorId}`);
 
         if (res.status === 200) {
             return res.data;
         }
     } catch (e) {
-        console.error('Error updating book:', e);
+        console.error('Error updating author:', e);
     }
 
     return null;
 }
+

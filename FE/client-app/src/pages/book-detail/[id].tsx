@@ -7,22 +7,36 @@ import { useRouter } from "next/router";
 import format from "date-fns/format";
 import AcceptOrder from "modules/AcceptOrder";
 import PopupMessage from "components/PopupMessage";
+import { BookType } from "Models/BookType";
+import { getAllBookType } from "services";
+import { Book_BookType } from "Models/Book_BookType";
 
 const { Meta } = Card;
 
 const Product: React.FC = () => {
   const router = useRouter();
   const [book, setBook] = useState<Book>();
+  const [bookTypes, setBookType] = useState([]);
   const { id } = router.query;
   const [orderAccept, setOrrderAccept] = useState(false);
   const [dataPopup, setDataPopup] = useState<any>(null);
 
   useEffect(() => {
     initData();
+    initBookType();
   }, [id]);
 
   const initData = () => {
     initBookData();
+  };
+
+  const initBookType = async () => {
+    try {
+      const result = await getAllBookType();
+      if (result) {
+        setBookType(result.data);
+      }
+    } catch (e) {}
   };
 
   const initBookData = async () => {
@@ -78,7 +92,19 @@ const Product: React.FC = () => {
                 />
                 <div className="dk-flex dk-flex-col dk-justify-between dk-gap-44">
                   <ul className="dk-list-none dk-font-Inter dk-font-medium dk-text-base">
-                    <li>Tác giả: {book?.Author}</li>
+                    <li>Tác giả: {book?.Author?.Name}</li>
+                    <li>
+                      Thể loại:{" "}
+                      {bookTypes
+                        .filter((ob: BookType) =>
+                          book.Book_BookType?.find(
+                            (el: Book_BookType) =>
+                              el.BookTypeId == ob.BookTypeId
+                          )
+                        )
+                        .map((ob: BookType) => ob?.Name)
+                        ?.join(", ")}
+                    </li>
                     <li>ISBN: {book?.ISBN}</li>
                     <li>Vị trí: {book?.Location}</li>
                     <li>
@@ -89,6 +115,8 @@ const Product: React.FC = () => {
                       )}
                     </li>
                     <li>Số lượng: {book?.Quantity}</li>
+                    <li>Mã sách: {book?.Barcode}</li>
+                    <li>Nhà xuất bản: {book?.Publisher?.Name}</li>
                   </ul>
                   <button
                     className="dk-bg-orange-500 dk-p-4 dk-font-Inter dk-text-white dk-font-semibold dk-text-sm dk-rounded-xl"

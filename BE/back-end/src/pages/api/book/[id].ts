@@ -16,6 +16,16 @@ const handler =  async (req: NextApiRequest, res: NextApiResponse) => {
         where: {
            BookId: bookId,
         },
+        include: {
+          Publisher: true,
+          Author: true,
+          BorrowedBook: true,
+          Book_BookType: {
+              include: {
+                  BookType: true
+              }
+          }
+        }
       });
 
       if (book) {

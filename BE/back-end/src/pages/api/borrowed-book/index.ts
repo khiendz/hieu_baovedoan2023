@@ -4,6 +4,12 @@ import { PrismaClient, Book, Author, BorrowedBook } from '@prisma/client';
 const prisma = new PrismaClient();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+
+    if (req.method == "OPTIONS") {
+        res.setHeader("Allow", "POST");
+        return res.status(202).json({});
+    }
+
     if (req.method === 'GET') {
         const result = await GetAllBorrowedBook();
 
@@ -12,13 +18,33 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         return res.json({ ...result });
-    } else if (req.method === 'POST') {
-        const borrowedBook = req.body;
+    } else if (req.method === 'PUT') {
+        const book = req.body;
 
-        const result = await UpdateBorrowedBook(borrowedBook);
+        const result = await UpdateBorrowedBook(book);
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to create a new borrowed book' });
+            return res.status(500).json({ error: 'Failed to update the book' });
+        }
+
+        return res.json({ ...result });
+    }  else if (req.method === 'POST') {
+        const borrowedBook = req.body;
+
+        const result = await AddBorrowedBook(borrowedBook);
+
+        if (!result) {
+            return res.status(500).json({ error: 'Failed to create a new book' });
+        }
+
+        return res.json({ ...result });
+    } else if (req.method === 'DELETE') {
+        const {borrowedBookId} = req.query;
+
+        const result = await DeleteBorrowedBook(parseInt(borrowedBookId?.toString() || "0"));
+
+        if (!result) {
+            return res.status(500).json({ error: 'Failed to delete a book' });
         }
 
         return res.json({ ...result });
@@ -54,21 +80,21 @@ const GetAllBorrowedBook = async () => {
     }
 }
 
-const AddAuthor = async (author: Author) => {
+const AddBorrowedBook = async (borrow: BorrowedBook) => {
     try {
-        const authorResult = await prisma.author.create({
-            data: author,
+        const borrowResult = await prisma.borrowedBook.create({
+            data: borrow,
         });
 
-        if (authorResult) {
+        if (borrowResult) {
             return {
-                author: authorResult,
+                data: borrowResult,
                 message: "Success",
                 status: "200"
             };
         } else {
             return {
-                tour: null,
+                data: null,
                 message: "No Success",
                 status: "500"
             };
@@ -76,24 +102,47 @@ const AddAuthor = async (author: Author) => {
     } catch (error) {
         console.error(error);
         return {
-            tour: null,
+            data: null,
             message: "Internal Server Error",
             status: "500"
         };
     }
 }
 
-const UpdateBorrowedBook = async (borrowedBook: BorrowedBook) => {
+const UpdateBorrowedBook = async (borrowedBook: any) => {
     try {
-        const updatedBorrowedBook = await prisma.borrowedBook.update({
+        const updatedBorrowBook = await prisma.borrowedBook.update({
             where: {
-                TransactionId: borrowedBook.TransactionId
-            }, // Assuming you have an 'id' field in your Book model
-            data: borrowedBook,
+                TransactionId: borrowedBook?.TransactionId
+            },
+            data: borrowedBook
         });
 
         return {
-            data: updatedBorrowedBook,
+            data: updatedBorrowBook,
+            message: "Success",
+            status: "200"
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            data: null,
+            message: "Internal Server Error",
+            status: "500"
+        };
+    }
+}
+
+const DeleteBorrowedBook = async (borrowBookId: number) => {
+    try {
+        const result = await prisma.borrowedBook.delete({
+            where: {
+                TransactionId: borrowBookId
+            }
+        })
+
+        return {
+            data: result,
             message: "Success",
             status: "200"
         };
