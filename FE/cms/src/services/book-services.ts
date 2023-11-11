@@ -59,7 +59,7 @@ export async function UpdateBook(book: Book) {
     try {
         const res: any = await axios.post(`${domainBE}/api/book`, JSON.stringify(book), {
             headers: {
-                'Content-Type': 'application/json', // Kiểu dữ liệu bạn đang gửi (JSON, XML, vv.)
+                'Content-Type': 'application/json', 
             },
         });
 
@@ -73,4 +73,17 @@ export async function UpdateBook(book: Book) {
     return null;
 }
 
+export async function DeleteBook(bookId: number) {
+    try {
+        const res: any = await axios.delete(`${domainBE}/api/book?bookId=${bookId}`);
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book:', e);
+    }
+
+    return null;
+}
 

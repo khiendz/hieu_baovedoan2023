@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Form,
-  Popconfirm,
-  Table,
-  Typography,
-} from "antd";
+import { Form, Popconfirm, Table, Typography } from "antd";
 import {
   getAllBookType,
   getAllBookWithRelative,
   getAllAuthor,
   getAllPublisher,
-  UpdateBook
+  UpdateBook,
+  DeleteBook,
 } from "services";
 import { Book } from "Models/Book";
 import "./style.scss";
@@ -46,11 +42,14 @@ const ManagerBook: React.FC = () => {
       inputType: "Select",
       render: (bookType: Book_BookType[]) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-          {
-            bookTypes.filter((ob: BookType) => 
-            bookType.find((el: Book_BookType) => 
-            el.BookTypeId == ob.BookTypeId)).map((ob: BookType) => ob?.Name)?.join(", ")
-          }
+          {bookTypes
+            .filter((ob: BookType) =>
+              bookType.find(
+                (el: Book_BookType) => el.BookTypeId == ob.BookTypeId
+              )
+            )
+            .map((ob: BookType) => ob?.Name)
+            ?.join(", ")}
         </span>
       ),
       editable: true,
@@ -137,25 +136,35 @@ const ManagerBook: React.FC = () => {
       align: "center",
       render: (_: any, record: Book) => {
         const editable = isEditing(record);
-        return editable ? (
-          <span className="dk-block dk-w-[88px] dk-font-semibold">
-            <Typography.Link
-              onClick={() => save(record?.BookId || "")}
-              style={{ marginRight: 8 }}
+        return (
+          <div className="dk-flex dk-gap-3 dk-text-[#1677ff]">
+            <Popconfirm
+              title="Sure to delete?"
+              onConfirm={() => handleDelete(record.BookId)}
             >
-              Save
-            </Typography.Link>
-            <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-              <a>Cancel</a>
+              <a>Delete</a>
             </Popconfirm>
-          </span>
-        ) : (
-          <Typography.Link
-            disabled={editingKey !== ""}
-            onClick={() => edit(record, record.BookId?.toString() || "")}
-          >
-            Edit
-          </Typography.Link>
+            {editable ? (
+              <span className="dk-block dk-w-[88px] dk-font-semibold">
+                <Typography.Link
+                  onClick={() => save(record?.BookId || "")}
+                  style={{ marginRight: 8 }}
+                >
+                  Save
+                </Typography.Link>
+                <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                  <a>Cancel</a>
+                </Popconfirm>
+              </span>
+            ) : (
+              <Typography.Link
+                disabled={editingKey !== ""}
+                onClick={() => edit(record, record.BookId?.toString() || "")}
+              >
+                Edit
+              </Typography.Link>
+            )}
+          </div>
         );
       },
     },
@@ -195,7 +204,7 @@ const ManagerBook: React.FC = () => {
         bookTypes: bookTypes,
         authors: authors,
         publishers: publishers,
-        form: form
+        form: form,
       }),
     };
   });
@@ -203,16 +212,25 @@ const ManagerBook: React.FC = () => {
   const changeBook = async (book: Book) => {
     try {
       const result = await UpdateBook(book);
-      if (result) 
-        return result?.data;
-      else 
-        return null;
-    } catch (e) 
-    {
+      if (result) return result?.data;
+      else return null;
+    } catch (e) {
       console.log(e);
       return null;
     }
-  }
+  };
+
+  const clearTheBook = async (bookId: number) => {
+    if (!bookId) return null;
+
+    try {
+      const result = await DeleteBook(bookId);
+      if (result) return result?.data;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
 
   const save = async (key: React.Key) => {
     try {
@@ -221,7 +239,7 @@ const ManagerBook: React.FC = () => {
       const index = newData.findIndex((item) => key === item.BookId);
       if (index > -1) {
         const item = newData[index];
-        const newBook = {...item,...row};
+        const newBook = { ...item, ...row };
         const result = changeBook(newBook);
         newData.splice(index, 1, {
           ...item,
@@ -241,6 +259,12 @@ const ManagerBook: React.FC = () => {
 
   const cancel = () => {
     setEditingKey("");
+  };
+
+  const handleDelete = async (key: number) => {
+    const result = await clearTheBook(key);
+    const newData = books.filter((item: Book) => item.BookId !== key);
+    setBook(newData);
   };
 
   const edit = (record: Book, key: string) => {

@@ -7,7 +7,7 @@ import { Book } from "Models/Book";
 import { BookType } from "Models/BookType";
 import { removeAccents } from "utils/charactor-util";
 import { format } from "date-fns";
-import ManagerBook from "modules/ManagerBook";
+import ManagerAuthor from "modules/ManagerAuthor";
 
 export default function Home() {
   const [bookList, setBookList] = useState<Book[]>([]);
@@ -95,7 +95,7 @@ export default function Home() {
           Trang tài liệu chính thống và đầy đủ số 1
         </h2>
         <div className="search-form dk-flex dk-flex-col dk-h-fit dk-min-h-[220px] dk-w-full dk-min-w-[760px] dk-p-4 dk-rounded dk-shadow-sm dk-mt-4 content-miss content-miss-v2 dk-gap-5 dk-relative dk-z-10">
-          <ManagerBook />
+          <ManagerAuthor />
         </div>
       </div>
     </LayoutDefault>

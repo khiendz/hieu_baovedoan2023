@@ -1,3 +1,4 @@
+import { Author } from 'Models/Author';
 import axios from 'axios';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
@@ -54,5 +55,21 @@ export async function getAllAuthorWithRelative () {
     }
 }
 
+export async function UpdateAuthor(author: Author) {
+    try {
+        const res: any = await axios.post(`${domainBE}/api/author`, JSON.stringify(author), {
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+        });
 
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book:', e);
+    }
+
+    return null;
+}
 

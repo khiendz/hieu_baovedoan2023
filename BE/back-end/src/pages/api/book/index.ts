@@ -28,6 +28,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
 
         return res.json({ ...result });
+    } else if (req.method === 'DELETE') {
+        const {bookId} = req.query;
+
+        const result = await DeleteBook(parseInt(bookId?.toString() || "0"));
+
+        if (!result) {
+            return res.status(500).json({ error: 'Failed to delete a book' });
+        }
+
+        return res.json({ ...result });
     } else {
         res.status(405).json({ error: 'Method not allowed' });
     }
@@ -126,6 +136,29 @@ const UpdateBook = async (book: any) => {
 
         return {
             data: updatedBook,
+            message: "Success",
+            status: "200"
+        };
+    } catch (e) {
+        console.error(e);
+        return {
+            data: null,
+            message: "Internal Server Error",
+            status: "500"
+        };
+    }
+}
+
+const DeleteBook = async (bookId: number) => {
+    try {
+        const result = await prisma.book.delete({
+            where: {
+                BookId: bookId
+            }
+        })
+
+        return {
+            data: result,
             message: "Success",
             status: "200"
         };

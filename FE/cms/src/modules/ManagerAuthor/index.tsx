@@ -6,29 +6,21 @@ import {
   Typography,
 } from "antd";
 import {
-  getAllBookType,
-  getAllBookWithRelative,
   getAllAuthor,
-  getAllPublisher,
+  UpdateAuthor,
   UpdateBook
 } from "services";
 import { Book } from "Models/Book";
 import "./style.scss";
-import { format } from "date-fns";
-import { Book_BookType } from "Models/Book_BookType";
 import { Publisher } from "Models/Publisher";
 import { Author } from "Models/Author";
 import { EditableCell } from "./EdittableCell";
-import { BookType } from "Models/BookType";
 
 const ManagerAuthor: React.FC = () => {
-  const [bookTypes, setBookType] = useState([]);
-  const [books, setBook] = useState<Book[]>([]);
   const [authors, setAuthors] = useState<Author[]>([]);
-  const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
-  const isEditing = (record: Book) => record?.BookId?.toString() === editingKey;
+  const isEditing = (record: Author) => record?.AuthorId?.toString() === editingKey;
 
   const columns = [
     {
@@ -50,90 +42,15 @@ const ManagerAuthor: React.FC = () => {
       align: "left",
     },
     {
-      title: "ISBN",
-      className: "column-money",
-      dataIndex: "ISBN",
-      editable: true,
-      align: "left",
-    },
-    {
-      title: "Số lượng",
-      className: "column-money",
-      dataIndex: "Quantity",
-      editable: true,
-      align: "left",
-    },
-    {
-      title: "Vị trí",
-      className: "column-money",
-      dataIndex: "Location",
-      editable: true,
-      align: "left",
-    },
-    {
-      title: "Năm xuất bản",
-      className: "column-money",
-      dataIndex: "PublicYear",
-      render: (date: any) => {
-        const timer = new Date(date);
-        return <p>{format(timer, "dd-MM-yyyy")}</p>;
-      },
-      editable: true,
-      align: "left",
-    },
-    {
-      title: "Ảnh đại diện",
-      className: "column-money",
-      dataIndex: "Img",
-      render: (img: any) => (
-        <img src={img} className="dk-w-[150px] dk-aspect-[3/4]" />
-      ),
-      editable: true,
-      align: "left",
-    },
-    {
-      title: "Mã sách",
-      className: "column-money",
-      dataIndex: "Barcode",
-      editable: true,
-      align: "left",
-    },
-    {
-      title: "Nhà xuất bản",
-      className: "column-money",
-      dataIndex: "Publisher",
-      inputType: "Select",
-      render: (publisher: Publisher) => (
-        <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-          {publisher?.Name}
-        </span>
-      ),
-      editable: true,
-      align: "left",
-    },
-    {
-      title: "Tác giả",
-      className: "column-money",
-      dataIndex: "Author",
-      inputType: "Select",
-      render: (author: Author) => (
-        <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-          {author?.Name}
-        </span>
-      ),
-      editable: true,
-      align: "left",
-    },
-    {
       title: "operation",
       dataIndex: "operation",
       align: "center",
-      render: (_: any, record: Book) => {
+      render: (_: any, record: Author) => {
         const editable = isEditing(record);
         return editable ? (
           <span className="dk-block dk-w-[88px] dk-font-semibold">
             <Typography.Link
-              onClick={() => save(record?.BookId || "")}
+              onClick={() => save(record?.AuthorId || "")}
               style={{ marginRight: 8 }}
             >
               Save
@@ -145,7 +62,7 @@ const ManagerAuthor: React.FC = () => {
         ) : (
           <Typography.Link
             disabled={editingKey !== ""}
-            onClick={() => edit(record, record.BookId?.toString() || "")}
+            onClick={() => edit(record, record.AuthorId?.toString() || "")}
           >
             Edit
           </Typography.Link>
@@ -160,23 +77,7 @@ const ManagerAuthor: React.FC = () => {
     }
 
     let inputType = "text";
-    switch (col.dataIndex) {
-      case "Book_BookType":
-        inputType = "select";
-        break;
-      case "Author":
-        inputType = "select";
-        break;
-      case "Publisher":
-        inputType = "select";
-        break;
-      case "PublicYear":
-        inputType = "date";
-        break;
-      default:
-        inputType = "text";
-        break;
-    }
+    
     return {
       ...col,
       onCell: (record: any) => ({
@@ -185,17 +86,15 @@ const ManagerAuthor: React.FC = () => {
         dataIndex: col.dataIndex,
         title: col.title,
         editing: isEditing(record),
-        bookTypes: bookTypes,
         authors: authors,
-        publishers: publishers,
         form: form
       }),
     };
   });
 
-  const changeBook = async (book: Book) => {
+  const changeAuthor = async (author: Author) => {
     try {
-      const result = await UpdateBook(book);
+      const result = await UpdateAuthor(author);
       if (result) 
         return result?.data;
       else 
@@ -209,22 +108,22 @@ const ManagerAuthor: React.FC = () => {
 
   const save = async (key: React.Key) => {
     try {
-      const row = (await form.validateFields()) as Book;
-      const newData = [...books];
-      const index = newData.findIndex((item) => key === item.BookId);
+      const row = (await form.validateFields()) as Author;
+      const newData = [...authors];
+      const index = newData.findIndex((item) => key === item.AuthorId);
       if (index > -1) {
         const item = newData[index];
         const newBook = {...item,...row};
-        const result = changeBook(newBook);
+        const result = changeAuthor(newBook);
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
-        setBook(newData);
+        setAuthors(newData);
         setEditingKey("");
       } else {
         newData.push(row);
-        setBook(newData);
+        setAuthors(newData);
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -236,57 +135,27 @@ const ManagerAuthor: React.FC = () => {
     setEditingKey("");
   };
 
-  const edit = (record: Book, key: string) => {
+  const edit = (record: Author, key: string) => {
     form.setFieldsValue({
       ...record,
     });
-    setEditingKey(record.BookId?.toString() || "");
+    setEditingKey(record.AuthorId?.toString() || "");
   };
 
   useEffect(() => {
     initData();
-    initBookType();
-    initAuthor();
-    initPublisher();
   }, []);
 
   const initData = async () => {
     try {
-      const result = await getAllBookWithRelative();
-      if (result && result?.data) {
-        setBook(result?.data);
-      }
-    } catch (e) {}
+        const result = await getAllAuthor();
+        if (result) {
+          setAuthors(result.data);
+        }
+      } catch (e) {}
   };
 
-  const initBookType = async () => {
-    try {
-      const result = await getAllBookType();
-      if (result) {
-        setBookType(result.data);
-      }
-    } catch (e) {}
-  };
-
-  const initAuthor = async () => {
-    try {
-      const result = await getAllAuthor();
-      if (result) {
-        setAuthors(result.data);
-      }
-    } catch (e) {}
-  };
-
-  const initPublisher = async () => {
-    try {
-      const result = await getAllPublisher();
-      if (result) {
-        setPublishers(result.data);
-      }
-    } catch (e) {}
-  };
-
-  return books && bookTypes ? (
+  return authors ? (
     <Form form={form} component={false}>
       <Table
         columns={mergedColumns}
