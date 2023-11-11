@@ -16,29 +16,7 @@ const items: MenuProps['items'] = [
     label: <Link href='/tac-gia' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Tác giả</span></Link>,
     key: 'news',
     icon: <EditOutlined />
-  },
-  {
-    label: <Link href='/gioi-thieu' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Giới thiệu</span></Link>,
-    key: 'tour',
-    children: [
-      {
-        label: <Link href='/gioi-thieu/offline' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách offline</span></Link>,
-        key: 'local'
-      },
-      {
-        label: <Link href='/gioi-thieu/online' className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'><span>Sách online</span></Link>,
-        key: 'global'
-      },
-    ],
-  },
-  {
-    label: (
-      <Link href="/san-pham" rel="noopener noreferrer" className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'>
-        Sản phẩm
-      </Link>
-    ),
-    key: 'airplane',
-  },
+  }
 ];
 
 const Navigation: React.FC = () => {

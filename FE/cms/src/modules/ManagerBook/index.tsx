@@ -1,5 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Form, Popconfirm, Table, Typography } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Form,
+  InputRef,
+  Popconfirm,
+  Table,
+  Typography,
+  Input,
+  Space,
+  Button,
+} from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import {
   getAllBookType,
   getAllBookWithRelative,
@@ -18,7 +28,13 @@ import { Author } from "Models/Author";
 import { EditableCell } from "./EdittableCell";
 import { BookType } from "Models/BookType";
 import AddRecord from "./Component/AddRecord";
-import type { ColumnsType, FilterValue, SorterResult } from 'antd/es/table/interface';
+import type {
+  ColumnType,
+} from "antd/es/table/interface";
+import type { FilterConfirmProps } from "antd/es/table/interface";
+import Highlighter from "react-highlight-words";
+
+type DataIndex = keyof Book;
 
 const ManagerBook: React.FC = () => {
   const [bookTypes, setBookType] = useState([]);
@@ -27,16 +43,121 @@ const ManagerBook: React.FC = () => {
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
-  const [open, setOpen] = useState(false);
-  const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | null>>({});
-  const [sortedInfo, setSortedInfo] = useState<SorterResult<Book>>({});
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const searchInput = useRef<InputRef>(null);
   const isEditing = (record: Book) => record?.BookId?.toString() === editingKey;
+
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: (param?: FilterConfirmProps) => void,
+    dataIndex: DataIndex
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText("");
+  };
+
+  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<Book> => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+      close,
+    }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleSearch(selectedKeys as string[], confirm, dataIndex)
+          }
+          style={{ marginBottom: 8, display: "block" }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() =>
+              handleSearch(selectedKeys as string[], confirm, dataIndex)
+            }
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({ closeDropdown: false });
+              setSearchText((selectedKeys as string[])[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              close();
+            }}
+          >
+            close
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
+    ),
+    onFilter: (value, record: any) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
+        />
+      ) : (
+        text
+      ),
+  });
 
   const columns = [
     {
       title: "Tiêu đề",
       dataIndex: "Title",
-      render: (title: any) => (
+      ...getColumnSearchProps("Title"),
+      render: (title: string) => (
         <a className="dk-font-Inter dk-text-sm dk-font-semibold">{title}</a>
       ),
       editable: true,
@@ -46,6 +167,7 @@ const ManagerBook: React.FC = () => {
       className: "column-money",
       dataIndex: "Book_BookType",
       inputType: "Select",
+      ...getColumnSearchProps("Book_BookType"),
       render: (bookType: Book_BookType[]) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
           {bookTypes
@@ -65,6 +187,7 @@ const ManagerBook: React.FC = () => {
       title: "ISBN",
       className: "column-money",
       dataIndex: "ISBN",
+      ...getColumnSearchProps("ISBN"),
       editable: true,
       align: "left",
     },
@@ -72,6 +195,7 @@ const ManagerBook: React.FC = () => {
       title: "Số lượng",
       className: "column-money",
       dataIndex: "Quantity",
+      ...getColumnSearchProps("Quantity"),
       editable: true,
       align: "left",
     },
@@ -79,6 +203,7 @@ const ManagerBook: React.FC = () => {
       title: "Vị trí",
       className: "column-money",
       dataIndex: "Location",
+      ...getColumnSearchProps("Location"),
       editable: true,
       align: "left",
     },
@@ -86,6 +211,7 @@ const ManagerBook: React.FC = () => {
       title: "Năm xuất bản",
       className: "column-money",
       dataIndex: "PublicYear",
+      ...getColumnSearchProps("PublicYear"),
       render: (date: any) => {
         const timer = new Date(date || new Date());
         return <p>{format(timer, "dd-MM-yyyy")}</p>;
@@ -97,6 +223,7 @@ const ManagerBook: React.FC = () => {
       title: "Ảnh đại diện",
       className: "column-money",
       dataIndex: "Img",
+      ...getColumnSearchProps("Img"),
       render: (img: any) => (
         <img src={img} className="dk-w-[150px] dk-aspect-[3/4]" />
       ),
@@ -107,6 +234,7 @@ const ManagerBook: React.FC = () => {
       title: "Mã sách",
       className: "column-money",
       dataIndex: "Barcode",
+      ...getColumnSearchProps("Barcode"),
       editable: true,
       align: "left",
     },
@@ -115,6 +243,7 @@ const ManagerBook: React.FC = () => {
       className: "column-money",
       dataIndex: "Publisher",
       inputType: "Select",
+      ...getColumnSearchProps("Publisher"),
       render: (publisher: Publisher) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
           {publisher?.Name}
@@ -128,6 +257,7 @@ const ManagerBook: React.FC = () => {
       className: "column-money",
       dataIndex: "Author",
       inputType: "Select",
+      ...getColumnSearchProps("Author"),
       render: (author: Author) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
           {author?.Name}
@@ -226,7 +356,7 @@ const ManagerBook: React.FC = () => {
     }
   };
 
-  const handleAddBook =async (book:Book) => {
+  const handleAddBook = async (book: Book) => {
     try {
       const result = await AddBook(book);
       if (result) return result?.data;
@@ -235,7 +365,7 @@ const ManagerBook: React.FC = () => {
       console.log(e);
       return null;
     }
-  }
+  };
 
   const clearTheBook = async (bookId: number) => {
     if (!bookId) return null;
@@ -284,10 +414,10 @@ const ManagerBook: React.FC = () => {
     setBook(newData);
   };
 
-  const handleAdd = async(book: Book) => {
+  const handleAdd = async (book: Book) => {
     const result = await handleAddBook(book);
-    debugger
-    setBook([{...book,BookId: books.length + 1},...books]);
+    debugger;
+    setBook([{ ...book, BookId: books.length + 1 }, ...books]);
   };
 
   const edit = (record: Book, key: string) => {
@@ -342,7 +472,14 @@ const ManagerBook: React.FC = () => {
 
   return books && bookTypes ? (
     <Form form={form} component={false}>
-      <AddRecord Authors={authors} Publishers={publishers} BookTypes={bookTypes} Save={handleAdd} Form={form} Books={books}/>
+      <AddRecord
+        Authors={authors}
+        Publishers={publishers}
+        BookTypes={bookTypes}
+        Save={handleAdd}
+        Form={form}
+        Books={books}
+      />
       <Table
         columns={mergedColumns}
         dataSource={books}

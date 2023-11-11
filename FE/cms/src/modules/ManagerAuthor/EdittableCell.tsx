@@ -6,6 +6,8 @@ import dayjs from "dayjs";
 import { Form, Input, Select, DatePicker, Space, FormInstance } from "antd";
 import { Book_BookType } from "Models/Book_BookType";
 
+const { TextArea } = Input;
+
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
   dataIndex: string;
@@ -64,57 +66,12 @@ export const EditableCell: React.FC<EditableCellProps> = ({
     default:
       break;
   }
-  switch (inputType) {
-    case "select":
-      inputNode =
-        dataIndex != "Book_BookType" ? (
-          <Space wrap>
-            <Select
-              className="dk-w-[200px]"
-              defaultValue={arrayValue[0]?.value}
-              options={[...arrayValue]}
-              onChange={(value) => {
-                form.setFieldValue(dataIndex, arrayValue[value - 1].ob);
-              }}
-            />
-          </Space>
-        ) : (
-          <Space wrap>
-            <Select
-              mode="multiple"
-              className="dk-w-[200px]"
-              defaultValue={arrayBookType.filter((ob) =>
-                record.Book_BookType.find((ele) => ele.BookTypeId == ob.value)
-              )}
-              options={[...arrayValue]}
-              onChange={(value: any) => {
-                const dataFilter: BookType[] = bookTypes.filter(
-                  (ob: BookType) =>
-                    value?.find((el: any) => el === ob.BookTypeId)
-                );
-                const data = dataFilter.map(
-                  (el: BookType) =>
-                    new Book_BookType(record.BookId, el.BookTypeId, record, el)
-                );
-                form.setFieldValue(dataIndex, data);
-              }}
-            />
-          </Space>
-        );
-      break;
-    case "date":
-      inputNode = (
-        <Space direction="vertical" size={12}>
-          <DatePicker
-            format={"DD-MM-YYYY"}
-            defaultValue={dayjs(record?.PublicYear)}
-            className="dk-w-[200px]"
-          />
-        </Space>
-      );
+  switch (dataIndex) {
+    case "Name": 
+      inputNode = <Input/>
       break;
     default:
-      inputNode = <Input />;
+      inputNode = <TextArea className="dk-h-fit dk-p-3"/>;
       break;
   }
 

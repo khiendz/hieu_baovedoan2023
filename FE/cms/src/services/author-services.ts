@@ -73,3 +73,36 @@ export async function UpdateAuthor(author: Author) {
     return null;
 }
 
+
+export async function AddAuthor(author: Author) {
+    try {
+        const res: any = await axios.post(`${domainBE}/api/author`, JSON.stringify(author), {
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+        });
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book:', e);
+    }
+
+    return null;
+}
+
+export async function DeleteAuthor(authorId: number) {
+    try {
+        const res: any = await axios.delete(`${domainBE}/api/author?authorId=${authorId}`);
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating author:', e);
+    }
+
+    return null;
+}
+
