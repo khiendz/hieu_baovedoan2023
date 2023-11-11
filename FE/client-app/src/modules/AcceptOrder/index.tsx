@@ -80,10 +80,10 @@ export default function AcceptOrder(props: Props) {
           <Formik
             initialValues={{
               fullName: "",
-              phone: null,
+              phone: 0,
               email: "",
               different: "",
-              dueDate: new Date()
+              dueDate: ""
             }}
             enableReinitialize={true}
             validate={(values) => {
@@ -248,7 +248,7 @@ export default function AcceptOrder(props: Props) {
                       [styles.success]: !errors.dueDate && touched.dueDate,
                     }, styles.different)}
                     type="date"
-                    id="different"
+                    id="dueDate"
                     name="dueDate"
                     placeholder="Địa chỉ"
                     onChange={(e: any) => {

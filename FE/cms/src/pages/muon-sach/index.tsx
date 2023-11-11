@@ -8,9 +8,12 @@ import { BookType } from "Models/BookType";
 import { removeAccents } from "utils/charactor-util";
 import { format } from "date-fns";
 import ManagerAuthor from "modules/ManagerAuthor";
+import { BorrowedBook } from "Models/BorrowedBook";
+import { getAllBorrowedBook } from "services/borrowedBook-services";
+import ManagerBorrowedBook from "modules/ManagerBorrowedBook";
 
-export default function Author() {
-  const [bookList, setBookList] = useState<Book[]>([]);
+export default function Order() {
+  const [borrowedBookList, setBorrowedBookList] = useState<BorrowedBook[]>([]);
   const [bookTypeList, setBookTypeList] = useState<BookType[]>([]);
   const [searchInput, setSearchInput] = useState<string>("");
   const [timeoutId, setTimeoutId] = useState<string>("");
@@ -24,15 +27,10 @@ export default function Author() {
   useEffect(() => {
     const initData = async () => {
       try {
-        const rest = await getAllBook();
+        const rest = await getAllBorrowedBook();
         if (rest) {
-          const dataBook: Book[] = rest.data;
-          setBookList(dataBook);
-        }
-        const bookTypes = await getAllBookType();
-        if (bookTypes) {
-          const dataBookTypes: BookType[] = bookTypes.data;
-          setBookTypeList(dataBookTypes);
+          const dataBorrowedBook: BorrowedBook[] = rest.data;
+          setBorrowedBookList(dataBorrowedBook);
         }
       } catch (e) {
         // Xử lý lỗi nếu cần
@@ -60,18 +58,7 @@ export default function Author() {
   }, [searchInput]);
 
   const searching = () => {
-    if (searchInputRef.current) {
-      const dataSearch = bookList.filter((e) => {
-        const removeAccentOb = removeAccents(e.Title.toUpperCase());
-        const removeAccentParam = removeAccents(
-          searchInputRef.current.toUpperCase()
-        );
-        const result = removeAccentOb.includes(removeAccentParam);
-        return result;
-      });
-      setSeachingData(dataSearch);
-      console.log(dataSearch);
-    }
+   
   };
 
   const handleInput = (value: string) => {
@@ -95,7 +82,7 @@ export default function Author() {
           Trang tài liệu chính thống và đầy đủ số 1
         </h2>
         <div className="search-form dk-flex dk-flex-col dk-h-fit dk-min-h-[220px] dk-w-full dk-min-w-[760px] dk-p-4 dk-rounded dk-shadow-sm dk-mt-4 content-miss content-miss-v2 dk-gap-5 dk-relative dk-z-10">
-          <ManagerAuthor />
+          <ManagerBorrowedBook />
         </div>
       </div>
     </LayoutDefault>

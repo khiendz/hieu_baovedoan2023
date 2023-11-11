@@ -21,7 +21,7 @@ export async function getBorrowedBookById(id: string) {
 
 export async function getAllBorrowedBook () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/borrowedBook?tag=1`);
+        const res: any = await axios.get(`${domainBE}/api/borrowed-book`);
         if (res.status == 200) 
             return res.data;
         
@@ -41,9 +41,9 @@ export async function getAllBorrowedWithRelative () {
     }
 }
 
-export async function UpdateBorrowedBook(borrowedBool: BorrowedBook) {
+export async function UpdateBorrowedBook(borrowedBook: BorrowedBook) {
     try {
-        const res: any = await axios.put(`${domainBE}/api/borrowed-book`, JSON.stringify(borrowedBool), {
+        const res: any = await axios.put(`${domainBE}/api/borrowed-book`, JSON.stringify(borrowedBook), {
             headers: {
                 'Content-Type': 'application/json', 
             },

@@ -42,7 +42,7 @@ const Product: React.FC = () => {
   const initBookData = async () => {
     if (id === null || id === undefined) return;
     try {
-      const idParam = parseInt(id[0]);
+      const idParam = parseInt(id.toString());
       const rest = await getBookById(idParam.toString() || "");
       if (rest) {
         let data: Book = rest;

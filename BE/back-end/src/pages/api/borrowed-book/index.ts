@@ -55,7 +55,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const GetAllBorrowedBook = async () => {
     try {
-        const borrowedBook = await prisma.borrowedBook.findMany();
+        const borrowedBook = await prisma.borrowedBook.findMany({
+            include: {
+                Member: true
+            }
+        });
 
         if (borrowedBook) {
             return {
@@ -116,13 +120,20 @@ const AddBorrowedBook = async (borrow: BorrowedBook) => {
     }
 }
 
-const UpdateBorrowedBook = async (borrowedBook: any) => {
+const UpdateBorrowedBook = async (borrow: any) => {
     try {
         const updatedBorrowBook = await prisma.borrowedBook.update({
             where: {
-                TransactionId: borrowedBook?.TransactionId
+                TransactionId: borrow?.TransactionId
             },
-            data: borrowedBook
+            data: {
+                MemberId: borrow.MemberId,
+                BookId: borrow.BookId,
+                BorrowDate: borrow.BorrowDate,
+                DueDate: borrow.DueDate,
+                ReturnDate: borrow.ReturnDate,
+                KateFee: borrow.KateFee
+            }
         });
 
         return {

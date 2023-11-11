@@ -62,7 +62,6 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
       onCancel={onCancel}
       onOk={async (ob) => {
         const row = (await form.validateFields()) as Book;
-        console.log(row);
         const data = bookTypes.map(
             (el: BookType) =>
               new Book_BookType(books.length + 1, el.BookTypeId, row, el)
