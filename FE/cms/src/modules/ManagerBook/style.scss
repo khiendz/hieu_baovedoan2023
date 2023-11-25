@@ -11,3 +11,10 @@
 :where(.css-dev-only-do-not-override-pr0fja).ant-modal .ant-modal-content {
   padding: 40px;
 }
+
+.ant-space-item {
+  width: 100%;
+  .ant-select-selector {
+    width: 100%;
+  }
+}

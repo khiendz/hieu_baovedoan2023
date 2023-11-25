@@ -127,16 +127,17 @@ const UpdateBook = async (book: any) => {
                 BookId: book?.BookId
             },
             data: {
-                AuthorId: book.Author.AuthorId,
-                Barcode: book.Barcode,
-                Img: book.Img,
-                ISBN: book.ISBN,
-                LateFeeTypeId: book.LateFeeTypeId,
-                Location: book.Location,
-                PublicYear: book.PublicYear,
-                Quantity: book.Quantity,
-                PublisherId: book.Publisher.PublisherId,
-                Title: book.Title
+                BookId: book?.BookId,
+                Title: book?.Title,
+                ISBN: book?.ISBN,
+                Quantity: book?.Quantity,
+                Location: book?.Location,
+                PublicYear: book?.PublicYear,
+                Img: book?.Img,
+                Barcode: book?.Barcode,
+                PublisherId: book?.PublisherId,
+                AuthorId: book?.AuthorId,
+                LateFeeTypeId: book?.LateFeeTypeId
             },
         });
 
@@ -146,11 +147,11 @@ const UpdateBook = async (book: any) => {
             }
         });
 
-        book.Book_BookType.forEach(async (element: Book_BookType) => {
+        book?.Book_BookType?.forEach(async (element: Book_BookType) => {
             await prisma.book_BookType.create({
                 data: {
-                    BookId: element.BookId,
-                    BookTypeId: element.BookTypeId
+                    BookId: book?.BookId,
+                    BookTypeId: element?.BookTypeId
                 }
             })
         });
@@ -172,6 +173,13 @@ const UpdateBook = async (book: any) => {
 
 const DeleteBook = async (bookId: number) => {
     try {
+
+        await prisma.book_BookType.deleteMany({
+            where: {
+                BookId: bookId
+            }
+        });
+
         const result = await prisma.book.delete({
             where: {
                 BookId: bookId

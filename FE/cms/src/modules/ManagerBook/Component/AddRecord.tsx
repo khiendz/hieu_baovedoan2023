@@ -7,6 +7,7 @@ import {
   Input,
   Modal,
   Select,
+  Space,
 } from "antd";
 import { Author } from "Models/Author";
 import { Publisher } from "Models/Publisher";
@@ -14,6 +15,7 @@ import { BookType } from "Models/BookType";
 import dayjs from "dayjs";
 import { Book } from "Models/Book";
 import { Book_BookType } from "Models/Book_BookType";
+import UploadFileImage from "components/UploadFileImage";
 
 interface CollectionCreateFormProps {
   open: boolean;
@@ -73,7 +75,6 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             Author: authors.filter((ob: Author) => ob.AuthorId === row.AuthorId)[0],
             Publisher: publishers.filter((ob: Publisher) => ob.PublisherId === row.PublisherId)[0]
         },books,setBook);
-        debugger
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",
           messagePopup: result?.message,
@@ -95,19 +96,37 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item name="BookType" label="Loại sách">
-          <Select
-            mode="multiple"
-            className="dk-w-full"
-            options={[
-              ...bookTypes?.map((ob: BookType) => {
+        <Form.Item name="Book_BookType" label="Loại sách">
+          <Space
+            className="dk-w-full dk-flex"
+          >
+            <Select
+              mode="multiple"
+              className="dk-w-full dk-flex"
+              options={bookTypes?.map((ob: BookType) => {
                 return { value: ob.BookTypeId, label: ob.Name, ob: ob };
-              }),
-            ]}
-            onChange={(value) => {
-              form.setFieldValue("BookType", value);
-            }}
-          />
+              })}
+              onChange={async (value: any) => {
+                const dataFilter: BookType[] = bookTypes.filter(
+                  (ob: BookType) =>
+                    value?.find((el: any) => el === ob.BookTypeId)
+                );
+                const record = (await form.validateFields()) as Book;
+                const data = record
+                  ? dataFilter.map(
+                      (el: BookType) =>
+                        new Book_BookType(
+                          record.BookId,
+                          el.BookTypeId,
+                          record,
+                          el
+                        )
+                    )
+                  : [];
+                form.setFieldValue("Book_BookType", data);
+              }}
+            />
+          </Space>
         </Form.Item>
         <Form.Item
           name="ISBN"
@@ -141,7 +160,9 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           />
         </Form.Item>
         <Form.Item name="Img" label="Ảnh đại diện" className="dk-w-full">
-          <Input />
+          <Form.Item name="Img" label="Ảnh đại diện" className="dk-w-full dk-flex dk-justify-center" >
+            <UploadFileImage lengthMaxImage={1} form={form} keyField="Img"/>
+          </Form.Item>
         </Form.Item>
         <Form.Item name="Barcode" label="Mã sách" className="dk-w-full">
           <Input />
@@ -197,7 +218,7 @@ const AddRecord: React.FC<Props> = (props) => {
           setOpen(true);
         }}
       >
-        New Collection
+        Tạo sách mới
       </Button>
       <CollectionCreateForm
         open={open}

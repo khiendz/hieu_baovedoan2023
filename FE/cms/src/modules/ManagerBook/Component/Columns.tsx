@@ -6,15 +6,18 @@ import { Publisher } from "Models/Publisher";
 import { FormInstance, Popconfirm, Typography } from "antd";
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import format from 'date-fns/format';
+import EditRecord from "./EditRecord";
 
 const Columns = (
     setSearchText:any,
-    setSearchedColumn: any
-    ,searchInput: any,
+    setSearchedColumn: any,
+    searchInput: any,
     searchedColumn: any,
     searchText: any,
     books: Book[],
+    authors: Author[],
     bookTypes: BookType[],
+    publishers: Publisher[],
     isEditing: any,
     edit: any,
     save: any,
@@ -28,6 +31,7 @@ const Columns = (
     {
       title: "Tiêu đề",
       dataIndex: "Title",
+      width: "250px",
       ...GetColumnSearchProps("TourName",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       render: (title: string) => (
         <a className="dk-font-Inter dk-text-sm dk-font-semibold">{title}</a>
@@ -39,6 +43,7 @@ const Columns = (
       className: "column-money",
       dataIndex: "Book_BookType",
       inputType: "Select",
+      width: "250px",
       ...GetColumnSearchProps("Book_BookType",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       render: (bookType: Book_BookType[]) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
@@ -59,6 +64,7 @@ const Columns = (
       title: "ISBN",
       className: "column-money",
       dataIndex: "ISBN",
+      width: "80px",
       ...GetColumnSearchProps("ISBN",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       editable: true,
       align: "left",
@@ -67,6 +73,7 @@ const Columns = (
       title: "Số lượng",
       className: "column-money",
       dataIndex: "Quantity",
+      width: "80px",
       ...GetColumnSearchProps("Quantity",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       editable: true,
       align: "left",
@@ -75,6 +82,7 @@ const Columns = (
       title: "Vị trí",
       className: "column-money",
       dataIndex: "Location",
+      width: "250px",
       ...GetColumnSearchProps("Location",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       editable: true,
       align: "left",
@@ -83,6 +91,7 @@ const Columns = (
       title: "Năm xuất bản",
       className: "column-money",
       dataIndex: "PublicYear",
+      width: "150px",
       ...GetColumnSearchProps("PublicYear",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       render: (date: any) => {
         const timer = new Date(date || new Date());
@@ -95,6 +104,7 @@ const Columns = (
       title: "Ảnh đại diện",
       className: "column-money",
       dataIndex: "Img",
+      width: "250px",
       ...GetColumnSearchProps("Img",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       render: (img: any) => (
         <img src={img} className="dk-w-[150px] dk-aspect-[3/4]" />
@@ -106,6 +116,7 @@ const Columns = (
       title: "Mã sách",
       className: "column-money",
       dataIndex: "Barcode",
+      width: "80px",
       ...GetColumnSearchProps("Barcode",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       editable: true,
       align: "left",
@@ -115,6 +126,7 @@ const Columns = (
       className: "column-money",
       dataIndex: "Publisher",
       inputType: "Select",
+      width: "250px",
       ...GetColumnSearchProps("Publisher",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       render: (publisher: Publisher) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
@@ -129,6 +141,7 @@ const Columns = (
       className: "column-money",
       dataIndex: "Author",
       inputType: "Select",
+      width: "250px",
       ...GetColumnSearchProps("Author",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       render: (author: Author) => (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
@@ -139,7 +152,7 @@ const Columns = (
       align: "left",
     },
     {
-      title: "operation",
+      title: "Cập nhật",
       dataIndex: "operation",
       align: "center",
       width: "250px",
@@ -148,10 +161,25 @@ const Columns = (
         const editable = isEditing(record);
         return (
           <div className="dk-flex dk-gap-3 dk-text-[#1677ff]">
+              <EditRecord
+                onInit={() => {
+                    edit(record, record.BookId?.toString() || "");
+                }}
+                Save={() => save(record?.BookId || "")}
+                Cancel={cancel}
+                Form={form}
+                Books={books}
+                BookTypes={bookTypes}
+                Publishers={publishers}
+                Authors={authors}
+                setBook={setBook}
+                setPopup={setPopup}
+                record={record}
+            />
             <Popconfirm
               title="Sure to delete?"
               onConfirm={async () => {
-                const result = await handleDelete(record.BookId);
+                const result = await handleDelete(record.BookId,books,setBook);
                 setPopup({
                   title: result?.status == 200 ? "Thành công" : "Thất bại",
                   messagePopup: result?.message,
@@ -161,25 +189,6 @@ const Columns = (
             >
               <a>Delete</a>
             </Popconfirm>
-            {editable ? (
-              <span className="dk-block dk-w-[88px] dk-font-semibold">
-                <Typography.Link
-                  onClick={() => save(record?.BookId || "")}
-                  style={{ marginRight: 8 }}
-                >
-                  Save
-                </Typography.Link>
-                <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                  <a>Cancel</a>
-                </Popconfirm>
-              </span>
-            ) : (
-              <Typography.Link
-                onClick={() => edit(record, record.BookId?.toString() || "")}
-              >
-                Edit
-              </Typography.Link>
-            )}
           </div>
         );
       },

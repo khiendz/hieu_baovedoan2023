@@ -10,7 +10,6 @@ import { Book } from "Models/Book";
 import "./style.scss";
 import { Publisher } from "Models/Publisher";
 import { Author } from "Models/Author";
-import { EditableCell } from "./EdittableCell";
 import AddRecord from "./Component/AddRecord";
 import Columns from "./Component/Columns";
 import MergedColumns from "./Component/MergeColumn";
@@ -47,6 +46,7 @@ const ManagerBook: React.FC = () => {
         const item = newData[index];
         const newBook = { ...item, ...row };
         const result = await changeBook(newBook);
+        debugger
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",
           messagePopup: result?.message,
@@ -129,7 +129,9 @@ const ManagerBook: React.FC = () => {
     searchedColumn,
     searchText,
     books,
+    authors,
     bookTypes,
+    publishers,
     isEditing,
     edit,
     save,
@@ -165,11 +167,6 @@ const ManagerBook: React.FC = () => {
         <Table
           columns={mergedColumns}
           dataSource={books}
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
           rowClassName="editable-row"
           bordered
           scroll={{ x: 1600, y: 700 }}
