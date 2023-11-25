@@ -15,12 +15,6 @@ import dayjs from "dayjs";
 import { Book } from "Models/Book";
 import { Book_BookType } from "Models/Book_BookType";
 
-interface Values {
-  title: string;
-  description: string;
-  modifier: string;
-}
-
 interface CollectionCreateFormProps {
   open: boolean;
   onCreate: () => void;
@@ -31,6 +25,8 @@ interface CollectionCreateFormProps {
   save: any;
   form: FormInstance;
   books: Book[];
+  setBook: any;
+  setPopup: any;
 }
 
 interface Props {
@@ -40,6 +36,8 @@ interface Props {
   Save: any;
   Form: FormInstance;
   Books: Book[];
+  setBook: any;
+  setPopup: any;
 }
 
 const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
@@ -51,7 +49,9 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   bookTypes,
   save,
   form,
-  books
+  books,
+  setBook,
+  setPopup
 }) => {
   return (
     <Modal
@@ -66,13 +66,19 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             (el: BookType) =>
               new Book_BookType(books.length + 1, el.BookTypeId, row, el)
           );
-        save({
+          const result = await save({
             ...row,Book_BookType: data,
             Quantity: parseInt(row?.Quantity ? row?.Quantity?.toString() : "0"),
             PublicYear: dayjs(row?.PublicYear) || dayjs(new Date()),
             Author: authors.filter((ob: Author) => ob.AuthorId === row.AuthorId)[0],
             Publisher: publishers.filter((ob: Publisher) => ob.PublisherId === row.PublisherId)[0]
-        });
+        },books,setBook);
+        debugger
+        setPopup({
+          title: result?.status == 200 ? "Thành công" : "Thất bại",
+          messagePopup: result?.message,
+          state: result?.status == 200
+        })
         onCreate();
       }}
     >
@@ -177,7 +183,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
 
 const AddRecord: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
-  const { Authors, Publishers, BookTypes, Save, Form, Books } = props;
+  const { Authors, Publishers, BookTypes, Save, Form, Books, setBook, setPopup } = props;
 
   const onCreate = () => {
     setOpen(false);
@@ -201,6 +207,8 @@ const AddRecord: React.FC<Props> = (props) => {
         save={Save}
         form={Form}
         books={Books}
+        setBook={setBook}
+        setPopup={setPopup}
         onCreate={onCreate}
         onCancel={() => {
           setOpen(false);
