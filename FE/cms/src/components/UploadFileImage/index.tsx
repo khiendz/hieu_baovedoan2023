@@ -50,6 +50,7 @@ const UploadFileImage: React.FC<any> = (props: any) => {
         fileList={fileList}
         onPreview={handlePreview}
         onChange={handleChange}
+        onRemove={() => setFileList([])}
       >
         {fileList.length >= lengthMaxImage ? null : uploadButton}
       </Upload>
