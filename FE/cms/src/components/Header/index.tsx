@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import { Roboto } from "next/font/google";
 import UserAccount from "modules/UserAccount";
+import Notification from "components/Notification";
 
 const roboto = Roboto({
   weight: "400",
@@ -22,9 +23,9 @@ export default function Header() {
           className={`${roboto.className} dk-border-[1px] dk-sha dk-rounded-lg dk-h-7 dk-w-96 
         focus:dk-outline-none dk-pl-[25px] dk-text-sm dk-appearance-none dk-pr-[25px] dk-shadow-md`}
         />
-        <button>
-          <SearchOutlined />
-        </button>
+        <div className="dk-relative dk-h-full dk-w-fit dk-flex dk-justify-center dk-items-center">
+          <Notification/>
+        </div>
       </div>
       <UserAccount />
     </header>

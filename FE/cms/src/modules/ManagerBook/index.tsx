@@ -35,7 +35,7 @@ import type { FilterConfirmProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 
 type DataIndex = keyof Book;
-
+  
 const ManagerBook: React.FC = () => {
   const [bookTypes, setBookType] = useState([]);
   const [books, setBook] = useState<Book[]>([]);
