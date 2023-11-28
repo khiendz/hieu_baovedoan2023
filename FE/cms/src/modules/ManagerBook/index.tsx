@@ -15,10 +15,12 @@ import Columns from "./Component/Columns";
 import MergedColumns from "./Component/MergeColumn";
 import { changeBook, handleAdd, handleDelete } from "./Services";
 import NotifYPopup from "components/NotifyPopup";
+import { useAppContext } from "hook/use-app-context";
 
 type DataIndex = keyof Book;
 
 const ManagerBook: React.FC = () => {
+  const { setData: setPopup } = useAppContext("popup-message");
   const [bookTypes, setBookType] = useState([]);
   const [books, setBook] = useState<Book[]>([]);
   const [authors, setAuthors] = useState<Author[]>([]);
@@ -28,13 +30,6 @@ const ManagerBook: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const [popup, setPopup] = useState({
-    title: "",
-    messagePopup: "",
-    state: true,
-  });
-  const [titlePopup, setTitlePopup] = useState("Thành công");
-  const [statePopup, setStatePopup] = useState(true);
   const isEditing = (record: Book) => record?.BookId?.toString() === editingKey;
 
   const save = async (key: React.Key) => {
@@ -46,7 +41,6 @@ const ManagerBook: React.FC = () => {
         const item = newData[index];
         const newBook = { ...item, ...row };
         const result = await changeBook(newBook);
-        debugger
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",
           messagePopup: result?.message,
@@ -182,12 +176,7 @@ const ManagerBook: React.FC = () => {
           )}
         ></Table>
       </Form>
-      <NotifYPopup
-        messagePopup={popup.messagePopup || ""}
-        setPopup={setPopup}
-        state={popup.state}
-        title={popup.title}
-      />
+      <NotifYPopup></NotifYPopup>
     </>
   ) : null;
 };
