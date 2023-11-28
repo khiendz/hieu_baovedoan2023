@@ -124,24 +124,40 @@ model Payment {
 
 model Employee {
   EmployeeId   Int     @id @default(autoincrement()) @map("EmployeeId")
-  Name         String?
-  Phone        Int?
   WorkSchedule String?
-  UserId       Int     @map("UserId")
+  UserId       Int
 
-  UserAccount UserAccount? @relation(fields: [UserId], references: [UserId])
+  User User? @relation(fields: [UserId], references: [UserId])
 }
 
-model UserAccount {
-  UserId   Int        @id @default(autoincrement()) @map("UserId")
-  Username String?
-  Password String?
-  Role     String?
-  Employee Employee[]
+//Bảng user
+model User {
+  UserId    Int        @id @default(autoincrement()) @map(name: "UserId")
+  FirstName String
+  LastName  String
+  Address   String
+  Phone     Int
+  AccountId Int?
+  Account   Account[]
+  Employee  Employee[]
 }
 
-model BackupData {
-  BackupId        Int     @id @default(autoincrement()) @map("BackupId")
-  BackupTimestamp String?
-  BackupFile      String?
+//Bảng tài khoản
+model Account {
+  AccountId Int    @id @default(autoincrement()) @map(name: "AccountId")
+  UserName  String
+  Password  String
+  RoleId    Int    @default(0)
+  UserId    Int
+
+  User        User?        @relation(fields: [UserId], references: [UserId])
+  RoleAccount RoleAccount? @relation(fields: [RoleId], references: [RoleId])
+}
+
+//Bảng phân quyền
+model RoleAccount {
+  RoleId      Int       @id @default(autoincrement()) @map(name: "RoleId")
+  RoleName    String
+  Description String
+  Account     Account[]
 }
