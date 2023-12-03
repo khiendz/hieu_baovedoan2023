@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { fetchWrapper } from 'helpers';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000"; 
 export const typeRegion = {
@@ -11,7 +12,7 @@ export async function getBookTypeByBookId(id: string) {
         return null;
     
     try {
-        const res: any = await axios.get(`${domainBE}/api/book-type/${id}`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/book-type/${id}`);
         if (res.status == 200) 
             return res.data;
         
@@ -22,7 +23,7 @@ export async function getBookTypeByBookId(id: string) {
 
 export async function getAllBookType () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/book-type`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/book-type`);
         if (res.status == 200) 
             return res.data;
         

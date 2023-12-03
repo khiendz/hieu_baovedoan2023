@@ -18,6 +18,7 @@ export class Book {
   PublisherId: number | null;
   AuthorId: number | null;
   LateFeeTypeId: number;
+  Description: string;
 
   Publisher: Publisher | null;
   Author: Author | null;

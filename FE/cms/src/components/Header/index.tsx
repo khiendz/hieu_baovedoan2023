@@ -3,7 +3,6 @@ import React from "react";
 import { Roboto } from "next/font/google";
 import UserAccount from "modules/UserAccount";
 import Notification from "components/Notification";
-import { userService } from "services";
 import { useAppContext } from "hook/use-app-context";
 
 const roboto = Roboto({

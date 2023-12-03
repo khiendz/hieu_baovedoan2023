@@ -8,7 +8,7 @@ import format from "date-fns/format";
 import AcceptOrder from "modules/AcceptOrder";
 import PopupMessage from "components/PopupMessage";
 import { BookType } from "Models/BookType";
-import { getAllBookType } from "services";
+import { JoinFileCDN, getAllBookType } from "services";
 import { Book_BookType } from "Models/Book_BookType";
 
 const { Meta } = Card;
@@ -85,14 +85,17 @@ const Product: React.FC = () => {
               <h1 className="dk-font-bold dk-text-2xl dk-font-Roboto dk-text-center dk-w-full">
                 {book?.Title}
               </h1>
-              <div className="info dk-flex dk-justify-center dk-items-start dk-gap-5">
+              <div className="info dk-flex dk-justify-center dk-items-start dk-gap-5 dk-w-[500px]">
                 <img
-                  src={book?.Img || ""}
-                  className="dk-w-[250px] dk-h-[450px]"
+                  src={JoinFileCDN(book?.Img || "")}
+                  className="dk-w-[250px] dk-h-[450px] dk-rounded-3xl"
                 />
-                <div className="dk-flex dk-flex-col dk-justify-between dk-gap-44">
+                <div className="dk-flex dk-flex-col dk-justify-between dk-gap-5">
                   <ul className="dk-list-none dk-font-Inter dk-font-medium dk-text-base">
-                    <li>Tác giả: {book?.Author?.Name}</li>
+                    <li>
+                      <span>Tác giả: </span>
+                      {book?.Author?.Name}
+                    </li>
                     <li>
                       Thể loại:{" "}
                       {bookTypes
@@ -110,7 +113,9 @@ const Product: React.FC = () => {
                     <li>
                       Năm xuất bản:{" "}
                       {format(
-                        book?.PublicYear ? new Date(book?.PublicYear?.toString() || "") : new Date(),
+                        book?.PublicYear
+                          ? new Date(book?.PublicYear?.toString() || "")
+                          : new Date(),
                         "dd-MM-yyyy"
                       )}
                     </li>
@@ -118,6 +123,15 @@ const Product: React.FC = () => {
                     <li>Mã sách: {book?.Barcode}</li>
                     <li>Nhà xuất bản: {book?.Publisher?.Name}</li>
                   </ul>
+                  {book.Description ? (
+                    <div
+                      className="schedule dk-flex dk-flex-col dk-gap-4 dk-bg-white dk-p-4 dk-rounded-lg"
+                      dangerouslySetInnerHTML={{
+                        __html: book.Description ? book.Description : "",
+                      }}
+                    ></div>
+                  ) : null}
+
                   <button
                     className="dk-bg-orange-500 dk-p-4 dk-font-Inter dk-text-white dk-font-semibold dk-text-sm dk-rounded-xl"
                     onClick={() => {
