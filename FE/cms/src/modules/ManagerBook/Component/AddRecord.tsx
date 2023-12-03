@@ -72,7 +72,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           const result = await save({
             ...row,Book_BookType: data,
             Quantity: parseInt(row?.Quantity ? row?.Quantity?.toString() : "0"),
-            PublicYear: dayjs(row?.PublicYear) || dayjs(new Date()),
+            PublicYear: row?.PublicYear ? dayjs(row?.PublicYear) : dayjs(new Date()),
             Author: authors.filter((ob: Author) => ob.AuthorId === row.AuthorId)[0],
             Publisher: publishers.filter((ob: Publisher) => ob.PublisherId === row.PublisherId)[0]
         },books,setBook);

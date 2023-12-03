@@ -164,7 +164,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           <Space className="dk-w-full">
             <DatePicker
               format={"DD-MM-YYYY"}
-              defaultValue={dayjs(record?.PublicYear || new Date())}
+              defaultValue={record?.PublicYear ? dayjs(new Date(record?.PublicYear)) : dayjs(new Date())}
               className="dk-w-full"
               onChange={(value) => {
                 form.setFieldValue("PublicYear", value);
