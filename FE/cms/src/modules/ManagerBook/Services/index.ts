@@ -45,6 +45,6 @@ export const handleDelete = async (key: number, books: Book[], setBook: any) => 
 export const handleAdd = async (book: Book, books: Book[], setBook: any) => {
     const result = await handleAddBook(book);
     if (result)
-    setBook([{ ...result.data, BookId: books.length + 1 }, ...books]);
+    setBook([{ ...result.data }, ...books]);
     return result;
 };
