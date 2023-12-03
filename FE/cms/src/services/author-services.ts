@@ -1,5 +1,5 @@
 import { Author } from 'Models/Author';
-import axios from 'axios';
+import { fetchWrapper } from 'helpers';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
 
@@ -9,7 +9,7 @@ export async function getAuthorById(id: string) {
         return null;
 
     try {
-        const res: any = await axios.get(`${domainBE}/api/author/${id}`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/author/${id}`);
         if (res.status == 200)
             return res.data;
 
@@ -24,7 +24,7 @@ export async function getAuthorByName(id: string,tags: string) {
         return null;
 
     try {
-        const res: any = await axios.get(`${domainBE}/api/author-by-name/${id}?tags=${tags}`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/author-by-name/${id}?tags=${tags}`);
         if (res.status == 200)
             return res.data;
 
@@ -35,7 +35,7 @@ export async function getAuthorByName(id: string,tags: string) {
 
 export async function getAllAuthor () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/author?tag=1`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/author?tag=1`);
         if (res.status == 200) 
             return res.data;
         
@@ -46,7 +46,7 @@ export async function getAllAuthor () {
 
 export async function getAllAuthorWithRelative () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/author/all-author-with-relative`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/author/all-author-with-relative`);
         if (res.status == 200) 
             return res.data;
         
@@ -57,11 +57,7 @@ export async function getAllAuthorWithRelative () {
 
 export async function UpdateAuthor(author: Author) {
     try {
-        const res: any = await axios.post(`${domainBE}/api/author`, JSON.stringify(author), {
-            headers: {
-                'Content-Type': 'application/json', 
-            },
-        });
+        const res: any = await fetchWrapper.post(`${domainBE}/api/author`, author);
 
         if (res.status === 200) {
             return res.data;
@@ -76,11 +72,7 @@ export async function UpdateAuthor(author: Author) {
 
 export async function AddAuthor(author: Author) {
     try {
-        const res: any = await axios.post(`${domainBE}/api/author`, JSON.stringify(author), {
-            headers: {
-                'Content-Type': 'application/json', 
-            },
-        });
+        const res: any = await fetchWrapper.post(`${domainBE}/api/author`, author);
 
         if (res.status === 200) {
             return res.data;
@@ -94,7 +86,7 @@ export async function AddAuthor(author: Author) {
 
 export async function DeleteAuthor(authorId: number) {
     try {
-        const res: any = await axios.delete(`${domainBE}/api/author?authorId=${authorId}`);
+        const res: any = await fetchWrapper.delete(`${domainBE}/api/author?authorId=${authorId}`);
 
         if (res.status === 200) {
             return res.data;

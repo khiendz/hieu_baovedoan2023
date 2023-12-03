@@ -1,0 +1,15 @@
+export const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "link",
+    "align",
+    "blockquote",
+    "code-block",
+    "list",
+    "bullet",
+    "script",
+    "color",
+];

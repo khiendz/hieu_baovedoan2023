@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 import getConfig from 'next/config';
+import { apiHandler } from '@/helpers/api';
 const jwt = require('jsonwebtoken');
 
 const prisma = new PrismaClient();
@@ -64,4 +65,4 @@ async function authenticate(username: string, password: string) {
     };
 }
 
-export default handler;
+export default apiHandler(handler);

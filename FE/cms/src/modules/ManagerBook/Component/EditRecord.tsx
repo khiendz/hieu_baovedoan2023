@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { Book } from "Models/Book";
 import { Book_BookType } from "Models/Book_BookType";
 import UploadFileImage from "components/UploadFileImage";
+import TextEditor from "components/TextEditor";
 
 interface CollectionCreateFormProps {
   open: boolean;
@@ -92,6 +93,14 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         >
           <Input />
         </Form.Item>
+        <Form.Item name="Description" label="Mô tả tour">
+          <TextEditor
+            initialValues={form?.getFieldValue("Description")}
+            onChange={(value: any) => {
+              form.setFieldValue("Description", value);
+            }}
+          />
+        </Form.Item>
         <Form.Item name="Book_BookType" label="Loại sách">
           <Space className="dk-w-full dk-flex">
             <Select
@@ -155,7 +164,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           <Space className="dk-w-full">
             <DatePicker
               format={"DD-MM-YYYY"}
-              defaultValue={dayjs(record.PublicYear)}
+              defaultValue={dayjs(record?.PublicYear || new Date())}
               className="dk-w-full"
               onChange={(value) => {
                 form.setFieldValue("PublicYear", value);

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Book, Author, Member } from '@prisma/client';
 import { format } from 'date-fns';
+import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
 
@@ -164,4 +165,4 @@ const DeleteMember = async (memberId: number) => {
     }
 }
 
-export default handler;
+export default apiHandler(handler);

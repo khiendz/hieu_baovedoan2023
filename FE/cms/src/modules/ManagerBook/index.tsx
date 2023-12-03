@@ -17,8 +17,6 @@ import { changeBook, handleAdd, handleDelete } from "./Services";
 import NotifYPopup from "components/NotifyPopup";
 import { useAppContext } from "hook/use-app-context";
 
-type DataIndex = keyof Book;
-
 const ManagerBook: React.FC = () => {
   const { setData: setPopup } = useAppContext("popup-message");
   const [bookTypes, setBookType] = useState([]);
@@ -48,10 +46,14 @@ const ManagerBook: React.FC = () => {
         });
         newData.splice(index, 1, {
           ...item,
-          ...row,
+          ...result.data,
         });
         setBook(newData);
         setEditingKey("");
+        initData();
+        initBookType();
+        initAuthor();
+        initPublisher();
       } else {
         newData.push(row);
         setBook(newData);

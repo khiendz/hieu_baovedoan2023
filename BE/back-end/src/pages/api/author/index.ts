@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Author } from '@prisma/client';
+import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
 
@@ -156,4 +157,4 @@ const DeleteAuthor = async (authorId: number) => {
     }
 }
 
-export default handler;
+export default apiHandler(handler);

@@ -22,7 +22,8 @@ export const userService = {
     login,
     logout,
     getAll,
-    ReturnUnauthorize
+    ReturnUnauthorize,
+    ReturnNotFoundPage
 };
 
 export async function login(username: string, password: string) {
@@ -31,8 +32,8 @@ export async function login(username: string, password: string) {
         const params = { username, password };
         const res: any = await fetchWrapper.post(url,params);
         if (res.status == 200) {
-            userSubject.next(res.data);
-            localStorage.setItem('user', JSON.stringify(res.data));
+            userSubject.next(res.data.data);
+            localStorage.setItem('user', JSON.stringify(res.data.data));
             return res;
         }
     } catch (e) {
@@ -51,6 +52,10 @@ function logout() {
 
 function ReturnUnauthorize () {
     Router.push('/unauthorize');
+}
+
+function ReturnNotFoundPage () {
+    Router.push('/not-found');
 }
 
 function getAll() {

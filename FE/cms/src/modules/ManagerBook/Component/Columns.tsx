@@ -7,6 +7,7 @@ import { FormInstance, Popconfirm, Typography } from "antd";
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import format from 'date-fns/format';
 import EditRecord from "./EditRecord";
+import { JoinFileCDN } from "services/file-service";
 
 const Columns = (
     setSearchText:any,
@@ -39,13 +40,37 @@ const Columns = (
       editable: true,
     },
     {
+      title: "Mô tả",
+      className: "column-money",
+      dataIndex: "Description",
+      width: "450px",
+      ...GetColumnSearchProps(
+        "Description",
+        setSearchText,
+        setSearchedColumn,
+        searchInput,
+        searchedColumn,
+        searchText
+      ),
+      render: (description: string) => (
+        <div
+          className="dk-max-w-full dk-text-sm dk-font-medium dk-font-Inter dk-line-clamp-5"
+          dangerouslySetInnerHTML={{ __html: description }}
+        >
+        </div>
+      ),
+      editable: true,
+      align: "left",
+    },
+    {
       title: "Loại sách",
       className: "column-money",
       dataIndex: "Book_BookType",
       inputType: "Select",
       width: "250px",
       ...GetColumnSearchProps("Book_BookType",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
-      render: (bookType: Book_BookType[]) => (
+      render: (bookType: Book_BookType[]) => {
+        return (
         <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
           {bookTypes
             .filter((ob: BookType) =>
@@ -56,7 +81,7 @@ const Columns = (
             .map((ob: BookType) => ob?.Name)
             ?.join(", ")}
         </span>
-      ),
+      )},
       editable: true,
       align: "left",
     },
@@ -93,9 +118,10 @@ const Columns = (
       dataIndex: "PublicYear",
       width: "150px",
       ...GetColumnSearchProps("PublicYear",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
-      render: (date: any) => {
-        const timer = new Date(date || new Date());
-        return <p>{format(timer, "dd-MM-yyyy")}</p>;
+      render: (date: Date) => {
+        return (<p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
+        {format(date ? new Date(date) : new Date(), 'dd-MM-yyyy')}
+      </p>)
       },
       editable: true,
       align: "left",
@@ -105,9 +131,8 @@ const Columns = (
       className: "column-money",
       dataIndex: "Img",
       width: "250px",
-      ...GetColumnSearchProps("Img",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
       render: (img: any) => (
-        <img src={img} className="dk-w-[150px] dk-aspect-[3/4]" />
+        <img src={JoinFileCDN(img)} className="dk-w-[250px] dk-aspect-[4/6]" />
       ),
       editable: true,
       align: "left",

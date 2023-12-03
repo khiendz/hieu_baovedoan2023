@@ -1,10 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 import { removeAccents } from '@/pages/utils/charactor-util';
+import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method == "OPTIONS") {
+    res.setHeader("Allow", "POST");
+    return res.status(202).json({});
+}
+
   if (req.method === 'GET') {
     const queryTitle = req.query.id as string;
     const tags = req.query.tags as string;
@@ -43,4 +49,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default handler;
+export default apiHandler(handler);

@@ -1,9 +1,15 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Book } from '@prisma/client';
+import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+    if (req.method == "OPTIONS") {
+        res.setHeader("Allow", "POST");
+        return res.status(202).json({});
+    }
+    
     if (req.method === 'GET') {
         const result = await GetBooksWithType();
 
@@ -56,6 +62,4 @@ const GetBooksWithType = async () => {
     }
 }
 
-
-
-export default handler;
+export default apiHandler(handler);

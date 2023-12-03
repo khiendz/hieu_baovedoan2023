@@ -18,6 +18,7 @@ model Book {
   Location      String?
   PublicYear    DateTime?
   Img           String?
+  Description   String?
   Barcode       String    @default("")
   PublisherId   Int?      @default(0)
   AuthorId      Int?      @default(0)

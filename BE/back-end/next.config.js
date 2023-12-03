@@ -15,7 +15,7 @@ const nextConfig = {
           {
             key: "Access-Control-Allow-Headers",
             value:
-              "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+              "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
           },
         ],
       },
@@ -29,6 +29,9 @@ const nextConfig = {
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000/api" // development api
         : "http://localhost:3000/api", // production api
+  },
+  images: {
+    domains: ["http://localhost:3000"],
   },
 };
 

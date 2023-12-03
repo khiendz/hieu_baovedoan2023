@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Book, Prisma, Book_BookType } from '@prisma/client';
+import { apiHandler } from '@/helpers/api';
+import { saveFile } from '@/services/file';
 
 const prisma = new PrismaClient();
 
@@ -79,7 +81,7 @@ const GetBook = async () => {
     }
 }
 
-const AddBook = async (book: Book) => {
+const AddBook = async (book: any) => {
     try {
         const bookResult = await prisma.book.create({
             data: {
@@ -89,23 +91,60 @@ const AddBook = async (book: Book) => {
                 Quantity: book.Quantity,
                 Location: book.Location,
                 PublicYear: book.PublicYear,
-                Img: book.Img,
                 Barcode: book.Barcode,
                 PublisherId: book.PublisherId,
                 AuthorId: book.AuthorId,
-                LateFeeTypeId: book.LateFeeTypeId
+                LateFeeTypeId: book.LateFeeTypeId,
+                Description: book.Description
             },
         });
 
-        if (bookResult) {
+        if (book.Img) {
+            const filename = await saveFile(book.Img, book.BookId);
+            bookResult.Img = filename;
+        }
+
+        const updatedTourType = await prisma.book.update({
+            where: {
+                BookId: bookResult.BookId
+            },
+            data: bookResult
+        });
+
+        book?.Book_BookType?.forEach(async (element: Book_BookType) => {
+            await prisma.book_BookType.create({
+                data: {
+                    BookId: bookResult?.BookId,
+                    BookTypeId: element?.BookTypeId
+                }
+            })
+        });
+
+        const bookRes = await prisma.book.findUnique({
+            where: {
+               BookId: bookResult.BookId,
+            },
+            include: {
+              Publisher: true,
+              Author: true,
+              BorrowedBook: true,
+              Book_BookType: {
+                  include: {
+                      BookType: true
+                  }
+              }
+            }
+          });
+
+        if (bookRes) {
             return {
-                tour: bookResult,
+                data: bookRes,
                 message: "Success",
                 status: "200"
             };
         } else {
             return {
-                tour: null,
+                data: null,
                 message: "No Success",
                 status: "500"
             };
@@ -133,12 +172,24 @@ const UpdateBook = async (book: any) => {
                 Quantity: book?.Quantity,
                 Location: book?.Location,
                 PublicYear: book?.PublicYear,
-                Img: book?.Img,
                 Barcode: book?.Barcode,
                 PublisherId: book?.PublisherId,
                 AuthorId: book?.AuthorId,
-                LateFeeTypeId: book?.LateFeeTypeId
+                LateFeeTypeId: book?.LateFeeTypeId,
+                Description: book.Description,
             },
+        });
+
+        if (book.Img && !book.Img.startsWith("file")) {
+            const filename = await saveFile(book.Img, book.BookId);
+            updatedBook.Img = filename;
+        }
+
+        const updatedTourType = await prisma.book.update({
+            where: {
+                BookId: updatedBook.BookId
+            },
+            data: updatedBook
         });
 
         await prisma.book_BookType.deleteMany({
@@ -156,8 +207,14 @@ const UpdateBook = async (book: any) => {
             })
         });
 
+        const bookRes = await prisma.book.findUnique({
+            where: {
+               BookId: updatedBook.BookId,
+            }
+          });
+
         return {
-            data: updatedBook,
+            data: bookRes,
             message: "Success",
             status: "200"
         };
@@ -201,4 +258,12 @@ const DeleteBook = async (bookId: number) => {
     }
 }
 
-export default handler;
+export default apiHandler(handler);
+
+export const config = {
+    api: {
+      bodyParser: {
+        sizeLimit: '10mb',
+      },
+    },
+  }

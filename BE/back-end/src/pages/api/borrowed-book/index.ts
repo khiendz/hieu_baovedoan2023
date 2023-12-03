@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Book, Author, BorrowedBook } from '@prisma/client';
+import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
 
@@ -174,4 +175,4 @@ const DeleteBorrowedBook = async (borrowBookId: number) => {
     }
 }
 
-export default handler;
+export default apiHandler(handler);

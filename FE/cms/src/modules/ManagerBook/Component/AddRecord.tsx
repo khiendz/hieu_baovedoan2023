@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { Book } from "Models/Book";
 import { Book_BookType } from "Models/Book_BookType";
 import UploadFileImage from "components/UploadFileImage";
+import TextEditor from "components/TextEditor";
 
 interface CollectionCreateFormProps {
   open: boolean;
@@ -95,6 +96,14 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           rules={[{ required: true, message: "Làm ơn nhập tiêu đề!" }]}
         >
           <Input />
+        </Form.Item>
+        <Form.Item name="Description" label="Mô tả tour">
+          <TextEditor
+            initialValues={form?.getFieldValue("Description")}
+            onChange={(value: any) => {
+              form.setFieldValue("Description", value);
+            }}
+          />
         </Form.Item>
         <Form.Item name="Book_BookType" label="Loại sách">
           <Space

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient, Book, BookType, Book_BookType } from '@prisma/client';
+import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
 
@@ -113,4 +114,4 @@ const UpdateBookBookTypeByBookID = async (bookBookType: Book_BookType) => {
     }
 }
 
-export default handler;
+export default apiHandler(handler);
