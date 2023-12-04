@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Employee, LateFee, PrismaClient, User } from '@prisma/client';
+import { Account, PrismaClient, RoleAccount, User } from '@prisma/client';
 import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (req.method === 'GET') {
-        const result = await GetLateFees();
+        const result = await GetAccounts();
 
         if (!result) {
             return res.status(400).json({ error: 'Invalid tour ID' });
@@ -19,32 +19,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.json({ ...result });
     } else if (req.method === 'PUT') {
-        const lateFee = req.body;
+        const account = req.body;
 
-        const result = await UpdateLateFee(lateFee);
+        const result = await UpdateAccount(account);
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to update the support late fee' });
+            return res.status(500).json({ error: 'Failed to update the support account' });
         }
 
         return res.json({ ...result });
     } else if (req.method === 'POST') {
-        const lateFee = req.body;
+        const account = req.body;
 
-        const result = await AddLateFee(lateFee);
+        const result = await AddAccount(account);
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to create a new support late fee' });
+            return res.status(500).json({ error: 'Failed to create a new support account' });
         }
 
         return res.json({ ...result });
     } else if (req.method === 'DELETE') {
-        const { lateFeeId } = req.query;
+        const { userId } = req.query;
 
-        const result = await DeleteLateFeeById(parseInt(lateFeeId?.toString() || "0"));
+        const result = await DeleteAccountById(parseInt(userId?.toString() || "0"));
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to delete a support employee' });
+            return res.status(500).json({ error: 'Failed to delete a support account' });
         }
 
         return res.json({ ...result });
@@ -53,13 +53,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-const GetLateFees = async () => {
+const GetAccounts = async () => {
     try {
-        const lateFees = await prisma.lateFee.findMany();
+        const accounts = await prisma.account.findMany();
 
-        if (lateFees) {
+        if (accounts) {
             return {
-                data: lateFees,
+                data: accounts,
                 message: "Success",
                 status: "200"
             };
@@ -80,17 +80,19 @@ const GetLateFees = async () => {
     }
 }
 
-const AddLateFee = async (lateFee: LateFee) => {
+const AddAccount = async (account: Account) => {
     try {
-        const lateFeeResult = await prisma.lateFee.create({
+        const accountResult = await prisma.account.create({
             data: {
-                TransactionId: lateFee.TransactionId,
-                FeeAmount: lateFee.FeeAmount,
+                UserName: account.UserName,
+                Password: account.Password,
+                RoleId: account.RoleId,
+                UserId: account.UserId
             },
         });
 
         return {
-            data: lateFeeResult,
+            data: accountResult,
             message: "Success",
             status: "200",
         };
@@ -105,20 +107,22 @@ const AddLateFee = async (lateFee: LateFee) => {
     }
 }
 
-const UpdateLateFee = async (lateFee: LateFee) => {
+const UpdateAccount = async (account: Account) => {
     try {
-        const lateFeeResult = await prisma.lateFee.update({
+        const userResult = await prisma.account.update({
             where: {
-                LateFeeId: lateFee?.LateFeeId
+                AccountId: account?.AccountId
             },
             data: {
-                TransactionId: lateFee.TransactionId,
-                FeeAmount: lateFee.FeeAmount,
+                UserName: account.UserName,
+                Password: account.Password,
+                RoleId: account.RoleId,
+                UserId: account.UserId
             }
         });
 
         return {
-            data: lateFeeResult,
+            data: userResult,
             message: "Success",
             status: "200"
         };
@@ -132,11 +136,11 @@ const UpdateLateFee = async (lateFee: LateFee) => {
     }
 }
 
-const DeleteLateFeeById = async (lateFeeId: number) => {
+const DeleteAccountById = async (accountId: number) => {
     try {
-        const result = await prisma.lateFee.delete({
+        const result = await prisma.account.delete({
             where: {
-                LateFeeId: lateFeeId
+                AccountId: accountId
             }
         })
 

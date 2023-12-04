@@ -43,7 +43,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else if (req.method === 'DELETE') {
         const {memberId} = req.query;
 
-        const result = await DeleteMember(parseInt(memberId?.toString() || "0"));
+        const result = await DeleteMemberById(parseInt(memberId?.toString() || "0"));
 
         if (!result) {
             return res.status(500).json({ error: 'Failed to delete a book' });
@@ -120,15 +120,22 @@ const AddMember = async (member: Member) => {
 
 const UpdateMember = async (member: any) => {
     try {
-        const updatedBorrowBook = await prisma.member.update({
+        const memberResult = await prisma.member.update({
             where: {
                 MemberId: member?.MemberId
             },
-            data: member
+            data: {
+                Name: member.Name,
+                Address: member.Address,
+                Phone: member.Phone,
+                Email: member.Email,
+                JoinDate: member?.JoinDate,
+                MemberRoleId: member.MemberRoleId
+            }
         });
 
         return {
-            data: updatedBorrowBook,
+            data: memberResult,
             message: "Success",
             status: "200"
         };
@@ -142,7 +149,7 @@ const UpdateMember = async (member: any) => {
     }
 }
 
-const DeleteMember = async (memberId: number) => {
+const DeleteMemberById = async (memberId: number) => {
     try {
         const result = await prisma.member.delete({
             where: {
