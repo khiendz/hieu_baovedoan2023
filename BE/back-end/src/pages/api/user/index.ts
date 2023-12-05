@@ -55,7 +55,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const GetUsers = async () => {
     try {
-        const users = await prisma.user.findMany();
+        const users = await prisma.user.findMany({
+            include: {
+                Account: true,
+                _count: true
+            }
+        });
 
         if (users) {
             return {
@@ -82,14 +87,32 @@ const GetUsers = async () => {
 
 const AddUser = async (user: User) => {
     try {
+        const exitsUserSamePhone = await prisma.user.findUnique({
+            where: {
+                Phone: user.Phone
+            }
+        });
+ 
+        if (exitsUserSamePhone) {
+            return {
+                data: null,
+                message: "Đã tồn tại người dùng có trùng số điện thoại",
+                status: "400",
+            };
+        }
+
         const userResult = await prisma.user.create({
             data: {
                 FirstName: user.FirstName,
                 LastName: user.LastName,
                 Address: user.Address,
-                Phone: user.Phone,
+                Phone:  user.Phone,
                 AccountId: user?.AccountId
             },
+            include: {
+                Account: true,
+                _count: true
+            }
         });
 
         return {
@@ -110,6 +133,23 @@ const AddUser = async (user: User) => {
 
 const UpdateUser = async (user: User) => {
     try {
+        const exitsUserSamePhone = await prisma.user.findUnique({
+            where: {
+                Phone: user.Phone,
+                NOT: {
+                    UserId: user.UserId
+                }
+            }
+        });
+ 
+        if (exitsUserSamePhone) {
+            return {
+                data: null,
+                message: "Đã tồn tại người dùng có trùng số điện thoại",
+                status: "400",
+            };
+        }
+
         const userResult = await prisma.user.update({
             where: {
                 UserId: user?.UserId
@@ -120,6 +160,10 @@ const UpdateUser = async (user: User) => {
                 Address: user.Address,
                 Phone: user.Phone,
                 AccountId: user?.AccountId
+            },
+            include: {
+                Account: true,
+                _count: true
             }
         });
 
@@ -140,17 +184,44 @@ const UpdateUser = async (user: User) => {
 
 const DeleteUserById = async (userId: number) => {
     try {
-        const result = await prisma.user.delete({
+        const userRelations = await prisma.user.findUnique({
             where: {
                 UserId: userId
+            },
+            include: {
+                Account: true, 
             }
-        })
+        });
 
-        return {
-            data: result,
-            message: "Success",
-            status: "200"
-        };
+        if (userRelations && userRelations.Account) {
+            await Promise.all(userRelations.Account.map(async (account) => {
+                await prisma.account.delete({
+                    where: {
+                        AccountId: account.AccountId
+                    }
+                });
+            }));
+        }
+
+        if (userRelations) {
+            const result = await prisma.user.delete({
+                where: {
+                    UserId: userId
+                }
+            });
+
+            return {
+                data: result,
+                message: "Success",
+                status: "200"
+            };
+        } else {
+            return {
+                data: null,
+                message: "User not found",
+                status: "404"
+            };
+        }
     } catch (e) {
         console.error(e);
         return {

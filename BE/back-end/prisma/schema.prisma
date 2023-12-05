@@ -69,7 +69,7 @@ model Member {
   MemberId     Int            @id @default(autoincrement()) @map("MemberId")
   Name         String?
   Address      String?
-  Phone        String?
+  Phone        String         @unique
   Email        String?
   JoinDate     DateTime?
   MemberRoleId Int            @default(0)
@@ -137,7 +137,7 @@ model User {
   FirstName String
   LastName  String
   Address   String
-  Phone     Int
+  Phone     String     @unique
   AccountId Int?
   Account   Account[]
   Employee  Employee[]
