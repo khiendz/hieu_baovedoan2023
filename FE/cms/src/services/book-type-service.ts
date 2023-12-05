@@ -1,3 +1,4 @@
+import { BookType } from 'Models';
 import axios from 'axios';
 import { fetchWrapper } from 'helpers';
 
@@ -31,6 +32,49 @@ export async function getAllBookType () {
         return null;
     }
 }
+
+export async function UpdateBookType(bookType: BookType) {
+    try {
+        const res: any = await fetchWrapper.put(`${domainBE}/api/book-type`, bookType);
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book:', e);
+    }
+
+    return null;
+}
+
+export async function AddBookType(bookType: BookType) {
+    try {
+        const res: any = await fetchWrapper.post(`${domainBE}/api/book-type`, bookType);
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book type:', e);
+    }
+
+    return null;
+}
+
+export async function DeleteBookType(bookTypeId: number) {
+    try {
+        const res: any = await fetchWrapper.delete(`${domainBE}/api/book-type?bookTypeId=${bookTypeId}`);
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error updating book type:', e);
+    }
+
+    return null;
+}
+
 
 
 

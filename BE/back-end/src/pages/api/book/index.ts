@@ -83,6 +83,29 @@ const GetBook = async () => {
 
 const AddBook = async (book: any) => {
     try {
+
+        if (!book.AuthorId) {
+            return {
+                data: null,
+                message: "Có vẻ bạn bị thiếu thông tin tác giả",
+                status: "400"
+            };
+        }
+        if (!book.LateFeeTypeId) {
+            return {
+                data: null,
+                message: "Có vẻ bạn bị thiếu thông tin phí trễ hạn",
+                status: "400"
+            };
+        }
+        if (!book.PublisherId) {
+            return {
+                data: null,
+                message: "Có vẻ bạn bị thiếu thông tin nhà sản xuất",
+                status: "400"
+            };
+        }
+
         const bookResult = await prisma.book.create({
             data: {
                 BookId: book.BookId,

@@ -125,7 +125,7 @@ const AddBookType = async (bookType: BookType) => {
     } catch (error) {
         console.error(error);
         return {
-            tour: null,
+            data: null,
             message: "Internal Server Error",
             status: "500"
         };

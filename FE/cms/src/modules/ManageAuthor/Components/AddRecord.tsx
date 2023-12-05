@@ -1,61 +1,52 @@
-import React, { useState } from "react";
-import {
-  Button,
-  DatePicker,
-  Form,
-  FormInstance,
-  Input,
-  Modal,
-  Select,
-} from "antd";
-import { Author } from "Models/Author";
-import { Publisher } from "Models/Publisher";
-import { BookType } from "Models/BookType";
-import dayjs from "dayjs";
-import { Book } from "Models/Book";
-import { Book_BookType } from "Models/Book_BookType";
-
-interface Values {
-  title: string;
-  description: string;
-  modifier: string;
-}
-
+import React, { useState, useEffect } from "react";
+import { Button, Form, FormInstance, Input, Modal, Select } from "antd";
+import { Account, Author, RoleAccount, User } from "Models";
+import { useAppContext } from "hook/use-app-context";
 interface CollectionCreateFormProps {
   open: boolean;
   onCreate: () => void;
   onCancel: () => void;
-  authors: Author[];
   save: any;
   form: FormInstance;
+  setPopup: any;
 }
 
 interface Props {
-  Authors: Author[];
   Save: any;
   Form: FormInstance;
+  setPopup: any;
 }
 
 const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   open,
   onCreate,
   onCancel,
-  authors,
   save,
-  form
+  form,
+  setPopup,
 }) => {
+  const { data: authors, setData: setAuthors } = useAppContext("accounts");
+
   return (
     <Modal
       open={open}
-      title="Thêm một tác giả mới"
-      okText="Thêm tác giả"
+      title="Tạo tác giả mới"
+      okText="Thêm mới"
       cancelText="Hủy"
       onCancel={onCancel}
       onOk={async (ob) => {
-        const row = (await form.validateFields()) as Book;
-        console.log(row);
-        save({
-            ...row
+        const row = (await form.validateFields()) as Author;
+        const result = await save(
+          {
+            ...row,
+          },
+          setAuthors,
+          authors
+        );
+        setPopup({
+          title: result?.status == 200 ? "Thành công" : "Thất bại",
+          messagePopup: result?.message,
+          state: result?.status == 200,
         });
         onCreate();
       }}
@@ -69,14 +60,14 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         <Form.Item
           name="Name"
           label="Tên tác giả"
-          rules={[{ required: true, message: "Làm ơn nhập tên tác giả!" }]}
+          rules={[{ required: true, message: "Làm ơn nhập tên tác giả" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           name="Description"
-          label="Mô tả"
-          rules={[{ required: true, message: "Làm ơn nhập mô tả!" }]}
+          label="Mô tả tác giả"
+          rules={[{ required: true, message: "Làm ơn nhập mô tả tác giả" }]}
         >
           <Input />
         </Form.Item>
@@ -87,7 +78,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
 
 const AddRecord: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
-  const { Authors, Save, Form } = props;
+  const { Save, Form, setPopup } = props;
 
   const onCreate = () => {
     setOpen(false);
@@ -101,16 +92,17 @@ const AddRecord: React.FC<Props> = (props) => {
           setOpen(true);
         }}
       >
-        New Collection
+        Thêm tác giả
       </Button>
       <CollectionCreateForm
         open={open}
-        authors={Authors}
         save={Save}
         form={Form}
+        setPopup={setPopup}
         onCreate={onCreate}
         onCancel={() => {
           setOpen(false);
+          Form.resetFields();
         }}
       />
     </div>

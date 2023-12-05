@@ -54,7 +54,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   form,
   books,
   setBook,
-  setPopup
+  setPopup,
 }) => {
   return (
     <Modal
@@ -66,21 +66,32 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
       onOk={async (ob) => {
         const row = (await form.validateFields()) as Book;
         const data = bookTypes.map(
-            (el: BookType) =>
-              new Book_BookType(books.length + 1, el.BookTypeId, row, el)
-          );
-          const result = await save({
-            ...row,Book_BookType: data,
+          (el: BookType) =>
+            new Book_BookType(books.length + 1, el.BookTypeId, row, el)
+        );
+        const result = await save(
+          {
+            ...row,
+            Book_BookType: data,
             Quantity: parseInt(row?.Quantity ? row?.Quantity?.toString() : "0"),
-            PublicYear: row?.PublicYear ? dayjs(row?.PublicYear) : dayjs(new Date()),
-            Author: authors.filter((ob: Author) => ob.AuthorId === row.AuthorId)[0],
-            Publisher: publishers.filter((ob: Publisher) => ob.PublisherId === row.PublisherId)[0]
-        },books,setBook);
+            PublicYear: row?.PublicYear
+              ? dayjs(row?.PublicYear)
+              : dayjs(new Date()),
+            Author: authors.filter(
+              (ob: Author) => ob.AuthorId === row.AuthorId
+            )[0],
+            Publisher: publishers.filter(
+              (ob: Publisher) => ob.PublisherId === row.PublisherId
+            )[0],
+          },
+          books,
+          setBook
+        );
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",
           messagePopup: result?.message,
-          state: result?.status == 200
-        })
+          state: result?.status == 200,
+        });
         onCreate();
       }}
     >
@@ -95,21 +106,27 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="Tiêu đề"
           rules={[{ required: true, message: "Làm ơn nhập tiêu đề!" }]}
         >
-          <Input />
+          <Input 
+            placeholder="Nhập tiêu đề"
+          />
         </Form.Item>
         <Form.Item name="Description" label="Mô tả tour">
           <TextEditor
+            placeholder="Nhập mô tả"
             initialValues={form?.getFieldValue("Description")}
             onChange={(value: any) => {
               form.setFieldValue("Description", value);
             }}
           />
         </Form.Item>
-        <Form.Item name="Book_BookType" label="Loại sách">
-          <Space
-            className="dk-w-full dk-flex"
-          >
+        <Form.Item
+          name="Book_BookType"
+          label="Loại sách"
+          rules={[{ required: true, message: "Làm ơn chọn loại sách!" }]}
+        >
+          <Space className="dk-w-full dk-flex">
             <Select
+              placeholder="Chưa có thông tin loại sách"
               mode="multiple"
               className="dk-w-full dk-flex"
               options={bookTypes?.map((ob: BookType) => {
@@ -142,23 +159,37 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="ISBN"
           rules={[{ required: true, message: "Làm ơn nhập ISBN!" }]}
         >
-          <Input />
+          <Input 
+            placeholder="Nhập ISBN"
+          />
         </Form.Item>
         <Form.Item
           name="Quantity"
           label="Số lượng"
           rules={[{ required: true, message: "Làm ơn nhập số lượng!" }]}
         >
-          <Input/>
+          <Input 
+            placeholder="Nhập số lượng"
+          />
         </Form.Item>
         <Form.Item
           name="Location"
           label="Vị trí"
           rules={[{ required: true, message: "Làm ơn nhập vị trí!" }]}
         >
-          <Input />
+          <Input 
+            placeholder="Nhập vị trí"
+          />
         </Form.Item>
-        <Form.Item name="PublicYear" label="Năm xuất bản" className="dk-w-full">
+        <Form.Item
+          name="PublicYear"
+          label="Năm xuất bản"
+          className="dk-w-full"
+          rules={[
+            { required: true, message: "Làm ơn nhập thời gian xuất bản" },
+          ]}
+          valuePropName="date"
+        >
           <DatePicker
             format={"DD-MM-YYYY"}
             defaultValue={dayjs(new Date())}
@@ -168,16 +199,32 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             }}
           />
         </Form.Item>
-        <Form.Item name="Img" label="Ảnh đại diện" className="dk-w-full">
-          <Form.Item name="Img" label="Ảnh đại diện" className="dk-w-full dk-flex dk-justify-center" >
-            <UploadFileImage lengthMaxImage={1} form={form} keyField="Img"/>
-          </Form.Item>
+        <Form.Item
+          name="Img"
+          label="Ảnh đại diện"
+          className="dk-w-full dk-flex dk-justify-center"
+          rules={[{ required: true, message: "Làm ơn nhập ảnh đại diện" }]}
+        >
+          <UploadFileImage lengthMaxImage={1} form={form} keyField="Img" />
         </Form.Item>
-        <Form.Item name="Barcode" label="Mã sách" className="dk-w-full">
-          <Input />
+        <Form.Item
+          name="Barcode"
+          label="Mã sách"
+          className="dk-w-full"
+          rules={[{ required: true, message: "Làm ơn nhập mã sách" }]}
+        >
+          <Input 
+            placeholder="Nhập mã sách"
+          />
         </Form.Item>
-        <Form.Item name="AuthorId" label="Tác giả" className="dk-w-full">
+        <Form.Item
+          name="AuthorId"
+          label="Tác giả"
+          className="dk-w-full"
+          rules={[{ required: true, message: "Làm ơn chọn tác giả" }]}
+        >
           <Select
+            placeholder="Chọn thông tin tác giả"
             className="dk-w-full"
             options={[
               ...authors?.map((ob: Author) => {
@@ -193,8 +240,10 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           name="PublisherId"
           label="Nhà xuất bản"
           className="dk-w-full"
+          rules={[{ required: true, message: "Làm ơn chọn nhà xuất bản" }]}
         >
           <Select
+            placeholder="Chọn nhà xuất bản"
             className="dk-w-full"
             options={[
               ...publishers?.map((ob: Publisher) => {
@@ -213,7 +262,16 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
 
 const AddRecord: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
-  const { Authors, Publishers, BookTypes, Save, Form, Books, setBook, setPopup } = props;
+  const {
+    Authors,
+    Publishers,
+    BookTypes,
+    Save,
+    Form,
+    Books,
+    setBook,
+    setPopup,
+  } = props;
 
   const onCreate = () => {
     setOpen(false);

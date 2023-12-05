@@ -84,7 +84,7 @@ export async function AddAuthor(author: Author) {
     return null;
 }
 
-export async function DeleteAuthor(authorId: number) {
+export async function DeleteAuthorById(authorId: number) {
     try {
         const res: any = await fetchWrapper.delete(`${domainBE}/api/author?authorId=${authorId}`);
 

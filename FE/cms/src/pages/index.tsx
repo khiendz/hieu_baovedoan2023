@@ -1,89 +1,10 @@
 "use client";
 import LayoutDefault from "components/layouts/LayoutDefault";
-import React, { useState, useEffect, useRef } from "react";
-import { getAllBook } from "services/book-services";
-import { getAllBookType } from "services/book-type-service";
-import { Book } from "Models/Book";
-import { BookType } from "Models/BookType";
-import { removeAccents } from "utils/charactor-util";
+import React from "react";
 import { format } from "date-fns";
 import ManagerBook from "modules/ManagerBook";
 
 export default function Home() {
-  const [bookList, setBookList] = useState<Book[]>([]);
-  const [bookTypeList, setBookTypeList] = useState<BookType[]>([]);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [timeoutId, setTimeoutId] = useState<string>("");
-  const [tag, setTag] = useState<string[]>([]);
-  const timeoutIdRef = useRef(timeoutId);
-  timeoutIdRef.current = timeoutId;
-  const [searchingData, setSeachingData] = useState<Book[]>([]);
-  const searchInputRef = useRef(searchInput);
-  searchInputRef.current = searchInput;
-
-  useEffect(() => {
-    const initData = async () => {
-      try {
-        const rest = await getAllBook();
-        if (rest) {
-          const dataBook: Book[] = rest.data;
-          setBookList(dataBook);
-        }
-        const bookTypes = await getAllBookType();
-        if (bookTypes) {
-          const dataBookTypes: BookType[] = bookTypes.data;
-          setBookTypeList(dataBookTypes);
-        }
-      } catch (e) {
-        // Xử lý lỗi nếu cần
-      }
-    };
-
-    initData();
-  }, []);
-
-  useEffect(() => {
-    clearTimeout(timeoutIdRef.current);
-
-    if (searchInput != "") {
-      clearTimeout(timeoutIdRef.current);
-      const timeoutIdOb = setTimeout(() => {
-        searching();
-      }, 1000);
-      setTimeoutId(String(timeoutIdOb));
-      timeoutIdRef.current = String(timeoutIdOb);
-    }
-
-    return () => {
-      clearTimeout(timeoutIdRef.current || "");
-    };
-  }, [searchInput]);
-
-  const searching = () => {
-    if (searchInputRef.current) {
-      const dataSearch = bookList.filter((e) => {
-        const removeAccentOb = removeAccents(e.Title.toUpperCase());
-        const removeAccentParam = removeAccents(
-          searchInputRef.current.toUpperCase()
-        );
-        const result = removeAccentOb.includes(removeAccentParam);
-        return result;
-      });
-      setSeachingData(dataSearch);
-      console.log(dataSearch);
-    }
-  };
-
-  const handleInput = (value: string) => {
-    setSeachingData([]);
-    clearTimeout(timeoutIdRef.current);
-    setSearchInput(value);
-  };
-
-  const handleSelect = (value: string[]) => {
-    setTag(value);
-  };
-
   return (
     <LayoutDefault>
       <div className="content-container content-miss dk-flex dk-flex-col dk-font-Roboto dk-gap-4">

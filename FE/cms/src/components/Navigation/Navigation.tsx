@@ -80,6 +80,18 @@ const items: MenuProps["items"] = [
     key: "role-account",
     icon: <EditOutlined />,
   },
+  {
+    label: (
+      <Link
+        href="/book-type"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Loại sách</span>
+      </Link>
+    ),
+    key: "book-type",
+    icon: <EditOutlined />,
+  },
 ];
 
 const Navigation: React.FC = () => {

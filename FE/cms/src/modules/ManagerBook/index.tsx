@@ -19,8 +19,8 @@ import { useAppContext } from "hook/use-app-context";
 
 const ManagerBook: React.FC = () => {
   const { setData: setPopup } = useAppContext("popup-message");
-  const [bookTypes, setBookType] = useState([]);
-  const [books, setBook] = useState<Book[]>([]);
+  const { data: bookTypes, setData: setBookType } = useAppContext('book-types');
+  const { data: books, setData: setBook } = useAppContext('books');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [form] = Form.useForm();
@@ -76,6 +76,8 @@ const ManagerBook: React.FC = () => {
   };
 
   useEffect(() => {
+    setBook([]);
+    setBookType([]);
     initData();
     initBookType();
     initAuthor();

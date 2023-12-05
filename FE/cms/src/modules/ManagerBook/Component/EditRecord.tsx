@@ -56,10 +56,6 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   bookTypes,
   save,
   form,
-  books,
-  setBook,
-  setPopup,
-  record,
 }) => {
   form?.setFieldValue(
     "PublicYear",
@@ -101,19 +97,15 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             }}
           />
         </Form.Item>
-        <Form.Item name="Book_BookType" label="Loại sách">
+        <Form.Item
+          name="Book_BookType"
+          label="Loại sách"
+          rules={[{ required: true, message: "Làm ơn chọn loại sách!" }]}
+        >
           <Space className="dk-w-full dk-flex">
             <Select
               mode="multiple"
               className="dk-w-full dk-flex"
-              defaultValue={() => {
-                const arrayBookType = bookTypes.map((ob: BookType) => {
-                  return { value: ob.BookTypeId, label: ob.Name, ob: ob };
-                });
-                return arrayBookType.filter((ob) =>
-                  record.Book_BookType.find((ele) => ele.BookTypeId == ob.value)
-                );
-              }}
               options={bookTypes?.map((ob: BookType) => {
                 return { value: ob.BookTypeId, label: ob.Name, ob: ob };
               })}
@@ -160,31 +152,45 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item name="PublicYear" label="Năm xuất bản" className="dk-w-full">
-          <Space className="dk-w-full">
-            <DatePicker
-              format={"DD-MM-YYYY"}
-              defaultValue={record?.PublicYear ? dayjs(new Date(record?.PublicYear)) : dayjs(new Date())}
-              className="dk-w-full"
-              onChange={(value) => {
-                form.setFieldValue("PublicYear", value);
-              }}
-            />
-          </Space>
+        <Form.Item
+          name="PublicYear"
+          label="Năm xuất bản"
+          className="dk-w-full"
+          rules={[
+            { required: true, message: "Làm ơn nhập thời gian xuất bản" },
+          ]}
+        >
+          <DatePicker
+            format={"DD-MM-YYYY"}
+            defaultValue={dayjs(new Date())}
+            className="dk-w-full"
+            onChange={(value) => {
+              form.setFieldValue("PublicYear", value);
+            }}
+          />
         </Form.Item>
-        <Form.Item name="Img" label="Ảnh đại diện" className="dk-w-full">
-          <Form.Item
-            name="Img"
-            label="Ảnh đại diện"
-            className="dk-w-full dk-flex dk-justify-center"
-          >
-            <UploadFileImage lengthMaxImage={1} form={form} keyField="Img" />
-          </Form.Item>
+        <Form.Item
+          name="Img"
+          label="Ảnh đại diện"
+          className="dk-w-full dk-flex dk-justify-center"
+          rules={[{ required: true, message: "Làm ơn nhập ảnh đại diện" }]}
+        >
+          <UploadFileImage lengthMaxImage={1} form={form} keyField="Img" />
         </Form.Item>
-        <Form.Item name="Barcode" label="Mã sách" className="dk-w-full">
+        <Form.Item
+          name="Barcode"
+          label="Mã sách"
+          className="dk-w-full"
+          rules={[{ required: true, message: "Làm ơn nhập mã sách" }]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="AuthorId" label="Tác giả" className="dk-w-full">
+        <Form.Item
+          name="AuthorId"
+          label="Tác giả"
+          className="dk-w-full"
+          rules={[{ required: true, message: "Làm ơn chọn tác giả" }]}
+        >
           <Select
             className="dk-w-full"
             options={[
@@ -201,6 +207,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           name="PublisherId"
           label="Nhà xuất bản"
           className="dk-w-full"
+          rules={[{ required: true, message: "Làm ơn chọn nhà xuất bản" }]}
         >
           <Select
             className="dk-w-full"
