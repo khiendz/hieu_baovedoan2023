@@ -10,7 +10,6 @@ export class BorrowedBook {
       public BorrowDate: Date | null,
       public DueDate: Date | null,
       public ReturnDate: Date | null,
-      public KateFee: number | null,
       public Member: Member,
       public Book: Book,
       public LateFees: LateFee[]

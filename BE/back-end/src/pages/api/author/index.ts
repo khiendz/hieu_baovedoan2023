@@ -135,6 +135,21 @@ const UpdateAuthor = async (author: Author) => {
 }
 
 const DeleteAuthor = async (authorId: number) => {
+
+    const existBook = await prisma.book.findMany({
+        where: {
+            AuthorId: authorId
+        }
+    });
+
+    if (existBook) {
+        return {
+            data: null,
+            message: "Đang có sách được gắn tác giả này",
+            status: "500"
+        };
+    }
+
     try {
         const result = await prisma.author.delete({
             where: {
@@ -151,7 +166,7 @@ const DeleteAuthor = async (authorId: number) => {
         console.error(e);
         return {
             data: null,
-            message: "Internal Server Error",
+            message: "Đang có sách được gắn tác giả này",
             status: "500"
         };
     }

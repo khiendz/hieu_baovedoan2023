@@ -41,7 +41,7 @@ export const handleDelete = async (key: number, borrowedBooks: BorrowedBook[], s
     const newData = borrowedBooks.filter(
         (item: BorrowedBook) => item.TransactionId !== key
     );
-    if (result.status == 200)
+    if (result?.status == 200)
         setBorrowedBooks(newData);
     return result;
 };

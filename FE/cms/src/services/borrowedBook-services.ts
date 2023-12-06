@@ -72,7 +72,7 @@ export async function AddBorrowedBook(borrowedBook: BorrowedBook) {
 
 export async function DeleteBorrowedBookById(borrowedBookId: number) {
     try {
-        const res: any = await axios.delete(`${domainBE}/api/borrowed-book?borrowedBookId=${borrowedBookId}`);
+        const res: any = await fetchWrapper.delete(`${domainBE}/api/borrowed-book?borrowedBookId=${borrowedBookId}`);
 
         if (res.status === 200) {
             return res.data;

@@ -1,7 +1,7 @@
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import EditRecord from "./EditRecord";
 import { FormInstance, Popconfirm } from "antd";
-import { LateFee } from "Models";
+import { BorrowedBook, LateFee } from "Models";
 
 const Columns = (
   setSearchText: any,
@@ -31,15 +31,17 @@ const Columns = (
       searchedColumn,
       searchText
     ),
-    render: (transactionId: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">
-        {transactionId}
-      </p>
+    render: (transactionId: number, record: LateFee) => (
+      <div className="dk-font-Inter dk-text-sm dk-font-semibold">
+        <p>Tên độc giả: {record.BorrowedBook.Member.Name}</p>
+        <p>Sách mượn: {record.BorrowedBook.Book.Title}</p>
+        <p>Mã mượn: {record.BorrowedBook.TransactionId}</p>
+      </div>
     ),
     editable: true,
   },
   {
-    title: "Tổng phí trễ hạn",
+    title: "Tổng phí trễ hạn tạm tính",
     className: "column-money",
     dataIndex: "FeeAmount",
     width: "450px",
@@ -53,6 +55,33 @@ const Columns = (
     ),
     render: (feeAmount: number) => (
       <p className="dk-font-Inter dk-text-sm dk-font-semibold">{feeAmount}</p>
+    ),
+    editable: true,
+    align: "left",
+  },
+  {
+    title: "Loại trễ hạn",
+    className: "column-money",
+    dataIndex: "TransactionId",
+    width: "450px",
+    ...GetColumnSearchProps(
+      "TransactionId",
+      setSearchText,
+      setSearchedColumn,
+      searchInput,
+      searchedColumn,
+      searchText
+    ),
+    render: (transactionId: number, record: LateFee) => (
+      <div className="dk-font-Inter dk-text-sm dk-font-semibold dk-flex dk-flex-col">
+        <span className="dk-font-Roboto dk-font-bold">
+          Tên loại trễ hạn:{" "}
+          <span className="dk-font-normal">{record.BorrowedBook?.Book?.LateFeeType?.Name}</span>
+        </span>
+        <span className="dk-font-Roboto dk-font-bold">
+          Mô tả loại trễ hạn: <span className="dk-font-normal">{record?.BorrowedBook?.Book.LateFeeType?.Description}</span>
+        </span>
+      </div>
     ),
     editable: true,
     align: "left",

@@ -38,7 +38,8 @@ export const clearTheBook = async (bookId: number) => {
 export const handleDelete = async (key: number, books: Book[], setBook: any) => {
     const result = await clearTheBook(key);
     const newData = books.filter((item: Book) => item.BookId !== key);
-    setBook(newData);
+    if (result.status == 200)
+        setBook(newData);
     return result;
 };
 

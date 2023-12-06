@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, FormInstance, Input, Modal } from "antd";
+import { Button, Form, FormInstance, Input, Modal, Select } from "antd";
+import { BorrowedBook } from "Models";
+import { useAppContext } from "hook/use-app-context";
 
 interface CollectionEditFormProps {
   open: boolean;
@@ -23,6 +25,7 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
   save,
   form,
 }) => {
+  const { data: borrowedBooks } = useAppContext("borrowed-books");
   return (
     <Modal
       open={open}
@@ -41,12 +44,52 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
         name="form_in_modal"
         initialValues={{ modifier: "public" }}
       >
-         <Form.Item
+        <Form.Item
           name="TransactionId"
           label="Giao dịch"
           rules={[{ required: true, message: "Làm ơn chọn giao dịch" }]}
         >
-          <Input />
+          <Select
+            placeholder="Chọn thông tin thuê sách"
+            className="dk-w-full dk-line-clamp-1"
+            options={
+              borrowedBooks
+                ? [
+                    ...borrowedBooks?.map((ob: BorrowedBook) => {
+                      return {
+                        value: ob?.TransactionId,
+                        label: (
+                          <div className="dk-flex dk-flex-col dk-line-clamp-1">
+                            <span className="dk-font-Roboto dk-font-bold">
+                              Tên người mượn:{" "}
+                              <span className="dk-font-normal">
+                                {ob.Member.Name}
+                              </span>
+                            </span>
+                            <span className="dk-font-Roboto dk-font-bold">
+                              Tên sách:{" "}
+                              <span className="dk-font-normal">
+                                {ob.Book.Title}
+                              </span>
+                            </span>
+                            <span className="dk-font-Roboto dk-font-bold">
+                              Mã mượn:{" "}
+                              <span className="dk-font-normal">
+                                {ob.TransactionId}
+                              </span>
+                            </span>
+                          </div>
+                        ),
+                        ob: ob,
+                      };
+                    }),
+                  ]
+                : []
+            }
+            onChange={(value) => {
+              form.setFieldValue("TransactionId", value);
+            }}
+          />
         </Form.Item>
         <Form.Item
           name="FeeAmount"

@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Form, FormInstance, Input, Modal, Select } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  FormInstance,
+  Input,
+  Modal,
+  Select,
+} from "antd";
 import { Book, BorrowedBook, Member } from "Models";
 import { useAppContext } from "hook/use-app-context";
 import dayjs from "dayjs";
@@ -27,11 +35,9 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   setPopup,
 }) => {
   const { data: borrowedBooks, setData: setBorrowedBooks } =
-  useAppContext("borrowed-books");
-  const { data: members } =
-  useAppContext("members");
-  const { data: books } =
-  useAppContext("books");
+    useAppContext("borrowed-books");
+  const { data: members } = useAppContext("members");
+  const { data: books } = useAppContext("books");
 
   return (
     <Modal
@@ -68,7 +74,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="Thành viên mượn"
           rules={[{ required: true, message: "Làm ơn chọn độc giả mượn" }]}
         >
-           <Select
+          <Select
             placeholder="Chọn độc giả"
             className="dk-w-full"
             options={[
@@ -86,7 +92,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="Sách mượn"
           rules={[{ required: true, message: "Làm ơn chọn sách mượn" }]}
         >
-           <Select
+          <Select
             placeholder="Chọn sách"
             className="dk-w-full"
             options={[
@@ -100,9 +106,11 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           />
         </Form.Item>
         <Form.Item
-          name="BorrowedDate"
+          name="BorrowDate"
           label="Ngày mượn"
-          rules={[{ required: true, message: "Làm ơn nhập ngày mượn" }]}
+          rules={[
+            { required: true, message: "Làm ơn nhập ngày mượn" },
+          ]}
           valuePropName="date"
         >
           <DatePicker
@@ -110,17 +118,20 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             defaultValue={dayjs(new Date())}
             className="dk-w-full"
             onChange={(value) => {
-              form.setFieldValue("BorrowedDate", value);
+              form.setFieldValue("BorrowDate", value);
             }}
           />
         </Form.Item>
+
         <Form.Item
           name="DueDate"
           label="Hạn trả"
-          rules={[{ required: true, message: "Làm ơn nhập hạn trả" }]}
+          rules={[
+            { required: true, message: "Làm ơn nhập hạn trả" },
+          ]}
           valuePropName="date"
         >
-           <DatePicker
+          <DatePicker
             format={"DD-MM-YYYY"}
             defaultValue={dayjs(new Date())}
             className="dk-w-full"
@@ -129,12 +140,10 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             }}
           />
         </Form.Item>
-        <Form.Item
-          name="ReturnDate"
-          label="Ngày trả"
-          valuePropName="date"
+
+        <Form.Item name="ReturnDate" label="Ngày trả" valuePropName="date"
         >
-           <DatePicker
+          <DatePicker
             format={"DD-MM-YYYY"}
             defaultValue={dayjs(new Date())}
             className="dk-w-full"
@@ -142,12 +151,6 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
               form.setFieldValue("ReturnDate", value);
             }}
           />
-        </Form.Item>
-        <Form.Item
-          name="KateFee"
-          label="Phí trễ hạn"
-        >
-          <Input type="number"/>
         </Form.Item>
       </Form>
     </Modal>

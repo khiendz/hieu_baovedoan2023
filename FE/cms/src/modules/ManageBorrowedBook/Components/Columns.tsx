@@ -81,10 +81,10 @@ const Columns = (
   {
     title: "Ngày mượn",
     className: "column-money",
-    dataIndex: "BorrowedDate",
+    dataIndex: "BorrowDate",
     width: "450px",
     ...GetColumnSearchProps(
-      "BorrowedDate",
+      "BorrowDate",
       setSearchText,
       setSearchedColumn,
       searchInput,
@@ -123,10 +123,10 @@ const Columns = (
   {
     title: "Ngày trả",
     className: "column-money",
-    dataIndex: "DueDate",
+    dataIndex: "ReturnDate",
     width: "450px",
     ...GetColumnSearchProps(
-      "DueDate",
+      "ReturnDate",
       setSearchText,
       setSearchedColumn,
       searchInput,
@@ -134,9 +134,15 @@ const Columns = (
       searchText
     ),
     render: (date: Date) => {
-      return (<p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-      {date ? format(new Date(date), 'dd-MM-yyyy') : "Chưa trả"}
-    </p>)
+      let formattedDate = "Chưa trả";
+      if (date && date?.toString() != "1970-01-01T00:00:00.000Z") {
+        formattedDate = format(new Date(date), 'dd-MM-yyyy');
+      }
+      return (
+        <p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
+          {formattedDate}
+        </p>
+      );
     },
     editable: true,
     align: "left",

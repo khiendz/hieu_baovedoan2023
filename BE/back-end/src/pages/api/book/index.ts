@@ -254,6 +254,18 @@ const UpdateBook = async (book: any) => {
 
 const DeleteBook = async (bookId: number) => {
     try {
+        const exitsBorrowBook = await prisma.borrowedBook.findMany({
+            where: {
+                BookId: bookId
+            }
+        });
+
+        if (exitsBorrowBook.length > 0)
+            return {
+                data: null,
+                message: "Sách đang được độc giả mượn, không thể xóa",
+                status: "500"
+            };
 
         await prisma.book_BookType.deleteMany({
             where: {

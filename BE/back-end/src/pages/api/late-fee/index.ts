@@ -55,7 +55,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const GetLateFees = async () => {
     try {
-        const lateFees = await prisma.lateFee.findMany();
+        const lateFees = await prisma.lateFee.findMany({
+            include: {
+                BorrowedBook: {
+                    include: {
+                        Book: {
+                            include: {
+                                LateFeeType: true
+                            }
+                        },
+                        Member: true,
+                    }
+                },
+                Payment: true
+            }
+        });
 
         if (lateFees) {
             return {
@@ -84,9 +98,22 @@ const AddLateFee = async (lateFee: LateFee) => {
     try {
         const lateFeeResult = await prisma.lateFee.create({
             data: {
-                TransactionId: lateFee.TransactionId,
-                FeeAmount: lateFee.FeeAmount,
+                TransactionId: +lateFee.TransactionId,
+                FeeAmount: +lateFee.FeeAmount,
             },
+            include: {
+                BorrowedBook: {
+                    include: {
+                        Book: {
+                            include: {
+                                LateFeeType: true
+                            }
+                        },
+                        Member: true,
+                    }
+                },
+                Payment: true
+            }
         });
 
         return {
@@ -112,8 +139,21 @@ const UpdateLateFee = async (lateFee: LateFee) => {
                 LateFeeId: lateFee?.LateFeeId
             },
             data: {
-                TransactionId: lateFee.TransactionId,
-                FeeAmount: lateFee.FeeAmount,
+                TransactionId: +lateFee.TransactionId,
+                FeeAmount: +lateFee.FeeAmount,
+            },
+            include: {
+                BorrowedBook: {
+                    include: {
+                        Book: {
+                            include: {
+                                LateFeeType: true
+                            }
+                        },
+                        Member: true,
+                    }
+                },
+                Payment: true
             }
         });
 

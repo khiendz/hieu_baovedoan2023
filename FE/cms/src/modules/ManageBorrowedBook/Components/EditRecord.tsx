@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Button, DatePicker, Form, FormInstance, Input, Modal, Select } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  FormInstance,
+  Input,
+  Modal,
+  Select,
+} from "antd";
 import dayjs from "dayjs";
 import { useAppContext } from "hook/use-app-context";
-import { Book, Member } from "Models";
+import { Book, BorrowedBook, Member } from "Models";
 
 interface CollectionEditFormProps {
   open: boolean;
@@ -26,11 +34,8 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
   save,
   form,
 }) => {
-  const { data: members } =
-  useAppContext("members");
-  const { data: books } =
-  useAppContext("books");
-
+  const { data: members } = useAppContext("members");
+  const { data: books } = useAppContext("books");
 
   return (
     <Modal
@@ -39,7 +44,8 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
       okText="Cật nhật sách mượn"
       cancelText="Hủy"
       onCancel={onCancel}
-      onOk={() => {
+      onOk={async () => {
+        const row = (await form.validateFields()) as BorrowedBook;
         save();
         onCreate();
       }}
@@ -55,10 +61,16 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
           label="Thành viên mượn"
           rules={[{ required: true, message: "Làm ơn chọn thành viên mượn" }]}
         >
-           <Select
+          <Select
             placeholder="Chọn độc giả"
             className="dk-w-full"
-            defaultValue={{ value: form.getFieldValue("MemberId"), label: members.find((member: Member) => member.MemberId == form.getFieldValue("MemberId"))?.Name }}
+            defaultValue={{
+              value: form.getFieldValue("MemberId"),
+              label: members.find(
+                (member: Member) =>
+                  member.MemberId == form.getFieldValue("MemberId")
+              )?.Name,
+            }}
             options={[
               ...members?.map((ob: Member) => {
                 return { value: ob.MemberId, label: ob.Name, ob: ob };
@@ -74,10 +86,15 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
           label="Sách mượn"
           rules={[{ required: true, message: "Làm ơn chọn sách mượn" }]}
         >
-            <Select
+          <Select
             placeholder="Chọn sách"
             className="dk-w-full"
-            defaultValue={{ value: form.getFieldValue("BookId"), label: books.find((book: Book) => book.BookId == form.getFieldValue("BookId"))?.Title }}
+            defaultValue={{
+              value: form.getFieldValue("BookId"),
+              label: books.find(
+                (book: Book) => book.BookId == form.getFieldValue("BookId")
+              )?.Title,
+            }}
             options={[
               ...books?.map((ob: Book) => {
                 return { value: ob.BookId, label: ob.Title, ob: ob };
@@ -89,54 +106,55 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
           />
         </Form.Item>
         <Form.Item
-          name="BorrowedDate"
+          name="BorrowDate"
           label="Ngày mượn"
-          rules={[{ required: true, message: "Làm ơn nhập ngày mượn" }]}
+          rules={[
+            { required: true, message: "Làm ơn nhập ngày mượn" },
+          ]}
           valuePropName="date"
         >
           <DatePicker
-            format={"DD-MM-YYYY"}
-            defaultValue={dayjs(new Date())}
+            format="DD-MM-YYYY"
             className="dk-w-full"
+            defaultValue={dayjs(form.getFieldsValue().BorrowDate) || null}
             onChange={(value) => {
-              form.setFieldValue("BorrowedDate", value);
+              form.setFieldValue("BorrowDate", value);
             }}
           />
         </Form.Item>
         <Form.Item
           name="DueDate"
           label="Hạn trả"
-          rules={[{ required: true, message: "Làm ơn nhập hạn trả" }]}
+          rules={[
+            { required: true, message: "Làm ơn nhập hạn trả" },
+          ]}
           valuePropName="date"
         >
-           <DatePicker
+          <DatePicker
             format={"DD-MM-YYYY"}
-            defaultValue={dayjs(new Date())}
+            defaultValue={dayjs(
+              form.getFieldValue("DueDate") ? form.getFieldValue("DueDate") : 0
+            )}
             className="dk-w-full"
             onChange={(value) => {
               form.setFieldValue("DueDate", value);
             }}
           />
         </Form.Item>
-        <Form.Item
-          name="ReturnDate"
-          label="Ngày trả"
-          valuePropName="date"
-        >
-           <DatePicker
+
+        <Form.Item name="ReturnDate" label="Ngày trả" valuePropName="date">
+          <DatePicker
             format={"DD-MM-YYYY"}
-            defaultValue={dayjs(new Date())}
+            defaultValue={dayjs(
+              form.getFieldValue("ReturnDate")
+                ? form.getFieldValue("ReturnDate")
+                : 0
+            )}
             className="dk-w-full"
             onChange={(value) => {
               form.setFieldValue("ReturnDate", value);
             }}
           />
-        </Form.Item>
-        <Form.Item
-          name="KateFee"
-          label="Phí trễ hạn"
-        >
-          <Input type="number"/>
         </Form.Item>
       </Form>
     </Modal>

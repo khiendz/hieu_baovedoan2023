@@ -198,7 +198,7 @@ const DeleteBookType = async (bookTypeId: number) => {
         console.error(e);
         return {
             data: null,
-            message: "Internal Server Error",
+            message: "Đang có sách có thuộc tính loại sách này",
             status: "500"
         };
     }

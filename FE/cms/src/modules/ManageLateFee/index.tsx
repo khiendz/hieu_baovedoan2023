@@ -8,9 +8,11 @@ import { handleDelete, handleAdd, changeLateFee } from "./services";
 import { useAppContext } from "hook/use-app-context";
 import { LateFee } from "Models";
 import { getAllLateFee } from "services/late-fee-service";
+import { getAllBorrowedBook } from "services/borrowedBook-services";
 
 const ManageLateFee = () => {
   const { data: lateFees, setData: setLateFees } = useAppContext("late-fees");
+  const { data: borrowedBooks, setData: setBorrowedBooks } = useAppContext("borrowed-books");
   const { setData: setPopup } = useAppContext("popup-message");
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -20,7 +22,9 @@ const ManageLateFee = () => {
 
   useEffect(() => {
     setLateFees([]);
+    setBorrowedBooks([]);
     initData();
+    initBorrowedBook();
     setPopup({
       title: "",
       messagePopup: "",
@@ -83,6 +87,16 @@ const ManageLateFee = () => {
       }
     } catch (e) {}
   };
+
+  const initBorrowedBook = async () => {
+    try {
+      const result = await getAllBorrowedBook();
+      if (result && result?.data) {
+        setBorrowedBooks(result?.data?.reverse());
+      }
+    } catch (e) {}
+  };
+
 
   const columns = Columns(
     setSearchText,

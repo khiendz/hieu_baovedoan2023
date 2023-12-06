@@ -100,7 +100,6 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         <Form.Item
           name="Book_BookType"
           label="Loại sách"
-          rules={[{ required: true, message: "Làm ơn chọn loại sách!" }]}
         >
           <Space className="dk-w-full dk-flex">
             <Select
@@ -159,6 +158,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           rules={[
             { required: true, message: "Làm ơn nhập thời gian xuất bản" },
           ]}
+          valuePropName="date"
         >
           <DatePicker
             format={"DD-MM-YYYY"}

@@ -58,7 +58,13 @@ const GetAllBorrowedBook = async () => {
     try {
         const borrowedBook = await prisma.borrowedBook.findMany({
             include: {
-                Member: true
+                Member: true,
+                Book: {
+                    include: {
+                        LateFeeType: true
+                    }
+                },
+                LateFee: true
             }
         });
 
@@ -78,7 +84,7 @@ const GetAllBorrowedBook = async () => {
     } catch (error) {
         console.error(error);
         return {
-            tour: null,
+            data: null,
             message: "Internal Server Error",
             status: "500"
         };
@@ -87,15 +93,40 @@ const GetAllBorrowedBook = async () => {
 
 const AddBorrowedBook = async (borrow: BorrowedBook) => {
     try {
+
+        const totalBook = await prisma.book.findUnique({
+            where: {
+                BookId: borrow.BookId
+            }
+        }) as Book;
+
+        const existBookBorrowe = await prisma.borrowedBook.findMany({
+            where: {
+                BookId: borrow.BookId 
+            }
+        });
+
+        if (totalBook.Quantity && existBookBorrowe.length >= totalBook.Quantity) {
+            return {
+                data: null,
+                message: "Không thể cho mượn vì đã cho mượn hết số sách",
+                status: "500"
+            };
+        }
+
         const borrowResult = await prisma.borrowedBook.create({
             data: {
                 MemberId: borrow.MemberId,
                 BookId: borrow.BookId,
                 BorrowDate: borrow.BorrowDate,
                 DueDate: borrow.DueDate,
-                ReturnDate: borrow?.ReturnDate,
-                KateFee: borrow.KateFee
+                ReturnDate: borrow?.ReturnDate ? borrow?.ReturnDate : null,
             },
+            include: {
+                Member: true,
+                Book: true,
+                LateFee: true
+            }
         });
 
         if (borrowResult) {
@@ -132,8 +163,12 @@ const UpdateBorrowedBook = async (borrow: any) => {
                 BookId: borrow.BookId,
                 BorrowDate: borrow.BorrowDate,
                 DueDate: borrow.DueDate,
-                ReturnDate: borrow?.ReturnDate,
-                KateFee: borrow.KateFee
+                ReturnDate: borrow?.ReturnDate ? borrow?.ReturnDate : null,
+            },
+            include: {
+                Member: true,
+                Book: true,
+                LateFee: true
             }
         });
 
