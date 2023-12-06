@@ -134,14 +134,18 @@ const Columns = (
       searchText
     ),
     render: (date: Date) => {
-      let formattedDate = "Chưa trả";
+      let formattedDate = null;
       if (date && date?.toString() != "1970-01-01T00:00:00.000Z") {
         formattedDate = format(new Date(date), 'dd-MM-yyyy');
       }
       return (
+        formattedDate ?
         <p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
           {formattedDate}
-        </p>
+        </p> : 
+        <p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter dk-p-1 dk-bg-red-400 dk-rounded dk-h-fit">
+          Chưa trả
+        </p> 
       );
     },
     editable: true,
