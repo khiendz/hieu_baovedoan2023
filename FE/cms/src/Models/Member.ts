@@ -10,6 +10,7 @@ export class Member {
       public Email: string | null,
       public JoinDate: Date | null,
       public MemberRoleId: number | null,
+      public Member: Member,
       public BorrowedBook: BorrowedBook[]
     ) {}
   }

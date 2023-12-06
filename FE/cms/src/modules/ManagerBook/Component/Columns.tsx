@@ -3,7 +3,7 @@ import { Book } from "Models/Book";
 import { BookType } from "Models/BookType";
 import { Book_BookType } from "Models/Book_BookType";
 import { Publisher } from "Models/Publisher";
-import { FormInstance, Popconfirm, Typography } from "antd";
+import { FormInstance, Popconfirm } from "antd";
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import format from 'date-fns/format';
 import EditRecord from "./EditRecord";

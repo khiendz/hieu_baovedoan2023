@@ -128,6 +128,54 @@ const items: MenuProps["items"] = [
     key: "payment",
     icon: <EditOutlined />,
   },
+  {
+    label: (
+      <Link
+        href="/late-fee"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Trễ hạn</span>
+      </Link>
+    ),
+    key: "late-fee",
+    icon: <EditOutlined />,
+  },
+  {
+    label: (
+      <Link
+        href="/late-fee-type"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Loại phí trễ hạn</span>
+      </Link>
+    ),
+    key: "late-fee-type",
+    icon: <EditOutlined />,
+  },
+  {
+    label: (
+      <Link
+        href="/member"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Độc giả</span>
+      </Link>
+    ),
+    key: "member",
+    icon: <EditOutlined />,
+  },
+  {
+    label: (
+      <Link
+        href="/member-type"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Kiểu độc giả</span>
+      </Link>
+    ),
+    key: "member-type",
+    icon: <EditOutlined />,
+  },
 ];
 
 const Navigation: React.FC = () => {
