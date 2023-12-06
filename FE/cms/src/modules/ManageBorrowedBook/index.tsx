@@ -4,14 +4,14 @@ import AddRecord from "./Components/AddRecord";
 import "./style.scss";
 import Columns from "./Components/Columns";
 import MergedColumns from "./Components/MergeColumns";
-import { handleDelete, handleAdd, changeBookType } from "./services";
+import { handleDelete, handleAdd, changeBorrowedBook } from "./services";
 import { useAppContext } from "hook/use-app-context";
-import { getAllBookType } from "services";
-import { BookType } from "Models";
+import { BorrowedBook } from "Models";
+import { getAllBorrowedBook } from "services/borrowedBook-services";
 
-const ManageBookType = () => {
-  const { data: bookTypes, setData: setBookTypes } =
-    useAppContext("book-types");
+const ManageBorrowedBook = () => {
+  const { data: borrowedBooks, setData: setBorrowedBooks } =
+    useAppContext("borrowed-books");
   const { setData: setPopup } = useAppContext("popup-message");
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -20,7 +20,7 @@ const ManageBookType = () => {
   const searchInput = useRef<InputRef>(null);
 
   useEffect(() => {
-    setBookTypes([]);
+    setBorrowedBooks([]);
     initData();
     setPopup({
       title: "",
@@ -29,25 +29,25 @@ const ManageBookType = () => {
     });
   }, []);
 
-  const isEditing = (record: BookType) =>
-    record?.BookTypeId?.toString() === editingKey;
+  const isEditing = (record: BorrowedBook) =>
+    record?.TransactionId?.toString() === editingKey;
 
   const save = async (key: React.Key) => {
     try {
-      const row = (await form.validateFields()) as BookType;
-      const newData = [...bookTypes];
-      const index = newData.findIndex((item) => key === item.AuthorId);
+      const row = (await form.validateFields()) as BorrowedBook;
+      const newData = [...borrowedBooks];
+      const index = newData.findIndex((item) => key === item.TransactionId);
       if (index > -1) {
         const item = newData[index];
         const newTourType = { ...item, ...row };
-        const result = await changeBookType(newTourType);
+        const result = await changeBorrowedBook(newTourType);
         if (result && result.status == 200) {
           const updateItem = result.data;
           newData.splice(index, 1, {
             ...item,
             ...updateItem,
           });
-          setBookTypes(newData);
+          setBorrowedBooks(newData);
         }
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",
@@ -57,7 +57,7 @@ const ManageBookType = () => {
         setEditingKey("");
       } else {
         newData.push(row);
-        setBookTypes(newData);
+        setBorrowedBooks(newData);
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -69,18 +69,18 @@ const ManageBookType = () => {
     setEditingKey("");
   };
 
-  const edit = (record: BookType, key: string) => {
+  const edit = (record: BorrowedBook, key: string) => {
     form.setFieldsValue({
       ...record,
     });
-    setEditingKey(record.BookTypeId?.toString() || "");
+    setEditingKey(record.TransactionId?.toString() || "");
   };
 
   const initData = async () => {
     try {
-      const result = await getAllBookType();
+      const result = await getAllBorrowedBook();
       if (result && result?.data) {
-        setBookTypes(result?.data?.reverse());
+        setBorrowedBooks(result?.data?.reverse());
       }
     } catch (e) {}
   };
@@ -97,20 +97,20 @@ const ManageBookType = () => {
     cancel,
     form,
     handleDelete,
-    setBookTypes,
+    setBorrowedBooks,
     setPopup,
-    bookTypes
+    borrowedBooks
   );
 
   const mergedColumns = MergedColumns(columns, isEditing, form);
 
-  return bookTypes ? (
+  return borrowedBooks ? (
     <>
       <Form form={form} component={false}>
         <AddRecord Save={handleAdd} Form={form} setPopup={setPopup} />
         <Table
           columns={mergedColumns}
-          dataSource={bookTypes}
+          dataSource={borrowedBooks}
           rowClassName="editable-row"
           scroll={{ x: 1600, y: 700 }}
           bordered
@@ -120,4 +120,4 @@ const ManageBookType = () => {
   ) : null;
 };
 
-export default ManageBookType;
+export default ManageBorrowedBook;

@@ -124,11 +124,20 @@ model Payment {
 }
 
 model Employee {
-  EmployeeId   Int     @id @default(autoincrement()) @map("EmployeeId")
-  WorkSchedule String?
-  UserId       Int
+  EmployeeId     Int     @id @default(autoincrement()) @map("EmployeeId")
+  WorkSchedule   String?
+  EmployeeTypeId Int     @default(0)
+  UserId         Int
 
-  User User? @relation(fields: [UserId], references: [UserId])
+  EmployeeType EmployeeType @relation(fields: [EmployeeTypeId], references: [EmployeeTypeId])
+  User         User?        @relation(fields: [UserId], references: [UserId])
+}
+
+model EmployeeType {
+  EmployeeTypeId Int        @id @default(autoincrement()) @map("EmployeeTypeId")
+  Name           String
+  Description    String
+  Employee       Employee[]
 }
 
 //Bảng user

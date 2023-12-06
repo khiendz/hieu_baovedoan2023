@@ -27,8 +27,8 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
   return (
     <Modal
       open={open}
-      title="Cập nhật thông tin sách mượn"
-      okText="Cật nhật sách mượn"
+      title="Cập nhật thông tin thanh toán"
+      okText="Cật nhật thanh toán"
       cancelText="Hủy"
       onCancel={onCancel}
       onOk={() => {
@@ -42,67 +42,41 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
         name="form_in_modal"
         initialValues={{ modifier: "public" }}
       >
-        <Form.Item
-          name="MemberId"
-          label="Thành viên mượn"
-          rules={[{ required: true, message: "Làm ơn chọn thành viên mượn" }]}
+          <Form.Item
+          name="LateFeeId"
+          label="Phí trễ hạn"
+          rules={[{ required: true, message: "Làm ơn nhập phí trễ hạn" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name="BookId"
-          label="Sách mượn"
-          rules={[{ required: true, message: "Làm ơn chọn sách mượn" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="BorrowedDate"
-          label="Ngày mượn"
-          rules={[{ required: true, message: "Làm ơn nhập ngày mượn" }]}
+          name="PaymentDate"
+          label="Ngày thanh toán"
+          rules={[{ required: true, message: "Làm ơn nhập ngày thanh toán" }]}
           valuePropName="date"
         >
-          <DatePicker
+             <DatePicker
             format={"DD-MM-YYYY"}
             defaultValue={dayjs(new Date())}
             className="dk-w-full"
             onChange={(value) => {
-              form.setFieldValue("BorrowedDate", value);
+              form.setFieldValue("PaymentDate", value);
             }}
           />
         </Form.Item>
         <Form.Item
-          name="DueDate"
-          label="Hạn trả"
-          rules={[{ required: true, message: "Làm ơn nhập hạn trả" }]}
+          name="Amount"
+          label="Tổng tiền thanh toán"
+          rules={[{ required: true, message: "Làm ơn nhập tổng tiền thanh toán" }]}
         >
-           <DatePicker
-            format={"DD-MM-YYYY"}
-            defaultValue={dayjs(new Date())}
-            className="dk-w-full"
-            onChange={(value) => {
-              form.setFieldValue("DueDate", value);
-            }}
-          />
+          <Input type="nunber"/>
         </Form.Item>
         <Form.Item
-          name="ReturnDate"
-          label="Ngày trả"
+          name="StatePayment"
+          label="Trạng thái thanh toán"
+          rules={[{ required: true, message: "Làm ơn nhập trạng thái thanh toán" }]}
         >
-           <DatePicker
-            format={"DD-MM-YYYY"}
-            defaultValue={dayjs(new Date())}
-            className="dk-w-full"
-            onChange={(value) => {
-              form.setFieldValue("ReturnDate", value);
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          name="KateFee"
-          label="Phí trễ hạn"
-        >
-          <Input type="number"/>
+          <Input type="nunber"/>
         </Form.Item>
       </Form>
     </Modal>
@@ -129,7 +103,7 @@ const EditRecord: React.FC<Props> = (props) => {
           setOpen(true);
         }}
       >
-        Sửa sách mượn
+        Sửa thông tin thanh toán
       </Button>
       <CollectionCreateForm
         open={open}

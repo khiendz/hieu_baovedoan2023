@@ -1,5 +1,6 @@
 import { Member } from 'Models/Member';
 import axios from 'axios';
+import { fetchWrapper } from 'helpers';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
 
@@ -9,7 +10,7 @@ export async function getMemberById(id: string) {
         return null;
 
     try {
-        const res: any = await axios.get(`${domainBE}/api/member/${id}`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/member/${id}`);
         if (res.status == 200)
             return res.data;
 
@@ -20,7 +21,7 @@ export async function getMemberById(id: string) {
 
 export async function getAllMember () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/member`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/member`);
         if (res.status == 200) 
             return res.data;
         
@@ -31,7 +32,7 @@ export async function getAllMember () {
 
 export async function getAllMemberWithRelative () {
     try {
-        const res: any = await axios.get(`${domainBE}/api/member/all-member-with-relative`);
+        const res: any = await fetchWrapper.get(`${domainBE}/api/member/all-member-with-relative`);
         if (res.status == 200) 
             return res.data;
         
@@ -42,11 +43,7 @@ export async function getAllMemberWithRelative () {
 
 export async function UpdateMember(member: Member) {
     try {
-        const res: any = await axios.put(`${domainBE}/api/member`, JSON.stringify(member), {
-            headers: {
-                'Content-Type': 'application/json', 
-            },
-        });
+        const res: any = await fetchWrapper.put(`${domainBE}/api/member`, member);
 
         if (res.status === 200) {
             return res.data;
@@ -58,13 +55,9 @@ export async function UpdateMember(member: Member) {
     return null;
 }
 
-export async function AddMember(borrowedBook: Member) {
+export async function AddMember(member: Member) {
     try {
-        const res: any = await axios.post(`${domainBE}/api/member`, JSON.stringify(borrowedBook), {
-            headers: {
-                'Content-Type': 'application/json', 
-            },
-        });
+        const res: any = await fetchWrapper.post(`${domainBE}/api/member`, member);
 
         if (res.status === 200) {
             return res.data;
@@ -78,7 +71,7 @@ export async function AddMember(borrowedBook: Member) {
 
 export async function DeleteMember(memberId: number) {
     try {
-        const res: any = await axios.delete(`${domainBE}/api/member?memberId=${memberId}`);
+        const res: any = await fetchWrapper.delete(`${domainBE}/api/member?memberId=${memberId}`);
 
         if (res.status === 200) {
             return res.data;

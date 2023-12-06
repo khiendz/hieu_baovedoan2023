@@ -70,7 +70,7 @@ export async function AddBorrowedBook(borrowedBook: BorrowedBook) {
     return null;
 }
 
-export async function DeleteBorrowedBook(borrowedBookId: number) {
+export async function DeleteBorrowedBookById(borrowedBookId: number) {
     try {
         const res: any = await axios.delete(`${domainBE}/api/borrowed-book?borrowedBookId=${borrowedBookId}`);
 

@@ -4,14 +4,14 @@ import AddRecord from "./Components/AddRecord";
 import "./style.scss";
 import Columns from "./Components/Columns";
 import MergedColumns from "./Components/MergeColumns";
-import { handleDelete, handleAdd, changeBookType } from "./services";
+import { handleDelete, handleAdd, changePayment} from "./services";
 import { useAppContext } from "hook/use-app-context";
-import { getAllBookType } from "services";
-import { BookType } from "Models";
+import { Payment } from "Models";
+import { getAllPayment } from "services/payment-service";
 
-const ManageBookType = () => {
-  const { data: bookTypes, setData: setBookTypes } =
-    useAppContext("book-types");
+const ManagePayment = () => {
+  const { data: payments, setData: setPayments } =
+    useAppContext("payments");
   const { setData: setPopup } = useAppContext("popup-message");
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -20,7 +20,7 @@ const ManageBookType = () => {
   const searchInput = useRef<InputRef>(null);
 
   useEffect(() => {
-    setBookTypes([]);
+    setPayments([]);
     initData();
     setPopup({
       title: "",
@@ -29,25 +29,25 @@ const ManageBookType = () => {
     });
   }, []);
 
-  const isEditing = (record: BookType) =>
-    record?.BookTypeId?.toString() === editingKey;
+  const isEditing = (record: Payment) =>
+    record?.PaymentID?.toString() === editingKey;
 
   const save = async (key: React.Key) => {
     try {
-      const row = (await form.validateFields()) as BookType;
-      const newData = [...bookTypes];
-      const index = newData.findIndex((item) => key === item.BookTypeId);
+      const row = (await form.validateFields()) as Payment;
+      const newData = [...payments];
+      const index = newData.findIndex((item) => key === item.PaymentID);
       if (index > -1) {
         const item = newData[index];
         const newTourType = { ...item, ...row };
-        const result = await changeBookType(newTourType);
+        const result = await changePayment(newTourType);
         if (result && result.status == 200) {
           const updateItem = result.data;
           newData.splice(index, 1, {
             ...item,
             ...updateItem,
           });
-          setBookTypes(newData);
+          setPayments(newData);
         }
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",
@@ -57,7 +57,7 @@ const ManageBookType = () => {
         setEditingKey("");
       } else {
         newData.push(row);
-        setBookTypes(newData);
+        setPayments(newData);
         setEditingKey("");
       }
     } catch (errInfo) {
@@ -69,18 +69,18 @@ const ManageBookType = () => {
     setEditingKey("");
   };
 
-  const edit = (record: BookType, key: string) => {
+  const edit = (record: Payment, key: string) => {
     form.setFieldsValue({
       ...record,
     });
-    setEditingKey(record.BookTypeId?.toString() || "");
+    setEditingKey(record.PaymentID?.toString() || "");
   };
 
   const initData = async () => {
     try {
-      const result = await getAllBookType();
+      const result = await getAllPayment();
       if (result && result?.data) {
-        setBookTypes(result?.data?.reverse());
+        setPayments(result?.data?.reverse());
       }
     } catch (e) {}
   };
@@ -97,20 +97,20 @@ const ManageBookType = () => {
     cancel,
     form,
     handleDelete,
-    setBookTypes,
+    setPayments,
     setPopup,
-    bookTypes
+    payments
   );
 
   const mergedColumns = MergedColumns(columns, isEditing, form);
 
-  return bookTypes ? (
+  return payments ? (
     <>
       <Form form={form} component={false}>
         <AddRecord Save={handleAdd} Form={form} setPopup={setPopup} />
         <Table
           columns={mergedColumns}
-          dataSource={bookTypes}
+          dataSource={payments}
           rowClassName="editable-row"
           scroll={{ x: 1600, y: 700 }}
           bordered
@@ -120,4 +120,4 @@ const ManageBookType = () => {
   ) : null;
 };
 
-export default ManageBookType;
+export default ManagePayment;

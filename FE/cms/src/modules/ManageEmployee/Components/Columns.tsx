@@ -1,8 +1,8 @@
-import { Author, BorrowedBook } from "Models";
+import { Author, BorrowedBook, Employee } from "Models";
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import EditRecord from "./EditRecord";
 import { FormInstance, Popconfirm } from "antd";
-import format from 'date-fns/format';
+import format from "date-fns/format";
 
 const Columns = (
   setSearchText: any,
@@ -21,120 +21,80 @@ const Columns = (
   bookTypes: Author[]
 ) => [
   {
-    title: "Mã mượn",
-    dataIndex: "TransactionId",
+    title: "Mã nhân viên",
+    dataIndex: "EmployeeId",
     width: "200px",
     ...GetColumnSearchProps(
-      "TransactionId",
+      "EmployeeId",
       setSearchText,
       setSearchedColumn,
       searchInput,
       searchedColumn,
       searchText
     ),
-    render: (transactionId: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{transactionId}</p>
+    render: (employeeId: number) => (
+      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{employeeId}</p>
     ),
     editable: true,
   },
   {
-    title: "Thành viên",
+    title: "Lịch làm việc",
     className: "column-money",
-    dataIndex: "MemberId",
+    dataIndex: "WorkSchedule",
     width: "450px",
     ...GetColumnSearchProps(
-      "MemberId",
+      "WorkSchedule",
       setSearchText,
       setSearchedColumn,
       searchInput,
       searchedColumn,
       searchText
     ),
-    render: (memberId: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{memberId}</p>
-    ),
-    editable: true,
-    align: "left",
-  },
-  {
-    title: "Sách mượn",
-    className: "column-money",
-    dataIndex: "BookId",
-    width: "450px",
-    ...GetColumnSearchProps(
-      "BookId",
-      setSearchText,
-      setSearchedColumn,
-      searchInput,
-      searchedColumn,
-      searchText
-    ),
-    render: (bookId: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{bookId}</p>
+    render: (workSchedule: string) => (
+      <p className="dk-font-Inter dk-text-sm dk-font-semibold">
+        {workSchedule}
+      </p>
     ),
     editable: true,
     align: "left",
   },
   {
-    title: "Ngày mượn",
+    title: "Kiểu nhân viên",
     className: "column-money",
-    dataIndex: "BorrowedDate",
+    dataIndex: "EmployeeTypeId",
     width: "450px",
     ...GetColumnSearchProps(
-      "BorrowedDate",
+      "EmployeeTypeId",
       setSearchText,
       setSearchedColumn,
       searchInput,
       searchedColumn,
       searchText
     ),
-    render: (date: Date) => {
-      return (<p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-      {format(date ? new Date(date) : new Date(), 'dd-MM-yyyy')}
-    </p>)
-    },
+    render: (employeeTypeId: number) => (
+      <p className="dk-font-Inter dk-text-sm dk-font-semibold">
+        {employeeTypeId}
+      </p>
+    ),
     editable: true,
     align: "left",
   },
   {
-    title: "Hạn trả",
+    title: "Thông tin nhân viên",
     className: "column-money",
-    dataIndex: "DueDate",
+    dataIndex: "UserId",
     width: "450px",
     ...GetColumnSearchProps(
-      "DueDate",
+      "UserId",
       setSearchText,
       setSearchedColumn,
       searchInput,
       searchedColumn,
       searchText
     ),
-    render: (date: Date) => {
-      return (<p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-      {format(date ? new Date(date) : new Date(), 'dd-MM-yyyy')}
-    </p>)
-    },
-    editable: true,
-    align: "left",
-  },
-  {
-    title: "Ngày trả",
-    className: "column-money",
-    dataIndex: "DueDate",
-    width: "450px",
-    ...GetColumnSearchProps(
-      "DueDate",
-      setSearchText,
-      setSearchedColumn,
-      searchInput,
-      searchedColumn,
-      searchText
+    render: (userId: number) => (
+      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{userId}</p>
     ),
-    render: (date: Date) => {
-      return (<p className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
-      {date ? format(new Date(date), 'dd-MM-yyyy') : "Chưa trả"}
-    </p>)
-    },
     editable: true,
     align: "left",
   },
@@ -144,24 +104,24 @@ const Columns = (
     align: "center",
     width: "250px",
     fixed: "right",
-    render: (_: any, record: BorrowedBook) => {
+    render: (_: any, record: Employee) => {
       const editable = isEditing(record);
 
       return (
         <div className="dk-flex dk-gap-3 dk-text-[#1677ff]">
           <EditRecord
             onInit={() => {
-              edit(record, record.TransactionId?.toString() || "");
+              edit(record, record.EmployeeId?.toString() || "");
             }}
-            Save={() => save(record?.TransactionId || "")}
+            Save={() => save(record?.EmployeeId || "")}
             Cancel={cancel}
             Form={form}
           />
           <Popconfirm
-            title={"Bạn có chắc chắn muốn xóa sách mượn này ?"}
+            title={"Bạn có chắc chắn muốn xóa nhân viên này ?"}
             onConfirm={async () => {
               const result = await handleDelete(
-                record.TransactionId,
+                record.EmployeeId,
                 bookTypes,
                 setBookTypes
               );

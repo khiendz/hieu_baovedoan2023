@@ -92,6 +92,42 @@ const items: MenuProps["items"] = [
     key: "book-type",
     icon: <EditOutlined />,
   },
+  {
+    label: (
+      <Link
+        href="/employee"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Nhân viên</span>
+      </Link>
+    ),
+    key: "employee",
+    icon: <EditOutlined />,
+  },
+  {
+    label: (
+      <Link
+        href="/employee-type"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Loại nhân viên</span>
+      </Link>
+    ),
+    key: "employee-type",
+    icon: <EditOutlined />,
+  },
+  {
+    label: (
+      <Link
+        href="/payment"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Thanh toán</span>
+      </Link>
+    ),
+    key: "payment",
+    icon: <EditOutlined />,
+  },
 ];
 
 const Navigation: React.FC = () => {

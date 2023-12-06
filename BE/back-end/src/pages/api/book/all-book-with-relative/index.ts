@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, Book } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();

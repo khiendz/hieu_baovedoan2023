@@ -7,3 +7,5 @@ export * from "./account-service";
 export * from "./user-service";
 export * from "./users-service";
 export * from "./role-account-service";
+export * from "./employee-service";
+export * from "./employee-type-service";

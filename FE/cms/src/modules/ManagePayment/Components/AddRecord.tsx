@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, DatePicker, Form, FormInstance, Input, Modal } from "antd";
-import { BorrowedBook } from "Models";
+import { Payment } from "Models";
 import { useAppContext } from "hook/use-app-context";
 import dayjs from "dayjs";
 interface CollectionCreateFormProps {
@@ -11,6 +11,7 @@ interface CollectionCreateFormProps {
   form: FormInstance;
   setPopup: any;
 }
+
 
 interface Props {
   Save: any;
@@ -26,24 +27,23 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   form,
   setPopup,
 }) => {
-  const { data: borrowedBooks, setData: setBorrowedBooks } =
-  useAppContext("borrowed-books");
-
+  const { data: payments, setData: setPayments } =
+  useAppContext("payments");
   return (
     <Modal
       open={open}
-      title="Thêm mới mượn sách"
+      title="Thêm mới thanh toán"
       okText="Thêm mới"
       cancelText="Hủy"
       onCancel={onCancel}
       onOk={async (ob) => {
-        const row = (await form.validateFields()) as BorrowedBook;
+        const row = (await form.validateFields()) as Payment;
         const result = await save(
           {
             ...row,
           },
-          setBorrowedBooks,
-          borrowedBooks
+          setPayments,
+          payments
         );
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",
@@ -60,66 +60,40 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         initialValues={{ modifier: "public" }}
       >
         <Form.Item
-          name="MemberId"
-          label="Thành viên mượn"
-          rules={[{ required: true, message: "Làm ơn chọn thành viên mượn" }]}
+          name="LateFeeId"
+          label="Phí trễ hạn"
+          rules={[{ required: true, message: "Làm ơn nhập phí trễ hạn" }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
-          name="BookId"
-          label="Sách mượn"
-          rules={[{ required: true, message: "Làm ơn chọn sách mượn" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="BorrowedDate"
-          label="Ngày mượn"
-          rules={[{ required: true, message: "Làm ơn nhập ngày mượn" }]}
+          name="PaymentDate"
+          label="Ngày thanh toán"
+          rules={[{ required: true, message: "Làm ơn nhập ngày thanh toán" }]}
           valuePropName="date"
         >
-          <DatePicker
+             <DatePicker
             format={"DD-MM-YYYY"}
             defaultValue={dayjs(new Date())}
             className="dk-w-full"
             onChange={(value) => {
-              form.setFieldValue("BorrowedDate", value);
+              form.setFieldValue("PaymentDate", value);
             }}
           />
         </Form.Item>
         <Form.Item
-          name="DueDate"
-          label="Hạn trả"
-          rules={[{ required: true, message: "Làm ơn nhập hạn trả" }]}
+          name="Amount"
+          label="Tổng tiền thanh toán"
+          rules={[{ required: true, message: "Làm ơn nhập tổng tiền thanh toán" }]}
         >
-           <DatePicker
-            format={"DD-MM-YYYY"}
-            defaultValue={dayjs(new Date())}
-            className="dk-w-full"
-            onChange={(value) => {
-              form.setFieldValue("DueDate", value);
-            }}
-          />
+          <Input type="nunber"/>
         </Form.Item>
         <Form.Item
-          name="ReturnDate"
-          label="Ngày trả"
+          name="StatePayment"
+          label="Trạng thái thanh toán"
+          rules={[{ required: true, message: "Làm ơn nhập trạng thái thanh toán" }]}
         >
-           <DatePicker
-            format={"DD-MM-YYYY"}
-            defaultValue={dayjs(new Date())}
-            className="dk-w-full"
-            onChange={(value) => {
-              form.setFieldValue("ReturnDate", value);
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          name="KateFee"
-          label="Phí trễ hạn"
-        >
-          <Input type="number"/>
+          <Input type="nunber"/>
         </Form.Item>
       </Form>
     </Modal>
@@ -142,7 +116,7 @@ const AddRecord: React.FC<Props> = (props) => {
           setOpen(true);
         }}
       >
-        Thêm sách mượn
+        Thêm thanh toán
       </Button>
       <CollectionCreateForm
         open={open}

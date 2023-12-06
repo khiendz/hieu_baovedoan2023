@@ -2,10 +2,9 @@
 import LayoutDefault from "components/layouts/LayoutDefault";
 import React from "react";
 import { format } from "date-fns";
-import ManageBorrowedBook from "modules/ManageBorrowedBook";
+import ManagePayment from "modules/ManagePayment";
 
-export default function Order() {
-
+export default function Home() {
   return (
     <LayoutDefault>
       <div className="content-container content-miss dk-flex dk-flex-col dk-font-Roboto dk-gap-4">
@@ -17,7 +16,7 @@ export default function Order() {
           Trang tài liệu chính thống và đầy đủ số 1
         </h2>
         <div className="search-form dk-flex dk-flex-col dk-h-fit dk-min-h-[220px] dk-w-full dk-min-w-[760px] dk-p-4 dk-rounded dk-shadow-sm dk-mt-4 content-miss content-miss-v2 dk-gap-5 dk-relative dk-z-10">
-          <ManageBorrowedBook/>
+          <ManagePayment/>
         </div>
       </div>
     </LayoutDefault>

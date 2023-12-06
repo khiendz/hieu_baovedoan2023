@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Employee, LateFee, LateFeeType, MemberRole, Payment, PrismaClient, User } from '@prisma/client';
+import { EmployeeType, PrismaClient } from '@prisma/client';
 import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
@@ -11,7 +11,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     if (req.method === 'GET') {
-        const result = await GetPayments();
+        const result = await GetEmployeeType();
 
         if (!result) {
             return res.status(400).json({ error: 'Invalid tour ID' });
@@ -19,32 +19,32 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         return res.json({ ...result });
     } else if (req.method === 'PUT') {
-        const payment = req.body;
+        const employeeType = req.body;
 
-        const result = await UpdatePayment(payment);
+        const result = await UpdateEmployeeType(employeeType);
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to update the support payment' });
+            return res.status(500).json({ error: 'Failed to update the support employee type' });
         }
 
         return res.json({ ...result });
     } else if (req.method === 'POST') {
-        const payment = req.body;
+        const employeeType = req.body;
 
-        const result = await AddPayment(payment);
+        const result = await AddEmployeeType(employeeType);
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to create a new support payment' });
+            return res.status(500).json({ error: 'Failed to create a new support employee' });
         }
 
         return res.json({ ...result });
     } else if (req.method === 'DELETE') {
-        const { paymentId } = req.query;
+        const { employeeTypeId } = req.query;
 
-        const result = await DeletePaymentById(parseInt(paymentId?.toString() || "0"));
+        const result = await DeleteEmployeeTypeById(parseInt(employeeTypeId?.toString() || "0"));
 
         if (!result) {
-            return res.status(500).json({ error: 'Failed to delete a support member role' });
+            return res.status(500).json({ error: 'Failed to delete a support employee type' });
         }
 
         return res.json({ ...result });
@@ -53,13 +53,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 };
 
-const GetPayments = async () => {
+const GetEmployeeType = async () => {
     try {
-        const payments = await prisma.payment.findMany();
+        const employeeTypes = await prisma.employeeType.findMany();
 
-        if (payments) {
+        if (employeeTypes) {
             return {
-                data: payments,
+                data: employeeTypes,
                 message: "Success",
                 status: "200"
             };
@@ -80,19 +80,17 @@ const GetPayments = async () => {
     }
 }
 
-const AddPayment = async (payment: Payment) => {
+const AddEmployeeType = async (employeeType: EmployeeType) => {
     try {
-        const paymentResult = await prisma.payment.create({
+        const employeeResult = await prisma.employeeType.create({
             data: {
-                LateFeeId: payment.LateFeeId,
-                PaymentDate: payment.PaymentDate,
-                Amount: payment.Amount,
-                StatePayments: payment.StatePayments
+                Name: employeeType.Name,
+                Description: employeeType?.Description
             },
         });
 
         return {
-            data: paymentResult,
+            data: employeeResult,
             message: "Success",
             status: "200",
         };
@@ -107,22 +105,20 @@ const AddPayment = async (payment: Payment) => {
     }
 }
 
-const UpdatePayment = async (payment: Payment) => {
+const UpdateEmployeeType = async (employeeType: EmployeeType) => {
     try {
-        const paymentResult = await prisma.payment.update({
+        const employeeTypeResult = await prisma.employeeType.update({
             where: {
-                PaymentID: payment?.PaymentID
+                EmployeeTypeId: employeeType?.EmployeeTypeId
             },
             data: {
-                LateFeeId: payment.LateFeeId,
-                PaymentDate: payment.PaymentDate,
-                Amount: payment.Amount,
-                StatePayments: payment.StatePayments
+                Name: employeeType.Name,
+                Description: employeeType?.Description
             }
         });
 
         return {
-            data: paymentResult,
+            data: employeeTypeResult,
             message: "Success",
             status: "200"
         };
@@ -136,11 +132,11 @@ const UpdatePayment = async (payment: Payment) => {
     }
 }
 
-const DeletePaymentById = async (paymentId: number) => {
+const DeleteEmployeeTypeById = async (employeeTypeId: number) => {
     try {
-        const result = await prisma.payment.delete({
+        const result = await prisma.employeeType.delete({
             where: {
-                PaymentID: paymentId
+                EmployeeTypeId: employeeTypeId
             }
         })
 
