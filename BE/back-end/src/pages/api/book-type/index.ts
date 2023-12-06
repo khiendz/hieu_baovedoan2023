@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, Book, Prisma, Book_BookType, BookType } from '@prisma/client';
+import { PrismaClient, BookType } from '@prisma/client';
 import { apiHandler } from '@/helpers/api';
 import { saveFile } from '@/services/file';
 
@@ -57,7 +57,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const GetBookType = async () => {
     try {
-        const bookTypes = await prisma.bookType.findMany();
+        const bookTypes = await prisma.bookType.findMany({
+            include: {
+                Book: true,
+            }
+        });
         if (bookTypes) {
             return {
                 data: bookTypes,
@@ -74,7 +78,7 @@ const GetBookType = async () => {
     } catch (error) {
         console.error(error);
         return {
-            tour: null,
+            data: null,
             message: "Internal Server Error",
             status: "500"
         };
@@ -179,13 +183,6 @@ const UpdateBookType = async (bookType: BookType) => {
 
 const DeleteBookType = async (bookTypeId: number) => {
     try {
-
-        await prisma.bookType.deleteMany({
-            where: {
-                BookTypeId: bookTypeId
-            }
-        });
-
         const result = await prisma.bookType.delete({
             where: {
                 BookTypeId: bookTypeId

@@ -77,129 +77,154 @@ const items: MenuProps["items"] = [
         href="/muon-sach"
         className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
       >
-        <span>Mượn sách</span>
+        <span>Quản trị mượn sách</span>
       </Link>
     ),
     key: "order",
-    icon: <BookOutlined />,
-   
+    children: [
+      {
+        label: (
+          <Link
+            href="/muon-sach"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Mượn sách</span>
+          </Link>
+        ),
+        key: "order",
+        icon: <BookOutlined />,
+      },
+      {
+        label: (
+          <Link
+            href="/late-fee"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Trễ hạn</span>
+          </Link>
+        ),
+        key: "late-fee",
+      },
+      {
+        label: (
+          <Link
+            href="/late-fee-type"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Loại phí trễ hạn</span>
+          </Link>
+        ),
+        key: "late-fee-type",
+      },
+      {
+        label: (
+          <Link
+            href="/payment"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Thanh toán</span>
+          </Link>
+        ),
+        key: "payment",
+        icon: <EuroOutlined />
+      },
+    ]
   },
   {
     label: (
       <Link
         href="/account"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold dk-"
       >
-        <span>Tài khoản</span>
+        <span>Quản trị người dùng và độc giả</span>
       </Link>
     ),
     key: "account",
-    icon: <UserAddOutlined />,
-  },
-  {
-    label: (
-      <Link
-        href="/user"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Người dùng</span>
-      </Link>
-    ),
-    key: "user",
-    icon: <UserOutlined />
-  },
-  {
-    label: (
-      <Link
-        href="/role-account"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Loại tài khoản</span>
-      </Link>
-    ),
-    key: "role-account",
-    icon: <UsergroupAddOutlined />
-  },
-
-  {
-    label: (
-      <Link
-        href="/employee"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Nhân viên</span>
-      </Link>
-    ),
-    key: "employee",
-    icon: <MehOutlined />
-  },
-  {
-    label: (
-      <Link
-        href="/employee-type"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Loại nhân viên</span>
-      </Link>
-    ),
-    key: "employee-type",
-    icon: <RocketOutlined />
-  },
-  {
-    label: (
-      <Link
-        href="/payment"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Thanh toán</span>
-      </Link>
-    ),
-    key: "payment",
-    icon: <EuroOutlined />
-  },
-  {
-    label: (
-      <Link
-        href="/late-fee"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Trễ hạn</span>
-      </Link>
-    ),
-    key: "late-fee",
-  },
-  {
-    label: (
-      <Link
-        href="/late-fee-type"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Loại phí trễ hạn</span>
-      </Link>
-    ),
-    key: "late-fee-type",
-  },
-  {
-    label: (
-      <Link
-        href="/member"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Độc giả</span>
-      </Link>
-    ),
-    key: "member",
-  },
-  {
-    label: (
-      <Link
-        href="/member-type"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Kiểu độc giả</span>
-      </Link>
-    ),
-    key: "member-type",
+    children: [
+      {
+        label: (
+          <Link
+            href="/account"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Tài khoản</span>
+          </Link>
+        ),
+        key: "account",
+        icon: <UserAddOutlined />,
+      },
+      {
+        label: (
+          <Link
+            href="/user"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Người dùng</span>
+          </Link>
+        ),
+        key: "user",
+        icon: <UserOutlined />
+      },
+      {
+        label: (
+          <Link
+            href="/role-account"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Loại tài khoản</span>
+          </Link>
+        ),
+        key: "role-account",
+        icon: <UsergroupAddOutlined />
+      },
+    
+      {
+        label: (
+          <Link
+            href="/employee"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Nhân viên</span>
+          </Link>
+        ),
+        key: "employee",
+        icon: <MehOutlined />
+      },
+      {
+        label: (
+          <Link
+            href="/employee-type"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Loại nhân viên</span>
+          </Link>
+        ),
+        key: "employee-type",
+        icon: <RocketOutlined />
+      },
+      {
+        label: (
+          <Link
+            href="/member"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Độc giả</span>
+          </Link>
+        ),
+        key: "member",
+      },
+      {
+        label: (
+          <Link
+            href="/member-type"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Kiểu độc giả</span>
+          </Link>
+        ),
+        key: "member-type",
+      },
+    ]
   },
 ];
 

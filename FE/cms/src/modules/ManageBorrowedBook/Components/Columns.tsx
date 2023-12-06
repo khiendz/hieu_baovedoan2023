@@ -1,4 +1,4 @@
-import { Author, BorrowedBook } from "Models";
+import { Author, BorrowedBook, Member } from "Models";
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import EditRecord from "./EditRecord";
 import { FormInstance, Popconfirm } from "antd";
@@ -18,7 +18,8 @@ const Columns = (
   handleDelete: any,
   setBookTypes: any,
   setPopup: any,
-  bookTypes: Author[]
+  bookTypes: Author[],
+  members: Member[]
 ) => [
   {
     title: "Mã mượn",
@@ -51,7 +52,9 @@ const Columns = (
       searchText
     ),
     render: (memberId: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{memberId}</p>
+      <div className="dk-font-Inter dk-text-sm dk-font-semibold">{
+        members.find((member: Member) => member.MemberId == memberId)?.Name
+      }</div>
     ),
     editable: true,
     align: "left",

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient, Book, Prisma, Book_BookType } from '@prisma/client';
+import { PrismaClient, Book_BookType } from '@prisma/client';
 import { apiHandler } from '@/helpers/api';
 import { saveFile } from '@/services/file';
 
@@ -57,7 +57,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const GetBook = async () => {
     try {
-        const book = await prisma.book.findMany();
+        const book = await prisma.book.findMany({
+            include: {
+                Author: true,
+                BookType: true,
+                BorrowedBook: true,
+                Publisher: true
+            }
+        });
         if (book) {
             return {
                 data: book,
@@ -91,13 +98,7 @@ const AddBook = async (book: any) => {
                 status: "400"
             };
         }
-        if (!book.LateFeeTypeId) {
-            return {
-                data: null,
-                message: "Có vẻ bạn bị thiếu thông tin phí trễ hạn",
-                status: "400"
-            };
-        }
+      
         if (!book.PublisherId) {
             return {
                 data: null,

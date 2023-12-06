@@ -89,13 +89,13 @@ const AddAuthor = async (author: Author) => {
 
         if (authorResult) {
             return {
-                author: authorResult,
+                data: authorResult,
                 message: "Success",
                 status: "200"
             };
         } else {
             return {
-                tour: null,
+                data: null,
                 message: "No Success",
                 status: "500"
             };
@@ -114,7 +114,7 @@ const UpdateAuthor = async (author: Author) => {
     try {
         const updatedAuthor = await prisma.author.update({
             where: {
-                AuthorId: 1
+                AuthorId: author.AuthorId
             }, // Assuming you have an 'id' field in your Book model
             data: author,
         });

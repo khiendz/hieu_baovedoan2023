@@ -34,7 +34,8 @@ const GetBooksWithType = async () => {
                     include: {
                         BookType: true
                     }
-                }
+                },
+                LateFeeType: true
             }
         });
 

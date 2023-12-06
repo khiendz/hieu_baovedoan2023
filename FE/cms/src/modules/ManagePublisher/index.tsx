@@ -11,7 +11,7 @@ import { getAllPublisher } from "services";
 
 const ManagePublisher= () => {
   const { data: publishers, setData: setPublishers } =
-    useAppContext("publisher");
+    useAppContext("publishers");
   const { setData: setPopup } = useAppContext("popup-message");
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");

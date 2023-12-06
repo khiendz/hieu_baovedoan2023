@@ -177,6 +177,21 @@ const Columns = (
       align: "left",
     },
     {
+      title: "Kiểu phí trễ hạn",
+      className: "column-money",
+      dataIndex: "LateFeeTypeId",
+      inputType: "Select",
+      width: "250px",
+      ...GetColumnSearchProps("Author",setSearchText,setSearchedColumn,searchInput,searchedColumn,searchText),
+      render: (lateFeeTypeId: number, record: Book) => (
+        <span className="dk-block dk-w-[150px] dk-text-sm dk-font-medium dk-font-Inter">
+          {record?.LateFeeType?.Description}
+        </span>
+      ),
+      editable: true,
+      align: "left",
+    },
+    {
       title: "Cập nhật",
       dataIndex: "operation",
       align: "center",

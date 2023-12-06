@@ -29,6 +29,7 @@ model Book {
   BorrowedBook  BorrowedBook[]
   Book_BookType Book_BookType[]
   BookType      BookType[]
+  LateFeeType   LateFeeType     @relation(fields: [LateFeeTypeId], references: [LateFeeTypeId])
 }
 
 model Author {
@@ -89,11 +90,10 @@ model BorrowedBook {
   BorrowDate    DateTime?
   DueDate       DateTime?
   ReturnDate    DateTime?
-  KateFee       Int?
 
-  Member   Member?   @relation(fields: [MemberId], references: [MemberId])
-  Book     Book?     @relation(fields: [BookId], references: [BookId])
-  LateFees LateFee[]
+  Member  Member?   @relation(fields: [MemberId], references: [MemberId])
+  Book    Book?     @relation(fields: [BookId], references: [BookId])
+  LateFee LateFee[]
 }
 
 model LateFee {
@@ -111,6 +111,7 @@ model LateFeeType {
   Description   String
   FeeAmount     Decimal
   DateCount     Int
+  Book          Book[]
 }
 
 model Payment {

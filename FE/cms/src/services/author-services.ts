@@ -57,7 +57,7 @@ export async function getAllAuthorWithRelative () {
 
 export async function UpdateAuthor(author: Author) {
     try {
-        const res: any = await fetchWrapper.post(`${domainBE}/api/author`, author);
+        const res: any = await fetchWrapper.put(`${domainBE}/api/author`, author);
 
         if (res.status === 200) {
             return res.data;

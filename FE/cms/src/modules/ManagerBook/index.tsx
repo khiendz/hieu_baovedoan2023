@@ -180,7 +180,6 @@ const ManagerBook: React.FC = () => {
           )}
         ></Table>
       </Form>
-      <NotifYPopup></NotifYPopup>
     </>
   ) : null;
 };

@@ -86,8 +86,8 @@ const AddLateFeeTypes = async (lateFeeType: LateFeeType) => {
             data: {
                 Name: lateFeeType.Name,
                 Description: lateFeeType.Description,
-                FeeAmount: lateFeeType.FeeAmount,
-                DateCount: lateFeeType.DateCount
+                FeeAmount: +lateFeeType.FeeAmount,
+                DateCount: +lateFeeType.DateCount
             },
         });
 

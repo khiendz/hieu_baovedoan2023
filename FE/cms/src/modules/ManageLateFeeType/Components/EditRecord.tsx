@@ -63,13 +63,6 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
           <Input />
         </Form.Item>
         <Form.Item
-          name="FeeAmount"
-          label="Phí trễ hạn"
-          rules={[{ required: true, message: "Làm ơn nhập phí trễ hạn" }]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           name="DateCount"
           label="Số ngày tính phí trễ 1 lần"
           rules={[{ required: true, message: "Làm ơn nhập số ngày tính phí trễ 1 lần" }]}

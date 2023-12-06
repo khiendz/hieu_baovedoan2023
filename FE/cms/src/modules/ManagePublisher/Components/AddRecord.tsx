@@ -43,7 +43,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             ...row,
           },
           setPublishers,
-          publishers
+          publishers || []
         );
         setPopup({
           title: result?.status == 200 ? "Thành công" : "Thất bại",

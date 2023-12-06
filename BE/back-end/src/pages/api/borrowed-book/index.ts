@@ -93,7 +93,7 @@ const AddBorrowedBook = async (borrow: BorrowedBook) => {
                 BookId: borrow.BookId,
                 BorrowDate: borrow.BorrowDate,
                 DueDate: borrow.DueDate,
-                ReturnDate: borrow.ReturnDate,
+                ReturnDate: borrow?.ReturnDate,
                 KateFee: borrow.KateFee
             },
         });
@@ -132,7 +132,7 @@ const UpdateBorrowedBook = async (borrow: any) => {
                 BookId: borrow.BookId,
                 BorrowDate: borrow.BorrowDate,
                 DueDate: borrow.DueDate,
-                ReturnDate: borrow.ReturnDate,
+                ReturnDate: borrow?.ReturnDate,
                 KateFee: borrow.KateFee
             }
         });

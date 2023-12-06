@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 import UserAccount from "modules/UserAccount";
 import Notification from "components/Notification";
 import { useAppContext } from "hook/use-app-context";
+import NotifYPopup from "components/NotifyPopup";
 
 const roboto = Roboto({
   weight: "400",
@@ -29,6 +30,7 @@ export default function Header() {
         </div>
       </div>
       <UserAccount />
+      <NotifYPopup></NotifYPopup>
     </header>
   ) 
 }

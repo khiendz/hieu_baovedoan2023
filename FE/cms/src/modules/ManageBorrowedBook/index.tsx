@@ -8,10 +8,14 @@ import { handleDelete, handleAdd, changeBorrowedBook } from "./services";
 import { useAppContext } from "hook/use-app-context";
 import { BorrowedBook } from "Models";
 import { getAllBorrowedBook } from "services/borrowedBook-services";
+import { getAllMember } from "services/member-services";
+import { getAllBook } from "services";
 
 const ManageBorrowedBook = () => {
   const { data: borrowedBooks, setData: setBorrowedBooks } =
     useAppContext("borrowed-books");
+  const { data: members, setData: setMembers } = useAppContext("members");
+  const { data: books, setData: setBooks } = useAppContext("books");
   const { setData: setPopup } = useAppContext("popup-message");
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -21,7 +25,11 @@ const ManageBorrowedBook = () => {
 
   useEffect(() => {
     setBorrowedBooks([]);
+    setMembers([]);
+    setBooks([]);
     initData();
+    initMembers();
+    initBooks();
     setPopup({
       title: "",
       messagePopup: "",
@@ -85,6 +93,25 @@ const ManageBorrowedBook = () => {
     } catch (e) {}
   };
 
+  const initMembers = async () => {
+    try {
+      const result = await getAllMember();
+      if (result && result?.data) {
+        setMembers(result?.data?.reverse());
+      }
+    } catch (e) {}
+  };
+
+  const initBooks = async () => {
+    try {
+      const result = await getAllBook();
+      if (result && result?.data) {
+        setBooks(result?.data?.reverse());
+      }
+    } catch (e) {}
+  };
+  
+
   const columns = Columns(
     setSearchText,
     setSearchedColumn,
@@ -99,7 +126,8 @@ const ManageBorrowedBook = () => {
     handleDelete,
     setBorrowedBooks,
     setPopup,
-    borrowedBooks
+    borrowedBooks,
+    members
   );
 
   const mergedColumns = MergedColumns(columns, isEditing, form);
