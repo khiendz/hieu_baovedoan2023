@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { HomeOutlined, EditOutlined } from "@ant-design/icons";
+import { HomeOutlined, EditOutlined, BookOutlined, UserAddOutlined, UsergroupAddOutlined, 
+  UserOutlined, InsertRowAboveOutlined, MehOutlined, RocketOutlined, EuroOutlined, FlagOutlined } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import Link from "next/link";
@@ -14,23 +15,61 @@ const items: MenuProps["items"] = [
         href="/"
         className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
       >
-        TRANG CHỦ
+        QUẢN TRỊ SÁCH
       </Link>
     ),
     key: "home",
     icon: <HomeOutlined />,
-  },
-  {
-    label: (
-      <Link
-        href="/tac-gia"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Tác giả</span>
-      </Link>
-    ),
-    key: "news",
-    icon: <EditOutlined />,
+    children: [
+      {
+        label: (
+          <Link
+            href="/"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            SÁCH
+          </Link>
+        ),
+        key: "home",
+        icon: <HomeOutlined />,
+      },
+      {
+        label: (
+          <Link
+            href="/book-type"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Loại sách</span>
+          </Link>
+        ),
+        key: "book-type",
+        icon: <InsertRowAboveOutlined />,
+      },
+      {
+        label: (
+          <Link
+            href="/tac-gia"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Tác giả</span>
+          </Link>
+        ),
+        key: "author",
+        icon: <EditOutlined />,
+      },
+      {
+        label: (
+          <Link
+            href="/publisher"
+            className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+          >
+            <span>Nhà xuất bản</span>
+          </Link>
+        ),
+        key: "publisher",
+        icon: <FlagOutlined />
+      },
+    ],
   },
   {
     label: (
@@ -42,7 +81,8 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "order",
-    icon: <EditOutlined />,
+    icon: <BookOutlined />,
+   
   },
   {
     label: (
@@ -54,7 +94,7 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "account",
-    icon: <EditOutlined />,
+    icon: <UserAddOutlined />,
   },
   {
     label: (
@@ -66,7 +106,7 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "user",
-    icon: <EditOutlined />,
+    icon: <UserOutlined />
   },
   {
     label: (
@@ -78,20 +118,9 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "role-account",
-    icon: <EditOutlined />,
+    icon: <UsergroupAddOutlined />
   },
-  {
-    label: (
-      <Link
-        href="/book-type"
-        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
-      >
-        <span>Loại sách</span>
-      </Link>
-    ),
-    key: "book-type",
-    icon: <EditOutlined />,
-  },
+
   {
     label: (
       <Link
@@ -102,7 +131,7 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "employee",
-    icon: <EditOutlined />,
+    icon: <MehOutlined />
   },
   {
     label: (
@@ -114,7 +143,7 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "employee-type",
-    icon: <EditOutlined />,
+    icon: <RocketOutlined />
   },
   {
     label: (
@@ -126,7 +155,7 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "payment",
-    icon: <EditOutlined />,
+    icon: <EuroOutlined />
   },
   {
     label: (
@@ -138,7 +167,6 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "late-fee",
-    icon: <EditOutlined />,
   },
   {
     label: (
@@ -150,7 +178,6 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "late-fee-type",
-    icon: <EditOutlined />,
   },
   {
     label: (
@@ -162,7 +189,6 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "member",
-    icon: <EditOutlined />,
   },
   {
     label: (
@@ -174,7 +200,6 @@ const items: MenuProps["items"] = [
       </Link>
     ),
     key: "member-type",
-    icon: <EditOutlined />,
   },
 ];
 
