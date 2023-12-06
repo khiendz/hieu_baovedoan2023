@@ -62,40 +62,78 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="Thông tin thuê sách"
           rules={[{ required: true, message: "Làm ơn chọn thông tin thuê sách" }]}
         >
-           <Select
+          <Select
             placeholder="Chọn thông tin thuê sách"
-            className="dk-w-full dk-line-clamp-1"
+            className="dk-w-full dk-line-clamp-2 dk-h-fit"
             options={
               borrowedBooks
                 ? [
-                    ...borrowedBooks?.map((ob: BorrowedBook) => {
-                      return {
-                        value: ob?.TransactionId,
-                        label: (
-                          <div className="dk-flex dk-flex-col dk-line-clamp-1">
-                            <span className="dk-font-Roboto dk-font-bold">
-                              Tên người mượn:{" "}
-                              <span className="dk-font-normal">
-                                {ob.Member.Name}
-                              </span>
-                            </span>
-                            <span className="dk-font-Roboto dk-font-bold">
-                              Tên sách:{" "}
-                              <span className="dk-font-normal">
-                                {ob.Book.Title}
-                              </span>
-                            </span>
-                            <span className="dk-font-Roboto dk-font-bold">
-                              Mã mượn:{" "}
-                              <span className="dk-font-normal">
-                                {ob.TransactionId}
-                              </span>
-                            </span>
-                          </div>
-                        ),
-                        ob: ob,
-                      };
-                    }),
+                    ...borrowedBooks
+                      ?.filter(
+                        (ob: BorrowedBook) =>
+                          ob.ReturnDate == null &&
+                          new Date().getDate() >
+                            new Date(ob?.DueDate || "").getDate() && 
+                          (lateFees as LateFee[]).find((lateFee: LateFee) => lateFee.BorrowedBook.TransactionId != ob.TransactionId)
+                      )
+                      ?.map((ob: BorrowedBook) => {
+                        return {
+                          value: ob?.TransactionId,
+                          label: (
+                            <div className="dk-flex dk-flex-col dk-line-clamp-1 dk-border-b-[1px] dk-pb-2 dk-overflow-hidden">
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Tên người mượn:{" "}
+                                <span className="dk-font-normal">
+                                  {ob.Member.Name}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Tên sách:{" "}
+                                <span className="dk-font-normal">
+                                  {ob.Book.Title}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Mã mượn:{" "}
+                                <span className="dk-font-normal">
+                                  {ob.TransactionId}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Số ngày trễ hạn:{" "}
+                                <span className="dk-font-normal">
+                                  {ob.DueDate
+                                    ? new Date().getDate() -
+                                      new Date(ob?.DueDate)?.getDate()
+                                    : 0}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Tổng tiền trễ hạn theo loại trễ hạn:{" "}
+                                <span className="dk-font-normal">
+                                  {new Date().getDate() -
+                                    new Date(ob?.DueDate || "")?.getDate() >=
+                                  ob.Book.LateFeeType.DateCount
+                                    ? (ob.Book.LateFeeType.FeeAmount *
+                                      ((new Date().getDate() -
+                                        new Date(
+                                          ob?.DueDate || ""
+                                        )?.getDate()) /
+                                        ob.Book.LateFeeType.DateCount)).toLocaleString("vi-VN")
+                                    : 0}{" "}VND
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Mô tả loại trễ hạn:{" "}
+                                <span className="dk-font-normal">
+                                  {ob.Book.LateFeeType.Description}
+                                </span>
+                              </div>
+                            </div>
+                          ),
+                          ob: ob,
+                        };
+                      }),
                   ]
                 : []
             }

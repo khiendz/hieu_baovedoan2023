@@ -64,7 +64,7 @@ const GetAllBorrowedBook = async () => {
                         LateFeeType: true
                     }
                 },
-                LateFee: true
+                LateFee: true,
             }
         });
 

@@ -2,6 +2,7 @@ import GetColumnSearchProps from "components/GetColumnSearchProps";
 import EditRecord from "./EditRecord";
 import { FormInstance, Popconfirm } from "antd";
 import { BorrowedBook, LateFee } from "Models";
+import IconMoney from "../Images/icon-money.svg";
 
 const Columns = (
   setSearchText: any,
@@ -54,7 +55,7 @@ const Columns = (
       searchText
     ),
     render: (feeAmount: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{feeAmount}</p>
+      <p className="dk-font-Inter dk-text-sm dk-bg-green-800 dk-font-bold dk-rounded dk-text-[#FFF] dk-p-1 dk-w-fit">{feeAmount.toLocaleString("vi-VN")} VND <IconMoney/></p>
     ),
     editable: true,
     align: "left",
@@ -83,6 +84,31 @@ const Columns = (
         </span>
       </div>
     ),
+    editable: true,
+    align: "left",
+  },
+  {
+    title: "Tình trạng thanh toán",
+    className: "column-money",
+    dataIndex: "TransactionId",
+    width: "450px",
+    ...GetColumnSearchProps(
+      "TransactionId",
+      setSearchText,
+      setSearchedColumn,
+      searchInput,
+      searchedColumn,
+      searchText
+    ),
+    render: (transactionId: number, record: LateFee) => { 
+      const isPayment = record?.Payment?.length > 0;
+      return (
+      <div className={`dk-font-Inter dk-text-sm dk-font-semibold dk-flex dk-flex-col ${!isPayment ? "dk-p-1 dk-bg-red-700 dk-font-Roboto dk-font-bold dk-rounded-md dk-w-fit dk-text-[#FFF]" : ""}`}>
+        {
+          record?.Payment?.length > 0 ? "Đã thanh toán" : "Chưa thanh toán"
+        }
+      </div>
+    )},
     editable: true,
     align: "left",
   },

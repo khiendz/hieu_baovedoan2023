@@ -4,14 +4,15 @@ import AddRecord from "./Components/AddRecord";
 import "./style.scss";
 import Columns from "./Components/Columns";
 import MergedColumns from "./Components/MergeColumns";
-import { handleDelete, handleAdd, changePayment} from "./services";
+import { handleDelete, handleAdd, changePayment } from "./services";
 import { useAppContext } from "hook/use-app-context";
 import { Payment } from "Models";
 import { getAllPayment } from "services/payment-service";
+import { getAllLateFee } from "services/late-fee-service";
 
 const ManagePayment = () => {
-  const { data: payments, setData: setPayments } =
-    useAppContext("payments");
+  const { data: payments, setData: setPayments } = useAppContext("payments");
+  const { data: lateFees, setData: setLateFees } = useAppContext("late-fees");
   const { setData: setPopup } = useAppContext("popup-message");
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -21,7 +22,9 @@ const ManagePayment = () => {
 
   useEffect(() => {
     setPayments([]);
+    setLateFees([]);
     initData();
+    initLateFee();
     setPopup({
       title: "",
       messagePopup: "",
@@ -81,6 +84,15 @@ const ManagePayment = () => {
       const result = await getAllPayment();
       if (result && result?.data) {
         setPayments(result?.data?.reverse());
+      }
+    } catch (e) {}
+  };
+
+  const initLateFee = async () => {
+    try {
+      const result = await getAllLateFee();
+      if (result && result?.data) {
+        setLateFees(result?.data?.reverse());
       }
     } catch (e) {}
   };

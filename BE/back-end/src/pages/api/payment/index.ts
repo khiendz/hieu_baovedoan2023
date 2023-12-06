@@ -55,7 +55,25 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const GetPayments = async () => {
     try {
-        const payments = await prisma.payment.findMany();
+        const payments = await prisma.payment.findMany({
+            include: {
+                LateFee: {
+                    include: {
+                        BorrowedBook: {
+                            include: {
+                                Book: {
+                                    include: {
+                                        LateFeeType: true
+                                    }
+                                },
+                                Member: true,
+                            }
+                        },
+                        Payment: true
+                    }
+                }
+            }
+        });
 
         if (payments) {
             return {
@@ -86,9 +104,26 @@ const AddPayment = async (payment: Payment) => {
             data: {
                 LateFeeId: payment.LateFeeId,
                 PaymentDate: payment.PaymentDate,
-                Amount: payment.Amount,
-                StatePayments: payment.StatePayments
+                Amount: +(payment?.Amount || 0),
+                StatePayments: (payment.StatePayments || 0)
             },
+            include: {
+                LateFee: {
+                    include: {
+                        BorrowedBook: {
+                            include: {
+                                Book: {
+                                    include: {
+                                        LateFeeType: true
+                                    }
+                                },
+                                Member: true,
+                            }
+                        },
+                        Payment: true
+                    }
+                }
+            }
         });
 
         return {
@@ -116,8 +151,25 @@ const UpdatePayment = async (payment: Payment) => {
             data: {
                 LateFeeId: payment.LateFeeId,
                 PaymentDate: payment.PaymentDate,
-                Amount: payment.Amount,
-                StatePayments: payment.StatePayments
+                Amount: +(payment?.Amount || 0),
+                StatePayments: (payment.StatePayments || 0)
+            },
+            include: {
+                LateFee: {
+                    include: {
+                        BorrowedBook: {
+                            include: {
+                                Book: {
+                                    include: {
+                                        LateFeeType: true
+                                    }
+                                },
+                                Member: true,
+                            }
+                        },
+                        Payment: true
+                    }
+                }
             }
         });
 

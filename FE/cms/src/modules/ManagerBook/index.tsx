@@ -16,11 +16,13 @@ import MergedColumns from "./Component/MergeColumn";
 import { changeBook, handleAdd, handleDelete } from "./Services";
 import NotifYPopup from "components/NotifyPopup";
 import { useAppContext } from "hook/use-app-context";
+import { getAllLateFeeType } from "services/late-fee-type";
 
 const ManagerBook: React.FC = () => {
   const { setData: setPopup } = useAppContext("popup-message");
   const { data: bookTypes, setData: setBookType } = useAppContext('book-types');
   const { data: books, setData: setBook } = useAppContext('books');
+  const { data: lateFeeTypes, setData: setLateFeeTypes } = useAppContext('late-fee-types');
   const [authors, setAuthors] = useState<Author[]>([]);
   const [publishers, setPublishers] = useState<Publisher[]>([]);
   const [form] = Form.useForm();
@@ -78,8 +80,10 @@ const ManagerBook: React.FC = () => {
   useEffect(() => {
     setBook([]);
     setBookType([]);
+    setLateFeeTypes([]);
     initData();
     initBookType();
+    initLateFeeTypes();
     initAuthor();
     initPublisher();
   }, []);
@@ -116,6 +120,15 @@ const ManagerBook: React.FC = () => {
       const result = await getAllPublisher();
       if (result) {
         setPublishers(result.data);
+      }
+    } catch (e) {}
+  };
+
+  const initLateFeeTypes = async () => {
+    try {
+      const result = await getAllLateFeeType();
+      if (result) {
+        setLateFeeTypes(result.data);
       }
     } catch (e) {}
   };

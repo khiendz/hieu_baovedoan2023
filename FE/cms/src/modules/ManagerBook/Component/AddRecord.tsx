@@ -17,6 +17,8 @@ import { Book } from "Models/Book";
 import { Book_BookType } from "Models/Book_BookType";
 import UploadFileImage from "components/UploadFileImage";
 import TextEditor from "components/TextEditor";
+import { useAppContext } from "hook/use-app-context";
+import { LateFeeType } from "Models";
 
 interface CollectionCreateFormProps {
   open: boolean;
@@ -56,6 +58,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
   setBook,
   setPopup,
 }) => {
+  const { data: lateFeeTypes, setData: setLateFeeTypes } =
+    useAppContext("late-fee-types");
   return (
     <Modal
       open={open}
@@ -106,9 +110,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="Tiêu đề"
           rules={[{ required: true, message: "Làm ơn nhập tiêu đề!" }]}
         >
-          <Input 
-            placeholder="Nhập tiêu đề"
-          />
+          <Input placeholder="Nhập tiêu đề" />
         </Form.Item>
         <Form.Item name="Description" label="Mô tả tour">
           <TextEditor
@@ -119,10 +121,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             }}
           />
         </Form.Item>
-        <Form.Item
-          name="Book_BookType"
-          label="Loại sách"
-        >
+        <Form.Item name="Book_BookType" label="Loại sách">
           <Space className="dk-w-full dk-flex">
             <Select
               placeholder="Chưa có thông tin loại sách"
@@ -158,27 +157,21 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="ISBN"
           rules={[{ required: true, message: "Làm ơn nhập ISBN!" }]}
         >
-          <Input 
-            placeholder="Nhập ISBN"
-          />
+          <Input placeholder="Nhập ISBN" />
         </Form.Item>
         <Form.Item
           name="Quantity"
           label="Số lượng"
           rules={[{ required: true, message: "Làm ơn nhập số lượng!" }]}
         >
-          <Input 
-            placeholder="Nhập số lượng"
-          />
+          <Input placeholder="Nhập số lượng" />
         </Form.Item>
         <Form.Item
           name="Location"
           label="Vị trí"
           rules={[{ required: true, message: "Làm ơn nhập vị trí!" }]}
         >
-          <Input 
-            placeholder="Nhập vị trí"
-          />
+          <Input placeholder="Nhập vị trí" />
         </Form.Item>
         <Form.Item
           name="PublicYear"
@@ -212,9 +205,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           className="dk-w-full"
           rules={[{ required: true, message: "Làm ơn nhập mã sách" }]}
         >
-          <Input 
-            placeholder="Nhập mã sách"
-          />
+          <Input placeholder="Nhập mã sách" />
         </Form.Item>
         <Form.Item
           name="AuthorId"
@@ -232,6 +223,40 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
             ]}
             onChange={(value) => {
               form.setFieldValue("AuthorId", value);
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          name="LateFeeTypeId"
+          label="Kiểu phí trễ hạn"
+          className="dk-w-full"
+          rules={[{ required: true, message: "Làm ơn chọn kiểu phí trễ hạn" }]}
+        >
+          <Select
+            placeholder="Chọn thông tin phí trễ hạn"
+            className="dk-w-full dk-h-fit"
+            options={[
+              ...lateFeeTypes?.map((ob: LateFeeType) => {
+                return {
+                  value: ob.LateFeeTypeId,
+                  label: (
+                    <div className="dk-flex dk-flex-col dk-line-clamp-1 dk-border-b-[1px] dk-pb-2 dk-overflow-hidden">
+                      <div className="dk-font-Roboto dk-font-bold">
+                        Tên loại phí trễ hạn:{" "}
+                        <span className="dk-font-normal">{ob?.Name}</span>
+                      </div>
+                      <div className="dk-font-Roboto dk-font-bold">
+                        Mô tả loại phí trễ hạn:{" "}
+                        <span className="dk-font-normal">{ob?.Description}</span>
+                      </div>
+                    </div>
+                  ),
+                  ob: ob,
+                };
+              }),
+            ]}
+            onChange={(value) => {
+              form.setFieldValue("LateFeeTypeId", value);
             }}
           />
         </Form.Item>

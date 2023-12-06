@@ -9,6 +9,7 @@ import { useAppContext } from "hook/use-app-context";
 import { LateFee } from "Models";
 import { getAllLateFee } from "services/late-fee-service";
 import { getAllBorrowedBook } from "services/borrowedBook-services";
+import IconMoney from "./Images/icon-money.svg";
 
 const ManageLateFee = () => {
   const { data: lateFees, setData: setLateFees } = useAppContext("late-fees");

@@ -21,6 +21,98 @@ const Columns = (
   payments: Payment[]
 ) => [
   {
+    title: "Mô tả thông tin thanh toán",
+    dataIndex: "LateFeeId",
+    width: "400px",
+    ...GetColumnSearchProps(
+      "LateFeeId",
+      setSearchText,
+      setSearchedColumn,
+      searchInput,
+      searchedColumn,
+      searchText
+    ),
+    render: (lateFeeId: number, record: Payment) => (
+      <div className="dk-flex dk-flex-col dk-overflow-hidden">
+                                                    <div className="dk-font-Roboto dk-font-bold">
+                                Mã trễ hạn:{" "}
+                                <span className="dk-font-normal">
+                                  {record.LateFeeId}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Tên người mượn:{" "}
+                                <span className="dk-font-normal">
+                                  {record?.LateFee?.BorrowedBook?.Member?.Name}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Ngày mượn:{" "}
+                                <span className="dk-font-normal">
+                                  {format(record?.LateFee?.BorrowedBook?.BorrowDate ? new Date(record?.LateFee?.BorrowedBook?.BorrowDate) : new Date(), 'dd-MM-yyyy')}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Hạn trả:{" "}
+                                <span className="dk-font-normal">
+                                  {format(record?.LateFee?.BorrowedBook?.DueDate ? new Date(record?.LateFee?.BorrowedBook?.DueDate) : new Date(), 'dd-MM-yyyy')}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Ngày trả:{" "}
+                                <span className="dk-font-normal">
+                                  {record?.LateFee?.BorrowedBook?.ReturnDate  ? 
+                                  format(record?.LateFee?.BorrowedBook?.ReturnDate ? new Date(record?.LateFee?.BorrowedBook?.ReturnDate) : new Date(), 'dd-MM-yyyy') :
+                                  "Chưa trả"}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Tên sách:{" "}
+                                <span className="dk-font-normal">
+                                  {record?.LateFee?.BorrowedBook.Book.Title}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Mã mượn:{" "}
+                                <span className="dk-font-normal">
+                                  {record?.LateFee?.BorrowedBook?.TransactionId}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Số ngày trễ hạn:{" "}
+                                <span className="dk-font-normal">
+                                  {record?.LateFee?.BorrowedBook?.DueDate
+                                    ? new Date().getDate() -
+                                      new Date(record?.LateFee?.BorrowedBook.DueDate)?.getDate()
+                                    : 0}
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Tổng tiền trễ hạn theo loại trễ hạn:{" "}
+                                <span className="dk-font-normal">
+                                  {new Date().getDate() -
+                                    new Date(record?.LateFee?.BorrowedBook.DueDate || "")?.getDate() >=
+                                    (record?.LateFee?.BorrowedBook?.Book?.LateFeeType?.DateCount || 0)
+                                    ? ((record?.LateFee?.BorrowedBook?.Book?.LateFeeType?.FeeAmount || 0) *
+                                      ((new Date().getDate() -
+                                        new Date(
+                                          record?.LateFee?.BorrowedBook.DueDate || ""
+                                        )?.getDate()) /
+                                        (record?.LateFee?.BorrowedBook.Book.LateFeeType.DateCount || 0))).toLocaleString("vi-VN")
+                                    : 0}{" "}VND
+                                </span>
+                              </div>
+                              <div className="dk-font-Roboto dk-font-bold">
+                                Mô tả loại trễ hạn:{" "}
+                                <span className="dk-font-normal">
+                                  {record?.LateFee?.BorrowedBook.Book.LateFeeType.Description}
+                                </span>
+                              </div>
+                            </div>
+    ),
+    editable: true,
+  },
+  {
     title: "Phí trễ hạn",
     dataIndex: "LateFeeId",
     width: "200px",
@@ -71,24 +163,7 @@ const Columns = (
       searchText
     ),
     render: (amount: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{amount}</p>
-    ),
-    editable: true,
-  },
-  {
-    title: "Trạng thái thanh toán",
-    dataIndex: "StatePayment",
-    width: "200px",
-    ...GetColumnSearchProps(
-      "Amount",
-      setSearchText,
-      setSearchedColumn,
-      searchInput,
-      searchedColumn,
-      searchText
-    ),
-    render: (statePayment: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{statePayment}</p>
+      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{amount.toLocaleString("vi-VN")} VND</p>
     ),
     editable: true,
   },

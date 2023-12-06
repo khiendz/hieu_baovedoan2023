@@ -1,7 +1,8 @@
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import EditRecord from "./EditRecord";
 import { FormInstance, Popconfirm } from "antd";
-import { LateFee, LateFeeType } from "Models";
+import { LateFeeType } from "Models";
+import IconMoney from "../Images/icon-money.svg";
 
 const Columns = (
   setSearchText: any,
@@ -69,7 +70,7 @@ const Columns = (
       searchText
     ),
     render: (feeAmount: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{feeAmount}</p>
+      <p className="dk-font-Inter dk-text-sm dk-bg-green-800 dk-font-bold dk-rounded dk-text-[#FFF] dk-p-1 dk-w-fit">{feeAmount.toLocaleString("vi-VN")} VND <IconMoney/></p>
     ),
     editable: true,
     align: "left",
@@ -88,7 +89,7 @@ const Columns = (
       searchText
     ),
     render: (count: number) => (
-      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{count}</p>
+      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{count} ngày</p>
     ),
     editable: true,
     align: "left",
@@ -97,7 +98,7 @@ const Columns = (
     title: "Cập nhật",
     dataIndex: "operation",
     align: "center",
-    width: "250px",
+    width: "350px",
     fixed: "right",
     render: (_: any, record: LateFeeType) => {
       const editable = isEditing(record);

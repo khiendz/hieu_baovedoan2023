@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Employee, LateFee, PrismaClient, User } from '@prisma/client';
+import { LateFee, PrismaClient } from '@prisma/client';
 import { apiHandler } from '@/helpers/api';
 
 const prisma = new PrismaClient();
@@ -96,6 +96,19 @@ const GetLateFees = async () => {
 
 const AddLateFee = async (lateFee: LateFee) => {
     try {
+        const exitsLateFee = await prisma.lateFee.findMany({
+            where: {
+                TransactionId: lateFee.TransactionId
+            }
+        });
+
+        if (exitsLateFee?.length > 0)
+        return {
+            data: null,
+            message: "Đã tồn tại trễ hạn cùng mã mượn",
+            status: "500"
+        };
+        
         const lateFeeResult = await prisma.lateFee.create({
             data: {
                 TransactionId: +lateFee.TransactionId,
@@ -134,6 +147,19 @@ const AddLateFee = async (lateFee: LateFee) => {
 
 const UpdateLateFee = async (lateFee: LateFee) => {
     try {
+        const exitsLateFee = await prisma.lateFee.findMany({
+            where: {
+                TransactionId: lateFee.TransactionId
+            }
+        });
+
+        if (exitsLateFee?.length > 0)
+        return {
+            data: null,
+            message: "Đã tồn tại trễ hạn cùng mã mượn",
+            status: "500"
+        };
+
         const lateFeeResult = await prisma.lateFee.update({
             where: {
                 LateFeeId: lateFee?.LateFeeId
