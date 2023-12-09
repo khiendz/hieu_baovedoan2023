@@ -96,10 +96,11 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         <Form.Item name="AccountId" label="Tài khoản">
           <Select
             className="dk-w-full"
-            defaultValue={{ value: "1", label: "default" }}
+            defaultValue={{ value: "0", label: "Không chọn" }}
             options={
               accounts
                 ? [
+                    { value: "0", label: "Không chọn" },
                     ...accounts?.map((ob: Account) => {
                       return {
                         value: ob?.UserId,

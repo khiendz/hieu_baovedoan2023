@@ -90,6 +90,10 @@ const AddAccount = async (account: Account) => {
         const exitsUserName = await prisma.account.findMany({
             where: {
                 UserName: account.UserName
+            },
+            include: {
+                RoleAccount: true,
+                User: true
             }
         });
 
@@ -113,6 +117,10 @@ const AddAccount = async (account: Account) => {
                 RoleId: account.RoleId,
                 UserId: account.UserId
             },
+            include: {
+                RoleAccount: true,
+                User: true
+            }
         });
 
         return {
@@ -142,6 +150,10 @@ const UpdateAccount = async (account: Account) => {
                 Password: account.Password,
                 RoleId: account.RoleId,
                 UserId: account.UserId
+            },
+            include: {
+                RoleAccount: true,
+                User: true
             }
         });
 

@@ -91,10 +91,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         ]}
         >
           <Select
+            placeholder="Chọn role account"
             className="dk-w-full"
-            defaultValue={
-              { value: "1", label: "Minion"}
-            }
             options={[
               ...roleAccounts?.map((ob: RoleAccount) => {
                 return { value: ob.RoleId, label: ob.RoleName, ob: ob };
@@ -110,10 +108,8 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
           label="Người dùng"
         >
           <Select
+            placeholder="Chọn thông tin người dùng"
             className="dk-w-full"
-            defaultValue={
-              { value: "1", label: "default"}
-            }
             options={users ? [
               ...users?.map((ob: User) => {
                 return { value: ob?.UserId, label: `${ob?.FirstName + " " + ob?.LastName}`, ob: ob };
