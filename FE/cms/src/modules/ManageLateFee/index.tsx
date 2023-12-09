@@ -6,14 +6,14 @@ import Columns from "./Components/Columns";
 import MergedColumns from "./Components/MergeColumns";
 import { handleDelete, handleAdd, changeLateFee } from "./services";
 import { useAppContext } from "hook/use-app-context";
-import { LateFee } from "Models";
-import { getAllLateFee } from "services/late-fee-service";
+import { BorrowedBook, LateFee } from "Models";
+import { AddLateFee, getAllLateFee } from "services/late-fee-service";
 import { getAllBorrowedBook } from "services/borrowedBook-services";
-import IconMoney from "./Images/icon-money.svg";
 
 const ManageLateFee = () => {
   const { data: lateFees, setData: setLateFees } = useAppContext("late-fees");
-  const { data: borrowedBooks, setData: setBorrowedBooks } = useAppContext("borrowed-books");
+  const { data: borrowedBooks, setData: setBorrowedBooks } =
+    useAppContext("borrowed-books");
   const { setData: setPopup } = useAppContext("popup-message");
   const [form] = Form.useForm();
   const [editingKey, setEditingKey] = useState("");
@@ -32,6 +32,44 @@ const ManageLateFee = () => {
       state: true,
     });
   }, []);
+
+  useEffect(() => {
+    if (borrowedBooks && lateFees) {
+      const lates = borrowedBooks?.filter(
+        (ob: BorrowedBook) =>
+          ob.ReturnDate == null &&
+          new Date().getTime() > new Date(ob?.DueDate || "").getTime() &&
+          (lateFees?.length > 0
+            ? (lateFees as LateFee[]).find(
+                (lateFee: LateFee) =>
+                  lateFee.BorrowedBook.TransactionId != ob.TransactionId
+              )
+            : true)
+      );
+
+      if (lates.length > 0) {
+        for (let index = 0; index < lates.length; index++) {
+          const element = lates[index] as BorrowedBook;
+          let lateFee = {} as LateFee;
+          lateFee.FeeAmount = element.Book.LateFeeType.FeeAmount *
+            Math.floor(
+              (new Date().getTime() -
+                new Date(element?.DueDate || "").getTime()) /
+                (1000 * 60 * 60 * 24) /
+                element.Book.LateFeeType.DateCount
+            );
+          lateFee.TransactionId = element.TransactionId;
+          handleAddLateFee(lateFee);
+        }
+        initData();
+        initBorrowedBook();
+      }
+    }
+  }, [borrowedBooks, lateFees]);
+
+  const handleAddLateFee = async (lateFee: LateFee) => {
+    await AddLateFee(lateFee);
+  }
 
   const isEditing = (record: LateFee) =>
     record?.LateFeeId?.toString() === editingKey;
@@ -97,7 +135,6 @@ const ManageLateFee = () => {
       }
     } catch (e) {}
   };
-
 
   const columns = Columns(
     setSearchText,

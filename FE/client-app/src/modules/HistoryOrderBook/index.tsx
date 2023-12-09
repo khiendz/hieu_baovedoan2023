@@ -9,6 +9,7 @@ import { Payment } from "Models/Payment";
 import { OrderParams } from "Models/OrderParams";
 import { removeAccents } from "utils/charactor-util";
 import { generateUID } from "utils/uid";
+import { sendOrder } from "utils/crypto";
 
 export default function HistoryOrderBook() {
   const { data: borrowedBooks, setData: setBorrowedBooks } =
@@ -42,11 +43,15 @@ export default function HistoryOrderBook() {
     paymentCreate.Amount = values?.Amount || 0;
     paymentCreate.PaymentDate = new Date();
     paymentCreate.StatePayments = 1;
+    paymentCreate.OrderCode = orderCode.toString();
 
     const addPaymentResult = await AddPayment(paymentCreate);
 
     if (addPaymentResult && addPaymentResult.status == 200) {
-
+        const result = await sendOrder(paymentOrder);
+        if (result && result.data.data) {
+          window.location.href = result.data.data.checkoutUrl;
+        }
     }
   }
 
@@ -171,7 +176,20 @@ export default function HistoryOrderBook() {
                 !(
                   ele?.LateFee?.length > 0 && ele.LateFee[0].Payment.length > 0
                 ) ? (
-                  <Button className="dk-bg-green-600 dk-font-bold dk-text-white hover:dk-scale-110">
+                  <Button 
+                    className="dk-bg-green-600 dk-font-bold dk-text-white hover:dk-scale-110"
+                    onClick={() => {
+                        handleAddPayment({
+                            Amount: (ele.Book.LateFeeType.FeeAmount *
+                                Math.floor(
+                                  (new Date().getTime() -
+                                    new Date(ele?.DueDate || "").getTime()) /
+                                    (1000 * 60 * 60 * 24) /
+                                    ele.Book.LateFeeType.DateCount
+                                ))
+                        })
+                    }}
+                    >
                     Thanh toán
                   </Button>
                 ) : null}

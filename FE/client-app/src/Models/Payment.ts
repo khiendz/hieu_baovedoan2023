@@ -8,5 +8,5 @@ export class Payment {
   public Amount: number | null;
   public StatePayments: number | null;
   public LateFee: LateFee | null;
-  public OrderPayment: string;
+  public OrderCode: string;
   }
