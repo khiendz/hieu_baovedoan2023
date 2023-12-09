@@ -24,7 +24,7 @@ const FormLogin: React.FC<any> = (props: any) => {
   const onFinish = async (values: any) => {
     try {
       const result = await userService.login(values.username, values.password);
-      if (result.data.data.user.RoleAccount.Description == 1) {
+      if (result?.data?.data && result.data.data.user.RoleAccount.Description == 1) {
         setPopup({
           title: "Tài khoản thường không thể truy cập cms",
           messagePopup: "Vui lòng thử lại",
@@ -34,11 +34,11 @@ const FormLogin: React.FC<any> = (props: any) => {
         return;
       }
       setPopup({
-        title: result?.status == 200 ? "Thành công" : "Thất bại",
-        messagePopup: result?.message,
-        state: result?.status == 200,
+        title: result?.data?.status == 200 ? "Thành công" : "Thất bại",
+        messagePopup: result?.data?.message,
+        state: result?.data?.status == 200,
       });
-      if (result && result.status == 200) {
+      if (result?.data && result?.data?.status == 200) {
         props.onCancel();
       }
     } catch {}
