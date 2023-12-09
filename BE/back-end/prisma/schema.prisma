@@ -173,3 +173,11 @@ model RoleAccount {
   Description String
   Account     Account[]
 }
+
+model Article {
+  ArticleId   Int    @id @default(autoincrement()) @map(name: "ArticleId")
+  Title       String
+  Description String
+  Thumb       String
+  Content     String
+}

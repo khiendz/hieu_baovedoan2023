@@ -226,6 +226,17 @@ const items: MenuProps["items"] = [
       },
     ]
   },
+  {
+    label: (
+      <Link
+        href="/article"
+        className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
+      >
+        <span>Tin tức</span>
+      </Link>
+    ),
+    key: "article",
+  },
 ];
 
 const Navigation: React.FC = () => {
