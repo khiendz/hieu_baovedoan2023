@@ -26,7 +26,6 @@ export default function Header() {
         focus:dk-outline-none dk-pl-[25px] dk-text-sm dk-appearance-none dk-pr-[25px] dk-shadow-md`}
         />
         <div className="dk-relative dk-h-full dk-w-fit dk-flex dk-justify-center dk-items-center">
-          <Notification/>
         </div>
       </div>
       <UserAccount />
