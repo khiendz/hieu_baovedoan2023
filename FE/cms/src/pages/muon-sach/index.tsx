@@ -10,8 +10,7 @@ export default function Order() {
     <LayoutDefault>
       <div className="content-container content-miss dk-flex dk-flex-col dk-font-Roboto dk-gap-4">
         <h1 className="dk-text-[#222] dk-font-bold dk-text-2xl dk-relative dk-z-[2]">
-          Thống kê các loại thông tin về thư viện đến ngày{" "}
-          {format(new Date(), "dd-MM-yyyy")}
+          Quản trị mượn sách
         </h1>
         <h2 className="dk-font-medium dk-text-xs dk-text-[#222]">
           Trang tài liệu chính thống và đầy đủ số 1

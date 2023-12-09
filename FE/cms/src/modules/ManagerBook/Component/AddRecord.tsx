@@ -112,7 +112,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         >
           <Input placeholder="Nhập tiêu đề" />
         </Form.Item>
-        <Form.Item name="Description" label="Mô tả tour">
+        <Form.Item name="Description" label="Mô tả sách">
           <TextEditor
             placeholder="Nhập mô tả"
             initialValues={form?.getFieldValue("Description")}

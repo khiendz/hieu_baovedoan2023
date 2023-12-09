@@ -21,12 +21,12 @@ export default function HistoryOrderBook() {
   const router = useRouter();
   const { setData: setPopup } = useAppContext("popup-message");
   const { data: lateFees, setData: setLateFees } = useAppContext("late-fees");
-  const{ id, status, cancel } = router.query;
+  const { id, status, cancel } = router.query;
 
   useEffect(() => {
     if (user) {
-        initData()
-        initBorrowBook();
+      initData();
+      initBorrowBook();
     }
   }, [user]);
 
@@ -72,7 +72,8 @@ export default function HistoryOrderBook() {
         for (let index = 0; index < lates.length; index++) {
           const element = lates[index] as BorrowedBook;
           let lateFee = {} as LateFee;
-          lateFee.FeeAmount = element.Book.LateFeeType.FeeAmount *
+          lateFee.FeeAmount =
+            element.Book.LateFeeType.FeeAmount *
             Math.floor(
               (new Date().getTime() -
                 new Date(element?.DueDate || "").getTime()) /
@@ -90,7 +91,7 @@ export default function HistoryOrderBook() {
 
   const handleAddLateFee = async (lateFee: LateFee) => {
     await AddLateFee(lateFee);
-  }
+  };
 
   const checkPaymentById = async (id: string) => {
     const checkPaymentResult = await checkPayment(id);
@@ -101,10 +102,7 @@ export default function HistoryOrderBook() {
       return;
     }
     await initBorrowBook();
-    handlePopup(
-      true,
-      "Thanh toán phí trễ hạn thành công"
-    );
+    handlePopup(true, "Thanh toán phí trễ hạn thành công");
   };
 
   const handlePopup = (isSuccess: boolean, message: string) => {
@@ -134,12 +132,12 @@ export default function HistoryOrderBook() {
     const addPaymentResult = await AddPayment(paymentCreate);
 
     if (addPaymentResult && addPaymentResult.status == 200) {
-        const result = await sendOrder(paymentOrder);
-        if (result && result.data.data) {
-          window.location.href = result.data.data.checkoutUrl;
-        }
+      const result = await sendOrder(paymentOrder);
+      if (result && result.data.data) {
+        window.location.href = result.data.data.checkoutUrl;
+      }
     }
-  }
+  };
 
   return user ? (
     <div className="dk-flex dk-flex-col dk-gap-2 content-container content-miss dk-font-Roboto dk-z-10 dk-mb-7">
@@ -239,7 +237,7 @@ export default function HistoryOrderBook() {
                             ? "dk-bg-green-500"
                             : "dk-bg-red-500"
                         }
-                             dk-bg-red-500 dk-font-semibold dk-text-white dk-rounded`}
+                             dk-font-semibold dk-text-white dk-rounded`}
                       >
                         {ele?.LateFee?.length > 0 &&
                         ele.LateFee[0].Payment.length > 0
@@ -262,21 +260,22 @@ export default function HistoryOrderBook() {
                 !(
                   ele?.LateFee?.length > 0 && ele.LateFee[0].Payment.length > 0
                 ) ? (
-                  <Button 
+                  <Button
                     className="dk-bg-green-600 dk-font-bold dk-text-white hover:dk-scale-110"
                     onClick={() => {
-                        handleAddPayment({
-                            Amount: (ele.Book.LateFeeType.FeeAmount *
-                                Math.floor(
-                                  (new Date().getTime() -
-                                    new Date(ele?.DueDate || "").getTime()) /
-                                    (1000 * 60 * 60 * 24) /
-                                    ele.Book.LateFeeType.DateCount
-                                )),
-                            LateFeeId: ele.LateFee[0].LateFeeId
-                        })
+                      handleAddPayment({
+                        Amount:
+                          ele.Book.LateFeeType.FeeAmount *
+                          Math.floor(
+                            (new Date().getTime() -
+                              new Date(ele?.DueDate || "").getTime()) /
+                              (1000 * 60 * 60 * 24) /
+                              ele.Book.LateFeeType.DateCount
+                          ),
+                        LateFeeId: ele.LateFee[0].LateFeeId,
+                      });
                     }}
-                    >
+                  >
                     Thanh toán
                   </Button>
                 ) : null}
@@ -285,8 +284,7 @@ export default function HistoryOrderBook() {
           ))
         : null}
     </div>
-  ) : 
-  (
+  ) : (
     <div className="dk-flex dk-justify-center dk-gap-2 content-container content-miss dk-font-Roboto dk-z-10 dk-mb-7 dk-text-[36px] dk-font-bold">
       Vui lòng đăng nhập để xem lịch sử thuê sách
     </div>

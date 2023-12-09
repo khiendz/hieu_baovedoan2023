@@ -37,7 +37,7 @@ export default function TourForm() {
   return (
     <div className={styles.contactContainer}>
       <div className={styles.formContainer}>
-        <h1 className={styles.title}>Lựa chọn tour du lịch</h1>
+        <h1 className={styles.title}>Lựa chọn sách</h1>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}

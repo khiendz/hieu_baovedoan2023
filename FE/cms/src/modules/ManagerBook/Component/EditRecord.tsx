@@ -92,7 +92,7 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item name="Description" label="Mô tả tour">
+        <Form.Item name="Description" label="Mô tả sách">
           <TextEditor
             initialValues={form?.getFieldValue("Description")}
             onChange={(value: any) => {
