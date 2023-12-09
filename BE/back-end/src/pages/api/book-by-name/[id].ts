@@ -6,10 +6,10 @@ import { apiHandler } from '@/helpers/api';
 const prisma = new PrismaClient();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method == "OPTIONS") {
-    res.setHeader("Allow", "POST");
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Allow', 'POST');
     return res.status(202).json({});
-}
+  }
 
   if (req.method === 'GET') {
     const queryTitle = req.query.id as string;
@@ -18,23 +18,28 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!queryTitle) {
       return res.status(400).json({ error: 'Invalid title query' });
     }
- 
-    const tagArray = tags?.toString()?.split(",");
+
+    const tagArray = tags ? tags.split(',').map(e => parseInt(e)) : [];
+
     try {
-      const listBook = await prisma.book.findMany({
-        include: {
-          Book_BookType: {
-            where: {
-              BookTypeId: {
-                in: Array.isArray(tagArray) ? tagArray?.map(e => parseInt(e)) : [0]
+      let listBook = await prisma.book.findMany();
+    
+      if (tags && tags != '' && tagArray) {
+        listBook = await prisma.book.findMany({
+          where: {
+            Book_BookType: {
+              some: {
+                BookTypeId: {
+                  in: tagArray.length > 0 ? tagArray : [0]
+                }
               }
             }
           }
-        }
-      });
+        });
+      }
+
       const query = removeAccents(queryTitle).toLocaleLowerCase();
-      const books = listBook?.filter((book) => 
-      {
+      const books = listBook.filter((book) => {
         const title = removeAccents(book.Title).toLocaleLowerCase();
         return title.includes(query);
       });
@@ -52,5 +57,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(405).json({ error: 'Method not allowed' });
   }
 };
+
 
 export default apiHandler(handler,["GET"]);

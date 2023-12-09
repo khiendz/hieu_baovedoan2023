@@ -13,7 +13,7 @@ const roboto = Roboto({
 export default function Header() {
   return (
     <header className={`dk-flex dk-flex-row dk-bg-[#8b0000] dk-h-16 dk-text-[#FFF] dk-gap-14 dk-justify-between dk-items-center dk-font-Inter`}>
-      <span className="dk-pl-8 dk-whitespace-nowrap">CMS quản lý thư viện trực tuyến</span>
+      <span className="dk-pl-8 dk-whitespace-nowrap dk-font-bold dk-text-[24px]">Thư viện</span>
       <div className="search dk-flex dk-flex-row dk-gap-6">
         <input
           type="text"
