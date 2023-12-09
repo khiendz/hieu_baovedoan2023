@@ -17,7 +17,7 @@ import { LateFee } from "Models/LateFee";
 export default function HistoryOrderBook() {
   const { data: borrowedBooks, setData: setBorrowedBooks } =
     useAppContext("borrowBook");
-  const { data: user, setData: setUser } = useAppContext("user");
+  const { data: user } = useAppContext("user");
   const router = useRouter();
   const { setData: setPopup } = useAppContext("popup-message");
   const { data: lateFees, setData: setLateFees } = useAppContext("late-fees");
@@ -141,7 +141,7 @@ export default function HistoryOrderBook() {
     }
   }
 
-  return (
+  return user ? (
     <div className="dk-flex dk-flex-col dk-gap-2 content-container content-miss dk-font-Roboto dk-z-10 dk-mb-7">
       {borrowedBooks
         ? borrowedBooks?.map((ele: BorrowedBook, index: string) => (
@@ -284,6 +284,11 @@ export default function HistoryOrderBook() {
             </div>
           ))
         : null}
+    </div>
+  ) : 
+  (
+    <div className="dk-flex dk-justify-center dk-gap-2 content-container content-miss dk-font-Roboto dk-z-10 dk-mb-7 dk-text-[36px] dk-font-bold">
+      Vui lòng đăng nhập để xem lịch sử thuê sách
     </div>
   );
 }

@@ -23,7 +23,6 @@ const Product: React.FC = () => {
   const [dataPopup, setDataPopup] = useState<any>(null);
   const { data: openRegister, setData: setOpenRegister } =
     useAppContext("open-register-form");
-  const { data: user } = useAppContext("user"); 
 
   useEffect(() => {
     initData();
@@ -142,12 +141,24 @@ const Product: React.FC = () => {
                       if (!userService.userValue) {
                         showPopup({
                           status: 401,
-                          message: "Nếu chưa có tài khoản, hãy tạo account để sử dụng chức năng thuê sách",
-                          title: "Để thuê sách, bạn phải đăng nhập "
-                        })
+                          message:
+                            "Nếu chưa có tài khoản, hãy tạo account để sử dụng chức năng thuê sách",
+                          title: "Đăng nhập để thuê sách",
+                        });
                         setOpenRegister(true);
                         return;
                       }
+
+                      if (book.Quantity == 0) {
+                        showPopup({
+                          status: 401,
+                          message:
+                            "Số lượng sách trong thư viện đã được mượn hết",
+                          title: "Vui lòng chờ thư viện cập nhật sách",
+                        });
+                        return;
+                      }
+
                       setOrrderAccept(!orderAccept);
                     }}
                   >

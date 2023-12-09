@@ -114,6 +114,21 @@ const AddBorrowedBook = async (borrow: BorrowedBook) => {
             };
         }
 
+        const book = await prisma.book.findUnique({
+            where: {
+                BookId: borrow.BookId
+            }
+        });
+
+        await prisma.book.update({
+            where: {
+                BookId: borrow.BookId
+            },
+            data: {
+                Quantity: (book?.Quantity || 1) - 1
+            }
+        });
+
         const borrowResult = await prisma.borrowedBook.create({
             data: {
                 MemberId: borrow.MemberId,
@@ -197,6 +212,7 @@ const UpdateBorrowedBook = async (borrow: any) => {
 
 const DeleteBorrowedBook = async (borrowBookId: number) => {
     try {
+       
         const result = await prisma.borrowedBook.delete({
             where: {
                 TransactionId: borrowBookId
@@ -212,6 +228,29 @@ const DeleteBorrowedBook = async (borrowBookId: number) => {
             }
         })
 
+        const borrow = await prisma.borrowedBook.findUnique({
+            where: {
+                TransactionId: borrowBookId
+            }
+        })
+
+        if (borrow) {
+            const book = await prisma.book.findUnique({
+                where: {
+                    BookId: borrow.BookId
+                }
+            });
+    
+            await prisma.book.update({
+                where: {
+                    BookId: borrow.BookId
+                },
+                data: {
+                    Quantity: (book?.Quantity || 1) - 1
+                }
+            });
+        }
+
         return {
             data: result,
             message: "Success",
@@ -221,7 +260,7 @@ const DeleteBorrowedBook = async (borrowBookId: number) => {
         console.error(e);
         return {
             data: null,
-            message: "Internal Server Error",
+            message: "Vui lòng xóa thông tin sách trễ hạn",
             status: "500"
         };
     }
