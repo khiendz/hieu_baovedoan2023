@@ -105,7 +105,8 @@ const AddPayment = async (payment: Payment) => {
                 LateFeeId: payment.LateFeeId,
                 PaymentDate: payment.PaymentDate,
                 Amount: +(payment?.Amount || 0),
-                StatePayments: (payment.StatePayments || 0)
+                StatePayments: (payment.StatePayments || 0),
+                OrderCode: payment.OrderCode
             },
             include: {
                 LateFee: {
@@ -152,7 +153,8 @@ const UpdatePayment = async (payment: Payment) => {
                 LateFeeId: payment.LateFeeId,
                 PaymentDate: payment.PaymentDate,
                 Amount: +(payment?.Amount || 0),
-                StatePayments: (payment.StatePayments || 0)
+                StatePayments: (payment.StatePayments || 0),
+                OrderCode: payment.OrderCode
             },
             include: {
                 LateFee: {

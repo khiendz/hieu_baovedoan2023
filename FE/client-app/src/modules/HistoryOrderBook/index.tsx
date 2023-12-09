@@ -4,21 +4,40 @@ import { useEffect } from "react";
 import { getBorrowedBookByPhone } from "services";
 import format from "date-fns/format";
 import { Button } from "antd";
-import { AddPayment } from "services/payment-service";
+import { AddPayment, DeletePaymentByOrderCode } from "services/payment-service";
 import { Payment } from "Models/Payment";
 import { OrderParams } from "Models/OrderParams";
 import { removeAccents } from "utils/charactor-util";
 import { generateUID } from "utils/uid";
-import { sendOrder } from "utils/crypto";
+import { checkPayment, sendOrder } from "utils/crypto";
+import { useRouter } from "next/router";
+import { AddLateFee, getAllLateFee } from "services/late-fee-service";
+import { LateFee } from "Models/LateFee";
 
 export default function HistoryOrderBook() {
   const { data: borrowedBooks, setData: setBorrowedBooks } =
     useAppContext("borrowBook");
   const { data: user, setData: setUser } = useAppContext("user");
+  const router = useRouter();
+  const { setData: setPopup } = useAppContext("popup-message");
+  const { data: lateFees, setData: setLateFees } = useAppContext("late-fees");
+  const{ id, status, cancel } = router.query;
 
   useEffect(() => {
-    if (user) initBorrowBook();
+    if (user) {
+        initData()
+        initBorrowBook();
+    }
   }, [user]);
+
+  const initData = async () => {
+    try {
+      const result = await getAllLateFee();
+      if (result && result?.data) {
+        setLateFees(result?.data?.reverse());
+      }
+    } catch (e) {}
+  };
 
   const initBorrowBook = async () => {
     try {
@@ -28,6 +47,71 @@ export default function HistoryOrderBook() {
         setBorrowedBooks(result.data?.reverse());
       }
     } catch {}
+  };
+
+  useEffect(() => {
+    if (!status) return;
+    checkPaymentById(id?.toString() || "");
+  }, [status]);
+
+  useEffect(() => {
+    if (borrowedBooks && lateFees) {
+      const lates = borrowedBooks?.filter(
+        (ob: BorrowedBook) =>
+          ob.ReturnDate == null &&
+          new Date().getTime() > new Date(ob?.DueDate || "").getTime() &&
+          (lateFees?.length > 0
+            ? (lateFees as LateFee[]).find(
+                (lateFee: LateFee) =>
+                  lateFee.BorrowedBook.TransactionId != ob.TransactionId
+              )
+            : true)
+      );
+
+      if (lates.length > 0) {
+        for (let index = 0; index < lates.length; index++) {
+          const element = lates[index] as BorrowedBook;
+          let lateFee = {} as LateFee;
+          lateFee.FeeAmount = element.Book.LateFeeType.FeeAmount *
+            Math.floor(
+              (new Date().getTime() -
+                new Date(element?.DueDate || "").getTime()) /
+                (1000 * 60 * 60 * 24) /
+                element.Book.LateFeeType.DateCount
+            );
+          lateFee.TransactionId = element.TransactionId;
+          handleAddLateFee(lateFee);
+        }
+        initData();
+        initBorrowBook();
+      }
+    }
+  }, [borrowedBooks, lateFees]);
+
+  const handleAddLateFee = async (lateFee: LateFee) => {
+    await AddLateFee(lateFee);
+  }
+
+  const checkPaymentById = async (id: string) => {
+    const checkPaymentResult = await checkPayment(id);
+    const { orderCode, status } = checkPaymentResult?.data?.data;
+    if (orderCode && status && status == "CANCELLED") {
+      handlePopup(false, "Thanh toán không thành công");
+      const result = await DeletePaymentByOrderCode(orderCode);
+      return;
+    }
+    handlePopup(
+      true,
+      "Thanh toán phí trễ hạn thành công"
+    );
+  };
+
+  const handlePopup = (isSuccess: boolean, message: string) => {
+    setPopup({
+      title: isSuccess ? "Thành công" : "Thất bại",
+      messagePopup: message,
+      state: isSuccess,
+    });
   };
 
   const handleAddPayment = async (values: any) => {
@@ -186,7 +270,8 @@ export default function HistoryOrderBook() {
                                     new Date(ele?.DueDate || "").getTime()) /
                                     (1000 * 60 * 60 * 24) /
                                     ele.Book.LateFeeType.DateCount
-                                ))
+                                )),
+                            LateFeeId: ele.LateFee[0].LateFeeId
                         })
                     }}
                     >

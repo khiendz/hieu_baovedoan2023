@@ -1,4 +1,4 @@
-import { LateFee, LateFeeType } from 'Models';
+import { LateFeeType } from 'Models/LateFeeType';
 import { fetchWrapper } from 'helpers';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";

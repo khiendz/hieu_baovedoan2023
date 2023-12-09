@@ -1,4 +1,4 @@
-import { Payment } from 'Models';
+import { Payment } from 'Models/Payment';
 import { fetchWrapper } from 'helpers';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
@@ -72,3 +72,16 @@ export async function DeletePaymentById(paymentId: number) {
     return null;
 }
 
+export async function DeletePaymentByOrderCode(orderCode: string) {
+    try {
+        const res: any = await fetchWrapper.delete(`${domainBE}/api/payment/order-code?orderCode=${orderCode}`);
+
+        if (res.status === 200) {
+            return res.data;
+        }
+    } catch (e) {
+        console.error('Error delete payment:', e);
+    }
+
+    return null;
+}

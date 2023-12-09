@@ -1,6 +1,4 @@
-import { LateFee } from 'Models';
-import { Member } from 'Models/Member';
-import axios from 'axios';
+import { LateFee } from 'Models/LateFee';
 import { fetchWrapper } from 'helpers';
 
 const domainBE = process?.env?.DOMAIN_BACK_END ?? "http://localhost:3000";
