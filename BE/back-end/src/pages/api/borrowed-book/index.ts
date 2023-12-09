@@ -124,8 +124,12 @@ const AddBorrowedBook = async (borrow: BorrowedBook) => {
             },
             include: {
                 Member: true,
-                Book: true,
-                LateFee: true
+                Book: {
+                    include: {
+                        LateFeeType: true
+                    }
+                },
+                LateFee: true,
             }
         });
 
@@ -167,8 +171,12 @@ const UpdateBorrowedBook = async (borrow: any) => {
             },
             include: {
                 Member: true,
-                Book: true,
-                LateFee: true
+                Book: {
+                    include: {
+                        LateFeeType: true
+                    }
+                },
+                LateFee: true,
             }
         });
 
@@ -192,6 +200,15 @@ const DeleteBorrowedBook = async (borrowBookId: number) => {
         const result = await prisma.borrowedBook.delete({
             where: {
                 TransactionId: borrowBookId
+            },
+            include: {
+                Member: true,
+                Book: {
+                    include: {
+                        LateFeeType: true
+                    }
+                },
+                LateFee: true,
             }
         })
 

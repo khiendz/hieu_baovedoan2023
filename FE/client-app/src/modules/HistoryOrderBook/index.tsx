@@ -100,6 +100,7 @@ export default function HistoryOrderBook() {
       const result = await DeletePaymentByOrderCode(orderCode);
       return;
     }
+    await initBorrowBook();
     handlePopup(
       true,
       "Thanh toán phí trễ hạn thành công"
@@ -128,6 +129,7 @@ export default function HistoryOrderBook() {
     paymentCreate.PaymentDate = new Date();
     paymentCreate.StatePayments = 1;
     paymentCreate.OrderCode = orderCode.toString();
+    paymentCreate.LateFeeId = values?.LateFeeId;
 
     const addPaymentResult = await AddPayment(paymentCreate);
 
