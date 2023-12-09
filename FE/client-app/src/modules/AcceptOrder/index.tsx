@@ -1,16 +1,13 @@
 "use client";
-import { LoadingOutlined } from "@ant-design/icons";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import styles from "./styles.module.scss";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Field, ErrorMessage } from "formik";
 import { BorrowedBook } from "Models/BorrowedBook";
 import classNames from "classnames";
 import { Member } from "Models/Member";
 import { AddBorrowedBook } from "services/borrowedBook-services";
 import { AddMember, getAllMember } from "services";
 import { Book } from "Models/Book";
-import dayjs from "dayjs";
 
 type Props = {
   bookOrder: Book;
@@ -65,6 +62,32 @@ export default function AcceptOrder(props: Props) {
       setMembers(result.data);
   }
 
+  const createMember = (values: any) => {
+    const member = new Member(
+      (members?.length || 0) + 1,
+      values.fullName,
+      values.different,
+      values.phone,
+      values.email,
+      new Date(),
+      0,
+      []
+    );
+    return member;
+  }
+
+  const createBorrowedBook = (values: any, isNewMember: any, member: Member) => {
+    const borrowedBook = new BorrowedBook();
+
+    borrowedBook.TransactionId =  0,
+    borrowedBook.MemberId = isNewMember ? isNewMember.MemberId : member?.MemberId,
+    borrowedBook.BookId = bookOrder.BookId,
+    borrowedBook.BorrowDate = new Date();
+    borrowedBook.DueDate = new Date(values.dueDate);
+
+    return borrowedBook;
+  }
+
   return (
     <div className={styles.container}>
       <div
@@ -99,43 +122,11 @@ export default function AcceptOrder(props: Props) {
             }}
             onSubmit={async (values, { setSubmitting }) => {
               const isNewMember = members?.find(ob => ob.Phone == values.phone);
-              const member = new Member(
-                (members?.length || 0) + 1,
-                values.fullName,
-                values.different,
-                values.phone,
-                values.email,
-                new Date(),
-                0,
-                []
-              );
-              let borrowedBook = new BorrowedBook(
-                0,
-                isNewMember ? isNewMember.MemberId : member?.MemberId,
-                bookOrder.BookId,
-                new Date(),
-                new Date(values.dueDate),
-                new Date(),
-                20000,
-                member,
-                bookOrder,
-                []
-              );
+              const member = createMember(values);
+              const borrowedBook = createBorrowedBook(values,isNewMember,member);
 
               if (isNewMember === undefined) {
                 HandleAddMember(member).then(async (data: Member) => {
-                  borrowedBook = new BorrowedBook(
-                    0,
-                    data?.MemberId,
-                    bookOrder.BookId,
-                    new Date(),
-                    new Date(values.dueDate),
-                    new Date(),
-                    20000,
-                    member,
-                    bookOrder,
-                    []
-                  );
                   const result = await HandleAddBorrowedBook(borrowedBook);
 
                   if (result) {
@@ -157,12 +148,8 @@ export default function AcceptOrder(props: Props) {
               values,
               errors,
               touched,
-              handleChange,
-              handleBlur,
               handleSubmit,
               setFieldValue,
-              isSubmitting,
-              /* and other goodies */
             }) => (
               <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={classNames(styles.fieldContainer)}>

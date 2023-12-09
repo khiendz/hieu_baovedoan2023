@@ -159,4 +159,4 @@ const DeletePublisherById = async (publisherId: number) => {
     }
 }
 
-export default apiHandler(handler);
+export default apiHandler(handler,["GET"]);

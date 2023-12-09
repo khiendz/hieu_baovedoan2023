@@ -204,7 +204,7 @@ const DeleteBookType = async (bookTypeId: number) => {
     }
 }
 
-export default apiHandler(handler);
+export default apiHandler(handler,["GET"]);
 
 export const config = {
     api: {

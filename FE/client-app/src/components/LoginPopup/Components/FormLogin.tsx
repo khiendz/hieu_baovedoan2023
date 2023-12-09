@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
-import { Button, Checkbox, Form, Input, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import { userService } from "services";
 import { useAppContext } from "hook/use-app-context";
-import Notification from "components/Notification";
 
 type FieldType = {
   username?: string;
   password?: string;
-  remember?: string;
 };
 
 const FormLogin: React.FC<any> = (props: any) => {
@@ -71,24 +69,13 @@ const FormLogin: React.FC<any> = (props: any) => {
           >
             <Input.Password />
           </Form.Item>
-
-          <Form.Item<FieldType>
-            label="Lưu đăng nhập"
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 8, span: 16 }}
-          >
-            <Checkbox>Remember me</Checkbox>
-          </Form.Item>
-
           <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
             <Button type="primary" htmlType="submit">
-              Submit
+              Đăng nhập
             </Button>
           </Form.Item>
         </Form>
       </Modal>
-      <Notification />
     </>
   );
 };

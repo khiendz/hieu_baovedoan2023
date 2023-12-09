@@ -211,4 +211,4 @@ const DeletePaymentById = async (paymentId: number) => {
     }
 }
 
-export default apiHandler(handler);
+export default apiHandler(handler,["GET","POTST","DELETE"]);

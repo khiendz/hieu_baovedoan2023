@@ -49,4 +49,4 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default apiHandler(handler);
+export default apiHandler(handler,["GET"]);

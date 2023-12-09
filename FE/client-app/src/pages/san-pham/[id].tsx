@@ -4,6 +4,7 @@ import LayoutDefault from "components/layouts/LayoutDefault";
 import { Book } from "Models/Book";
 import { getBookByName } from "services/book-services";
 import { useRouter } from "next/router";
+import { JoinFileCDN } from "services";
 
 const { Meta } = Card;
 
@@ -49,7 +50,7 @@ const Product: React.FC = () => {
                   <img
                     className="dk-w-[240px] dk-h-[300px]"
                     alt="example"
-                    src={ele.Img || ""}
+                    src={JoinFileCDN(ele.Img || "")}
                   />
                 }
               >

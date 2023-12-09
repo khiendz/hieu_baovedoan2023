@@ -51,7 +51,7 @@ const Navigation: React.FC = () => {
   };
 
   return <nav>
-    <Menu className={`dk-text-[#222] dk-text-lg dk-font-bold dk-py-3 dk-border-none dk-shadow-md dk-font-Inter ${user ? "" : "dk-hidden"}`} onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
+    <Menu className={`dk-text-[#222] dk-text-lg dk-font-bold dk-py-3 dk-border-none dk-shadow-md dk-font-Inter`} onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
     </nav>;
 };
 

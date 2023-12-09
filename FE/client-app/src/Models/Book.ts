@@ -25,5 +25,6 @@ export class Book {
   BorrowedBook: BorrowedBook[];
   Book_BookType: Book_BookType[];
   BookType: BookType[];
+  LateFeeType: LateFeeType;
 }
   

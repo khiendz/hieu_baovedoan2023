@@ -232,4 +232,4 @@ const DeleteUserById = async (userId: number) => {
     }
 }
 
-export default apiHandler(handler);
+export default apiHandler(handler,["GET","POST"]);

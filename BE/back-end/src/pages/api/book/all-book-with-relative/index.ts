@@ -63,4 +63,4 @@ const GetBooksWithType = async () => {
     }
 }
 
-export default apiHandler(handler);
+export default apiHandler(handler,["GET"]);

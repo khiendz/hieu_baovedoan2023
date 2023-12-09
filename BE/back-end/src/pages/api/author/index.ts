@@ -172,4 +172,4 @@ const DeleteAuthor = async (authorId: number) => {
     }
 }
 
-export default apiHandler(handler);
+export default apiHandler(handler,["GET"]);
