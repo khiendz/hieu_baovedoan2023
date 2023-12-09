@@ -40,6 +40,14 @@ const items: MenuProps['items'] = [
     ),
     key: 'airplane',
   },
+  {
+    label: (
+      <Link href="/history-borowd" rel="noopener noreferrer" className='dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold'>
+        Lịch sử thuê sách
+      </Link>
+    ),
+    key: 'history-borowd',
+  },
 ];
 
 const Navigation: React.FC = () => {

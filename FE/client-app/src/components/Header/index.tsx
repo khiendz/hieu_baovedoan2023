@@ -3,6 +3,7 @@ import React from "react";
 import { Roboto } from "next/font/google";
 import UserAccount from "modules/UserAccount";
 import Notification from "components/Notification";
+import NotifYPopup from "components/NotifyPopup";
 
 const roboto = Roboto({
   weight: "400",
@@ -23,6 +24,7 @@ export default function Header() {
         />
       </div>
       <UserAccount />
+      <NotifYPopup></NotifYPopup>
     </header>
   ) 
 }

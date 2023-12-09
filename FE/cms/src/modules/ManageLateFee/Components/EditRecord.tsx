@@ -60,8 +60,8 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
                       ?.filter(
                         (ob: BorrowedBook) =>
                           ob.ReturnDate == null &&
-                          new Date().getDate() >
-                            new Date(ob?.DueDate || "").getDate() &&
+                          new Date().getTime() >
+                            new Date(ob?.DueDate || "").getTime() &&
                           (lateFees as LateFee[]).find(
                             (lateFee: LateFee) =>
                               lateFee.BorrowedBook.TransactionId !=
@@ -95,24 +95,30 @@ const CollectionCreateForm: React.FC<CollectionEditFormProps> = ({
                                 Số ngày trễ hạn:{" "}
                                 <span className="dk-font-normal">
                                   {ob.DueDate
-                                    ? new Date().getDate() -
-                                      new Date(ob?.DueDate)?.getDate()
+                                    ? Math.floor(
+                                        (new Date().getTime() -
+                                          new Date(ob?.DueDate)?.getTime()) /
+                                          (1000 * 60 * 60 * 24)
+                                      )
                                     : 0}
                                 </span>
                               </div>
                               <div className="dk-font-Roboto dk-font-bold">
                                 Tổng tiền trễ hạn theo loại trễ hạn:{" "}
                                 <span className="dk-font-normal">
-                                  {new Date().getDate() -
-                                    new Date(ob?.DueDate || "")?.getDate() >=
-                                  ob.Book.LateFeeType.DateCount
-                                    ? (ob.Book.LateFeeType.FeeAmount *
-                                      ((new Date().getDate() -
-                                        new Date(
-                                          ob?.DueDate || ""
-                                        )?.getDate()) /
-                                        ob.Book.LateFeeType.DateCount)).toLocaleString("vi-VN")
-                                    : 0}{" "}VND
+                                  {ob.DueDate &&
+                                  new Date() > new Date(ob.DueDate)
+                                    ? (
+                                        ob.Book.LateFeeType.FeeAmount *
+                                        Math.floor(
+                                          (new Date().getTime() -
+                                            new Date(ob.DueDate).getTime()) /
+                                            (1000 * 60 * 60 * 24) /
+                                            ob.Book.LateFeeType.DateCount
+                                        )
+                                      ).toLocaleString("vi-VN")
+                                    : 0}{" "}
+                                  VND
                                 </span>
                               </div>
                               <div className="dk-font-Roboto dk-font-bold">

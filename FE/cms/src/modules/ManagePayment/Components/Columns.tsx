@@ -168,6 +168,23 @@ const Columns = (
     editable: true,
   },
   {
+    title: "Mã giao dịch",
+    dataIndex: "OrderCode",
+    width: "200px",
+    ...GetColumnSearchProps(
+      "OrderCode",
+      setSearchText,
+      setSearchedColumn,
+      searchInput,
+      searchedColumn,
+      searchText
+    ),
+    render: (OrderCode: string) => (
+      <p className="dk-font-Inter dk-text-sm dk-font-semibold">{OrderCode}</p>
+    ),
+    editable: true,
+  },
+  {
     title: "Cập nhật",
     dataIndex: "operation",
     align: "center",

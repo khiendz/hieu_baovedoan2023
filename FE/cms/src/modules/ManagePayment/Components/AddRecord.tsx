@@ -209,6 +209,15 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         >
           <Input type="nunber" />
         </Form.Item>
+        <Form.Item
+          name="OrderCode"
+          label="Mã giao dịch"
+          rules={[
+            { required: true, message: "Làm ơn nhập tổng tiền mã giao dịch" },
+          ]}
+        >
+          <Input />
+        </Form.Item>
       </Form>
     </Modal>
   );

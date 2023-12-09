@@ -60,7 +60,9 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
         <Form.Item
           name="TransactionId"
           label="Thông tin thuê sách"
-          rules={[{ required: true, message: "Làm ơn chọn thông tin thuê sách" }]}
+          rules={[
+            { required: true, message: "Làm ơn chọn thông tin thuê sách" },
+          ]}
         >
           <Select
             placeholder="Chọn thông tin thuê sách"
@@ -72,9 +74,14 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                       ?.filter(
                         (ob: BorrowedBook) =>
                           ob.ReturnDate == null &&
-                          new Date().getDate() >
-                            new Date(ob?.DueDate || "").getDate() && 
-                          (lateFees as LateFee[]).find((lateFee: LateFee) => lateFee.BorrowedBook.TransactionId != ob.TransactionId)
+                          new Date().getTime() >
+                            new Date(ob?.DueDate || "").getTime() &&
+                            ( lateFees?.length > 0 ? 
+                              (lateFees as LateFee[]).find(
+                                (lateFee: LateFee) =>
+                                lateFee.BorrowedBook.TransactionId !=
+                                ob.TransactionId
+                            ) : true)
                       )
                       ?.map((ob: BorrowedBook) => {
                         return {
@@ -103,24 +110,30 @@ const CollectionCreateForm: React.FC<CollectionCreateFormProps> = ({
                                 Số ngày trễ hạn:{" "}
                                 <span className="dk-font-normal">
                                   {ob.DueDate
-                                    ? new Date().getDate() -
-                                      new Date(ob?.DueDate)?.getDate()
+                                    ? Math.floor(
+                                        (new Date().getTime() -
+                                          new Date(ob?.DueDate)?.getTime()) /
+                                          (1000 * 60 * 60 * 24)
+                                      )
                                     : 0}
                                 </span>
                               </div>
                               <div className="dk-font-Roboto dk-font-bold">
                                 Tổng tiền trễ hạn theo loại trễ hạn:{" "}
                                 <span className="dk-font-normal">
-                                  {new Date().getDate() -
-                                    new Date(ob?.DueDate || "")?.getDate() >=
-                                  ob.Book.LateFeeType.DateCount
-                                    ? (ob.Book.LateFeeType.FeeAmount *
-                                      ((new Date().getDate() -
-                                        new Date(
-                                          ob?.DueDate || ""
-                                        )?.getDate()) /
-                                        ob.Book.LateFeeType.DateCount)).toLocaleString("vi-VN")
-                                    : 0}{" "}VND
+                                  {ob.DueDate &&
+                                  new Date() > new Date(ob.DueDate)
+                                    ? (
+                                        ob.Book.LateFeeType.FeeAmount *
+                                        Math.floor(
+                                          (new Date().getTime() -
+                                            new Date(ob.DueDate).getTime()) /
+                                            (1000 * 60 * 60 * 24) /
+                                            ob.Book.LateFeeType.DateCount
+                                        )
+                                      ).toLocaleString("vi-VN")
+                                    : 0}{" "}
+                                  VND
                                 </span>
                               </div>
                               <div className="dk-font-Roboto dk-font-bold">
@@ -160,6 +173,7 @@ const AddRecord: React.FC<Props> = (props) => {
 
   const onCreate = () => {
     setOpen(false);
+    Form.resetFields();
   };
 
   return (

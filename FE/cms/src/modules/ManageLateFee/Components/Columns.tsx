@@ -1,7 +1,7 @@
 import GetColumnSearchProps from "components/GetColumnSearchProps";
 import EditRecord from "./EditRecord";
 import { FormInstance, Popconfirm } from "antd";
-import { BorrowedBook, LateFee } from "Models";
+import { LateFee } from "Models";
 import IconMoney from "../Images/icon-money.svg";
 
 const Columns = (

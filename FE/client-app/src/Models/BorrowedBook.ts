@@ -11,5 +11,5 @@ export class BorrowedBook {
   public ReturnDate: Date | null;
   public Member: Member;
   public Book: Book;
-  public LateFees: LateFee[]
+  public LateFee: LateFee[]
 }

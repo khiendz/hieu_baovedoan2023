@@ -8,8 +8,9 @@ import format from "date-fns/format";
 import AcceptOrder from "modules/AcceptOrder";
 import PopupMessage from "components/PopupMessage";
 import { BookType } from "Models/BookType";
-import { JoinFileCDN, getAllBookType } from "services";
+import { JoinFileCDN, getAllBookType, userService } from "services";
 import { Book_BookType } from "Models/Book_BookType";
+import { useAppContext } from "hook/use-app-context";
 
 const { Meta } = Card;
 
@@ -20,6 +21,9 @@ const Product: React.FC = () => {
   const { id } = router.query;
   const [orderAccept, setOrrderAccept] = useState(false);
   const [dataPopup, setDataPopup] = useState<any>(null);
+  const { data: openRegister, setData: setOpenRegister } =
+    useAppContext("open-register-form");
+  const { data: user } = useAppContext("user"); 
 
   useEffect(() => {
     initData();
@@ -135,6 +139,15 @@ const Product: React.FC = () => {
                   <button
                     className="dk-bg-orange-500 dk-p-4 dk-font-Inter dk-text-white dk-font-semibold dk-text-sm dk-rounded-xl"
                     onClick={() => {
+                      if (!userService.userValue) {
+                        showPopup({
+                          status: 401,
+                          message: "Nếu chưa có tài khoản, hãy tạo account để sử dụng chức năng thuê sách",
+                          title: "Để thuê sách, bạn phải đăng nhập "
+                        })
+                        setOpenRegister(true);
+                        return;
+                      }
                       setOrrderAccept(!orderAccept);
                     }}
                   >

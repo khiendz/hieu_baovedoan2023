@@ -120,6 +120,7 @@ model Payment {
   PaymentDate   DateTime?
   Amount        Float?
   StatePayments Int?
+  OrderCode     String    @unique @default("")
 
   LateFee LateFee? @relation(fields: [LateFeeId], references: [LateFeeId])
 }

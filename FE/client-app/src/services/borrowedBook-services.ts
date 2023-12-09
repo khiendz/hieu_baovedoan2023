@@ -20,6 +20,20 @@ export async function getBorrowedBookById(id: string) {
     }
 }
 
+export async function getBorrowedBookByPhone(phoneNumber: string) {
+    if (!phoneNumber)
+        return null;
+
+    try {
+        const res: any = await fetchWrapper.get(`${domainBE}/api/borrowed-book/phone/${phoneNumber}`);
+        if (res.status == 200)
+            return res.data;
+
+    } catch (e) {
+        return null;
+    }
+}
+
 export async function getAllBorrowedBook () {
     try {
         const res: any = await fetchWrapper.get(`${domainBE}/api/borrowedBook?tag=1`);

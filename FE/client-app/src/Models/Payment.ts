@@ -2,12 +2,11 @@ import { LateFee } from "./LateFee";
 
 // model/Payment.ts
 export class Payment {
-    constructor(
-      public PaymentID: number,
-      public LateFeeId: number | null,
-      public PaymentDate: Date | null,
-      public Amount: number | null,
-      public StatePayments: number | null,
-      public LateFee: LateFee | null
-    ) {}
+  public PaymentID: number;
+  public LateFeeId: number | null;
+  public PaymentDate: Date | null;
+  public Amount: number | null;
+  public StatePayments: number | null;
+  public LateFee: LateFee | null;
+  public OrderPayment: string;
   }

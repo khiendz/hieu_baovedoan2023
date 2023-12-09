@@ -11,9 +11,13 @@ export default function UserAccount() {
   const { data: open, setData: setOpen } = useAppContext("open-login-form");
 
   useEffect(() => {
-    const subscription = userService.user.subscribe((x) => setUser(x));
+    const subscription = userService.user.subscribe((data) => 
+    {
+      if (data && data.user)
+        setUser(data?.user?.User)
+    });
     return () => subscription.unsubscribe();
-  }, []);
+  },[]);
 
   function logout() {
     userService.logout();
@@ -25,7 +29,7 @@ export default function UserAccount() {
       <div className="dk-pr-28 dk-flex dk-w-fit dk-h-full dk-items-center">
         {user ? (
           <div className="dk-flex dk-gap-5">
-            Xin chào {`${user.user.User.FirstName} ${user.user.User.LastName}`}
+            Xin chào {`${user?.FirstName} ${user?.LastName}`}
             <button
               onClick={logout}
               className="nav-item nav-link hover:dk-cursor-pointer"

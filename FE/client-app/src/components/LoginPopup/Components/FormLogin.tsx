@@ -10,6 +10,7 @@ type FieldType = {
 
 const FormLogin: React.FC<any> = (props: any) => {
   const { setData: setPopup } = useAppContext("popup-message");
+  const { data: user, setData: setUser } = useAppContext("user"); 
 
   useEffect(() => {
     setPopup({

@@ -87,6 +87,25 @@ const GetAccounts = async () => {
 
 const AddAccount = async (account: Account) => {
     try {
+        const exitsUserName = await prisma.account.findMany({
+            where: {
+                UserName: account.UserName
+            }
+        });
+
+        if (exitsUserName?.length > 0) {
+            await prisma.user.delete({
+                where: {
+                    UserId: account.UserId
+                }
+            });
+            return {
+                data: null,
+                message: "Đã tồn tại tài khoản có cùng user name",
+                status: "400",
+            };
+        }
+
         const accountResult = await prisma.account.create({
             data: {
                 UserName: account.UserName,
