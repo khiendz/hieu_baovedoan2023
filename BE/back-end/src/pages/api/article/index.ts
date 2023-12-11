@@ -172,7 +172,7 @@ const UpdateArticle = async (article: Article) => {
 
 const DeleteArticle= async (articleId: number) => {
     try {
-        const deleteResult = await prisma.article.findMany({
+        const deleteResult = await prisma.article.delete({
             where: {
                 ArticleId: articleId
             }

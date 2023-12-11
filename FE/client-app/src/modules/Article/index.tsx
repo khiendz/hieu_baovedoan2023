@@ -18,7 +18,7 @@ export default function ArticleContent(props: any) {
   };
 
   return article ? (
-    <div className="dk-w-[1080px] dk-flex dk-flex-col dk-justify-center dk-items-center dk-gap-4">
+    <div className="dk-w-[800px] dk-flex dk-flex-col dk-justify-center dk-items-center dk-gap-4">
       <h1 className="dk-text-[36px] dk-font-Inter dk-font-bold dk-text-center">{article.Title}</h1>
       <h2 className="dk-text-[20px] dk-font-Inter dk-font-medium" dangerouslySetInnerHTML={{ __html: article.Description }}></h2>
       <img
@@ -26,7 +26,7 @@ export default function ArticleContent(props: any) {
         className="dk-w-[680px] dk-aspect-[3/2] dk-rounded-md"
       />
       <div
-        className="dk-w-[1080px]"
+        className="dk-w-[800px]"
         dangerouslySetInnerHTML={{ __html: article.Content }}
       ></div>
     </div>

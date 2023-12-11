@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Form, InputRef, Table } from "antd";
-import { Book } from "Models/Book";
 import "./style.scss";
 import AddRecord from "./Component/AddRecord";
 import Columns from "./Component/Columns";
@@ -55,11 +54,11 @@ const ManageArticle: React.FC = () => {
     setEditingKey("");
   };
 
-  const edit = (record: Book, key: string) => {
+  const edit = (record: Article, key: string) => {
     form.setFieldsValue({
       ...record,
     });
-    setEditingKey(record.BookId?.toString() || "");
+    setEditingKey(record.ArticleId?.toString() || "");
   };
 
   useEffect(() => {

@@ -1,5 +1,4 @@
 import { Article } from "Models/Article.model";
-import { Book } from "Models/Book";
 import { AddArticle, DeleteArticleById, UpdateArticle } from "services/article-service";
 
 export const changeArticle = async (article: Article) => {
@@ -44,7 +43,7 @@ export const handleDelete = async (key: number, articles: Article[], setArticles
     return result;
 };
 
-export const handleAdd = async (article: Article, articles: Book[], setArticles: any) => {
+export const handleAdd = async (article: Article, articles: Article[], setArticles: any) => {
     const result = await handleAddArticle(article);
     if (result)
         setArticles([{ ...result.data }, ...articles]);
