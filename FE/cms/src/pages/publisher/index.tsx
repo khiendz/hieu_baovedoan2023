@@ -9,12 +9,9 @@ export default function Home() {
   return (
     <LayoutDefault>
       <div className="content-container content-miss dk-flex dk-flex-col dk-font-Roboto dk-gap-4 dk-relative dk-z-10">
-        <h1 className="dk-text-[#FFF] dk-font-bold dk-text-2xl dk-relative dk-z-[2]">
-          TRẢI NGHIỆM KỲ NGHỈ TUYỆT VỜI
+      <h1 className="dk-text-[#222] dk-font-bold dk-text-2xl dk-relative dk-z-[2]">
+          Quản trị nhà xuất bản
         </h1>
-        <h2 className="dk-font-medium dk-text-xs dk-text-[#FFF]">
-          Combo khách sạn - vé máy bay - đưa đón sân bay giá tốt nhất
-        </h2>
         <ManagePublisher/>
       </div>
     </LayoutDefault>

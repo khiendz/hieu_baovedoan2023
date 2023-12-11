@@ -36,7 +36,7 @@ const ManagePublisher= () => {
     try {
       const row = (await form.validateFields()) as Publisher;
       const newData = [...publishers];
-      const index = newData.findIndex((item) => key === item.PaymentID);
+      const index = newData.findIndex((item) => key === item.PublisherId);
       if (index > -1) {
         const item = newData[index];
         const newTourType = { ...item, ...row };

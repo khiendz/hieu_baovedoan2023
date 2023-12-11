@@ -26,8 +26,8 @@ const SelectBox: React.FC<Props> = (props: Props) => {
       optionLabelProp="label"
     >
       {props?.data?.length > 0
-        ? props?.data?.map((ele, index) => (
-            <Option key={index} label={ele.Name}>
+        ? props?.data?.map((ele: BookType, index) => (
+            <Option key={ele.BookTypeId} label={ele.Name}>
               <Space>{ele.Name}</Space>
             </Option>
           ))

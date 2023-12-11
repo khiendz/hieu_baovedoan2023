@@ -110,11 +110,13 @@ const AddAccount = async (account: Account) => {
             };
         }
 
+        const roleAccount = await prisma.roleAccount.findMany();
+
         const accountResult = await prisma.account.create({
             data: {
                 UserName: account.UserName,
                 Password: account.Password,
-                RoleId: account.RoleId,
+                RoleId: roleAccount?.length > 0 ? roleAccount[0].RoleId : 0,
                 UserId: account.UserId
             },
             include: {

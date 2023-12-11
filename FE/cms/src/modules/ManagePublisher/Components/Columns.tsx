@@ -17,9 +17,9 @@ const Columns = (
   cancel: any,
   form: FormInstance,
   handleDelete: any,
-  setPayments: any,
+  setPublishers: any,
   setPopup: any,
-  payments: Payment[]
+  publishers: Publisher[]
 ) => [
   {
     title: "Tên nhà xuất bản",
@@ -119,8 +119,8 @@ const Columns = (
             onConfirm={async () => {
               const result = await handleDelete(
                 record.PublisherId,
-                payments,
-                setPayments
+                publishers,
+                setPublishers
               );
               setPopup({
                 title: result?.status == 200 ? "Thành công" : "Thất bại",

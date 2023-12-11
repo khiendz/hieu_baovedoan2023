@@ -123,7 +123,10 @@ const handleSelect = (value: string[]) => {
             } */}
           </div>
           <div className="select dk-flex dk-flex-row dk-gap-4 dk-relative dk-z-10">
-            <SelectBox data={bookTypeList} setTag={(e:string[]) => handleSelect(e)}/>
+            <SelectBox 
+              data={bookTypeList} 
+              setTag={(e:string[]) => handleSelect(e)}
+            />
           </div>
           <div className="dk-w-full dk-flex dk-items-center dk-justify-center dk-relative dk-z-10">
             <a 

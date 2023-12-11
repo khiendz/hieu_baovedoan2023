@@ -147,19 +147,6 @@ const AddLateFee = async (lateFee: LateFee) => {
 
 const UpdateLateFee = async (lateFee: LateFee) => {
     try {
-        const exitsLateFee = await prisma.lateFee.findMany({
-            where: {
-                TransactionId: lateFee.TransactionId
-            }
-        });
-
-        if (exitsLateFee?.length > 0)
-        return {
-            data: null,
-            message: "Đã tồn tại trễ hạn cùng mã mượn",
-            status: "500"
-        };
-
         const lateFeeResult = await prisma.lateFee.update({
             where: {
                 LateFeeId: lateFee?.LateFeeId
