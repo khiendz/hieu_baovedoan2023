@@ -1,7 +1,14 @@
 :where(.css-dev-only-do-not-override-pr0fja).ant-btn-primary {
-    background-color: #1677ff;
-  }
+  background-color: #1677ff;
+}
 
-.ant-modal-close-x {
-  display: none !important;
+:where(.css-dev-only-do-not-override-pr0fja).ant-modal .ant-modal-content {
+  position: relative;
+  background-color: #ffffff;
+  background-clip: padding-box;
+  border: 0;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  pointer-events: auto;
+  padding: 20px 42px;
 }

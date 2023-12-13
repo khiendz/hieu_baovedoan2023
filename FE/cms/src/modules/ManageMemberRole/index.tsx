@@ -39,7 +39,7 @@ const ManageMemberRole = () => {
     try {
       const row = (await form.validateFields()) as MemberRole;
       const newData = [...memberRoles];
-      const index = newData.findIndex((item) => key === item.MemberId);
+      const index = newData.findIndex((item) => key === item.MemberRoleId);
       if (index > -1) {
         const item = newData[index];
         const newTourType = { ...item, ...row };

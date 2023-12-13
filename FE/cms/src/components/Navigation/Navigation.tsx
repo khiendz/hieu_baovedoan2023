@@ -216,13 +216,13 @@ const items: MenuProps["items"] = [
       {
         label: (
           <Link
-            href="/member-type"
+            href="/member-role"
             className="dk-text-sm dk-text-[#222] dk-font-Inter dk-font-bold"
           >
             <span>Kiểu độc giả</span>
           </Link>
         ),
-        key: "member-type",
+        key: "member-role",
       },
     ]
   },
